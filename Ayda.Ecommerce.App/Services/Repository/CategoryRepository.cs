@@ -105,10 +105,23 @@ public class CategoryRepository : ICategoryRepository {
 
     }
 
-    public async Task<ResultDto<IEnumerable<CategoryDto>>> GetAllAsync() {
-        var categories = await _db.Categories
-            .Include(x => x.CategoryAttributes)
-            .ToListAsync();
+    public async Task<ResultDto<IEnumerable<CategoryDto>>> GetAllAsync(int? id) {
+        IEnumerable<Category> categories;
+       
+        if (id > 0 || id != null) {
+            categories = await _db.Categories
+                .Include(x => x.SubCategories)
+                .Include(x => x.CategoryAttributes)
+                .Where(x => x.ParentCategoryId == id).ToListAsync();
+        }
+        else
+        {
+            categories = await _db.Categories
+                .Include(x => x.SubCategories)
+                .Include(x => x.CategoryAttributes)
+                .Where(x => x.ParentCategoryId == null)
+                .ToListAsync();
+        }
         return new ResultDto<IEnumerable<CategoryDto>> {
             IsSuccess = true,
             Data = _mapper.Map<IEnumerable<CategoryDto>>(categories)

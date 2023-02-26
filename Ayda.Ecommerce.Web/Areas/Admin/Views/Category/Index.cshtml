@@ -66,8 +66,11 @@
                                         <div>
                                             <button onclick="ShowModalAddChildCategory('@p.Id','@p.Name')" class="btn bg-green btn-sm waves-effect"><i class="fa fa-plus"></i></button>
                                             <button class="btn bg-cyan  waves-effect btn-sm"><i class="fa fa-edit"></i></button>
-                                            <button class="btn bg-red waves-effect btn-sm"><i class="fa fa-trash"></i></button>
-                                            <button class="btn bg-deep-purple waves-effect btn-sm"><i class="fa fa-eye"></i></button>
+                                            <button onclick="DeleteParent('@p.Id','@p.Name')" class="btn bg-red waves-effect btn-sm"><i class="fa fa-trash"></i></button>
+                                         @if (p.SubCategories.Any())
+                                         {
+                                             <a href="/admin/category/index/@p.Id" class="btn bg-deep-purple waves-effect btn-sm"><i class="fa fa-eye"></i>&nbsp;زیرمجموعه</a>
+                                         }
                                         </div>
                                     </td>
                                 </tr>
@@ -88,7 +91,7 @@
     <link rel="stylesheet" href="~/lib/Sweetalert2/sweetalert2.min.css" />
     <script src="~/lib/Sweetalert2/sweetalert2.min.js"></script>
     <script>
-
+        //Add Category Parent & Child
         function ShowModalAddParentCategory() {
             $('#AddParent').modal('show');
         }
@@ -96,6 +99,58 @@
             $('#Add-Childcategory_ParentId').val(parentId)
             $('#parent-name').html(parentName)
             $('#AddChild').modal('show');
+        }
+        //Remove Category
+        function DeleteParent(parentId, title) {
+            swal.fire({
+                title: 'حذف دسته بندی ' + ' ( ' + title + ' )',
+                text: "کاربر گرامی  مطمئن هستید؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#7cacbe',
+                confirmButtonText: 'بله ',
+                cancelButtonText: 'خیر'
+            }).then((result) => {
+                if (result.value) {
+
+                    var postData = {
+                        'id': parentId
+                    };
+
+                    $.ajax({
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        type: "POST",
+                        url: "/Admin/Category/RemoveCategory/",
+                        data: postData,
+                        success: function (data) {
+                            if (data.isSuccess == true) {
+                                swal.fire(
+                                    'موفق!',
+                                    data.message,
+                                    'success'
+                                ).then(function (isConfirm) {
+                                    location.reload();
+                                });
+                            } else {
+
+                                swal.fire(
+                                    'هشدار!',
+                                    data.message,
+                                    'warning'
+                                );
+
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+
+                    });
+
+                }
+            });
         }
     </script>
 }
@@ -122,7 +177,7 @@
                         <label>لوگو دسته</label>
                         <div class="form-group">
                             <div class="form-line">
-                                <input type="file" name="Images" class="form-control" accept="image/*">
+                                <input type="file" name="Image" class="form-control" accept="image/*">
                             </div>
                         </div>
                         <label> توضیحات</label>
@@ -161,7 +216,7 @@
                         <label>لوگو دسته</label>
                         <div class="form-group">
                             <div class="form-line">
-                                <input type="file" name="Images" class="form-control" accept="image/*">
+                                <input type="file" name="Image" class="form-control" accept="image/*">
                             </div>
                         </div>
                         <label> توضیحات</label>

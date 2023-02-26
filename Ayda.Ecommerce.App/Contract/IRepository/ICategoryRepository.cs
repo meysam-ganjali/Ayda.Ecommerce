@@ -8,6 +8,6 @@ public interface ICategoryRepository
     Task<ResultDto> AddAsync(CreateCategoryDto categoryDto);
     Task<ResultDto> RemoveAsync(int id);
     Task<ResultDto> UpdateAsync(UpdateCategoryDto categoryDto);
-    Task<ResultDto<IEnumerable<CategoryDto>>> GetAllAsync();
+    Task<ResultDto<IEnumerable<CategoryDto>>> GetAllAsync(int? id);
     Task<ResultDto<CategoryDto>> GetByIdAsync(int id);
 }

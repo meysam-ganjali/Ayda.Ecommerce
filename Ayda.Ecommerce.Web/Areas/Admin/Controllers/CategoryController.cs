@@ -10,18 +10,19 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers {
         public CategoryController(IUnitOfWork categoryService) {
             _categoryService = categoryService;
         }
-        public async Task<IActionResult> Index() {
-            var result = await _categoryService.CategoryService.GetAllAsync();
+        public async Task<IActionResult> Index(int? id) {
+            var result = await _categoryService.CategoryService.GetAllAsync(id);
             return View(result.Data);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCategory(CreateCategoryDto categoryDto)
-        {
-            var Images = HttpContext.Request.Form.Files;
-            if (Images != null)
+        public async Task<IActionResult> CreateCategory(CreateCategoryDto categoryDto) {
+            if (categoryDto.Image != null)
             {
-                categoryDto.Image = Images[0];
+                var Images = HttpContext.Request.Form.Files;
+                if (Images != null) {
+                    categoryDto.Image = Images[0];
+                }
             }
             var result = await _categoryService.CategoryService.AddAsync(categoryDto);
             if (result.IsSuccess) {
@@ -31,6 +32,12 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers {
 
             TempData["error"] = result.Message;
             return Redirect("/Admin/Category/Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveCategory(int id) {
+            var result = await _categoryService.CategoryService.RemoveAsync(id);
+            return Json(result);
         }
     }
 }
