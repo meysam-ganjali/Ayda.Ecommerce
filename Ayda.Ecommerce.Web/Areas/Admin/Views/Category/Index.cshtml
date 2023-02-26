@@ -1,0 +1,183 @@
+﻿@model IEnumerable<Ayda.Ecommerce.ShareModels.EcommerceDto.CategoryDto>
+@{
+    ViewData["Title"] = "دسته بندی ها";
+}
+<partial name="_Notification"/>
+<div class="block-header">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+                <li class="breadcrumb-item">
+                    <h4 class="page-title">لیست دسته بندی</h4>
+                </li>
+                <li class="breadcrumb-item bcrumb-1">
+                    <a href="/admin/home/index">
+                        <i class="fas fa-home"></i> خانه
+                    </a>
+                </li>
+                <li class="breadcrumb-item bcrumb-2">
+                    <a href="/admin/category/index">@ViewData["Title"]</a>
+                </li>
+                <li class="breadcrumb-item active">@ViewData["Title"]</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                @*<a class="btn bg-green"><i class="fa fa-plus" onclick="CreateParentCategory()"></i>&nbsp;ایجاد دسته والد</a>*@
+                <button type="button" class="btn bg-green" onclick="ShowModalAddParentCategory()"><i class="fa fa-plus"></i>&nbsp;ایجاد دسته والد</button>
+            </div>
+            <div class="body table-responsive">
+                @if (Model.Any()) {
+
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>لوگو</th>
+                                <th>نام اصلی</th>
+                                <th>تعداد زیرمجموعه</th>
+                                <th><i class="fa fa-toolbox"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var p in Model) {
+                                <tr>
+                                    <th scope="row">@p.Id</th>
+                                    <td>
+                                        @if (!string.IsNullOrWhiteSpace(p.LogoPath)) {
+                                            <img src="~/@p.LogoPath.Trim('\\')" class="shadow img-thumbnail img-rounded" width="50" height="50" />
+                                        } else {
+                                            <img src="" class="shadow img-thumbnail img-rounded" width="50" height="50" />
+                                        }
+                                    </td>
+                                    <td>@p.Name</td>
+
+                                    @if (p.SubCategories.Count > 0) {
+                                        <td>@p.SubCategories.Count</td>
+                                    } else {
+                                        <td>فاقد زیر مجموعه</td>
+                                    }
+
+                                    <td>
+                                        <div>
+                                            <button onclick="ShowModalAddChildCategory('@p.Id','@p.Name')" class="btn bg-green btn-sm waves-effect"><i class="fa fa-plus"></i></button>
+                                            <button class="btn bg-cyan  waves-effect btn-sm"><i class="fa fa-edit"></i></button>
+                                            <button class="btn bg-red waves-effect btn-sm"><i class="fa fa-trash"></i></button>
+                                            <button class="btn bg-deep-purple waves-effect btn-sm"><i class="fa fa-eye"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                } else {
+                    <p>دسته بندی برای نمایش وجود ندارد</p>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+    {
+    <link rel="stylesheet" href="~/lib/Sweetalert2/sweetalert2.min.css" />
+    <script src="~/lib/Sweetalert2/sweetalert2.min.js"></script>
+    <script>
+
+        function ShowModalAddParentCategory() {
+            $('#AddParent').modal('show');
+        }
+        function ShowModalAddChildCategory(parentId,parentName) {
+            $('#Add-Childcategory_ParentId').val(parentId)
+            $('#parent-name').html(parentName)
+            $('#AddChild').modal('show');
+        }
+    </script>
+}
+@section Modals
+    {
+  
+    <div class="modal" id="AddParent" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-light-blue waves-effect">
+                    <h5 class="modal-title text-white">ثبت دسته اصلی</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/admin/category/CreateCategory" enctype="multipart/form-data">
+                        <label>عنوان دسته&nbsp;<i class="text-danger">*</i></label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <input type="text" name="Name" class="form-control" placeholder="عنوان دسته بندی را مشخص کنید">
+                            </div>
+                        </div>
+                        <label>لوگو دسته</label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <input type="file" name="Images" class="form-control" accept="image/*">
+                            </div>
+                        </div>
+                        <label> توضیحات</label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <textarea class="form-control" rows="3" name="Description"></textarea>
+                            </div>
+                        </div>
+                        <br> <div class="modal-footer">
+                            <button type="submit" class="btn btn-info waves-effect"><i class="fas fa-save"></i></button>
+                            <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">لغو</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="AddChild" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-light-green waves-effect">
+                    <h5 class="modal-title text-white">ثبت زیردسته برای&nbsp;<span class="badg bg-info" id="parent-name"></span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/admin/category/CreateCategory" enctype="multipart/form-data">
+                        <input type="hidden" name="ParentCategoryId" id="Add-Childcategory_ParentId" />
+                        <label>عنوان دسته&nbsp;<i class="text-danger">*</i></label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <input type="text" name="Name" class="form-control" placeholder="عنوان دسته بندی را مشخص کنید">
+                            </div>
+                        </div>
+                        <label>لوگو دسته</label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <input type="file" name="Images" class="form-control" accept="image/*">
+                            </div>
+                        </div>
+                        <label> توضیحات</label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <textarea class="form-control" rows="3" name="Description"></textarea>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-info waves-effect"><i class="fas fa-save"></i></button>
+                            <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">لغو</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Contract\IRepository\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ayda.Ecommerce.Data\Ayda.Ecommerce.Data.csproj" />
+    <ProjectReference Include="..\Ayda.Ecommerce.Domains\Ayda.Ecommerce.Domains.csproj" />
+    <ProjectReference Include="..\Ayda.Ecommerce.ShareModels\Ayda.Ecommerce.ShareModels.csproj" />
+    <ProjectReference Include="..\Ayda.Ecommerce.Utilities\Ayda.Ecommerce.Utilities.csproj" />
+  </ItemGroup>
+
+</Project>
