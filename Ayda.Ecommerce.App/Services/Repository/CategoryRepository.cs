@@ -25,7 +25,7 @@ public class CategoryRepository : ICategoryRepository {
         var categoy = _mapper.Map<Category>(categoryDto);
         if (categoryDto.Image != null) {
             UploadHelper uploadObj = new UploadHelper(_environment);
-            var uploadedResult = uploadObj.UploadFile(categoryDto.Image, $@"\image\category-logo\");
+            var uploadedResult = uploadObj.UploadFile(categoryDto.Image, $@"\images\category_logo\");
             categoy.LogoPath = uploadedResult.FileNameAddress;
         }
 

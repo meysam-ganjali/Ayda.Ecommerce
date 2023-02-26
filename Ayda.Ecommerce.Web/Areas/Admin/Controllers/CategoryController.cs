@@ -39,5 +39,24 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers {
             var result = await _categoryService.CategoryService.RemoveAsync(id);
             return Json(result);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateCategory(UpdateCategoryDto categoryDto)
+        {
+            if (categoryDto.Image != null) {
+                var Images = HttpContext.Request.Form.Files;
+                if (Images != null) {
+                    categoryDto.Image = Images[0];
+                }
+            }
+            var result = await _categoryService.CategoryService.UpdateAsync(categoryDto);
+            if (result.IsSuccess) {
+                TempData["success"] = result.Message;
+                return Redirect("/Admin/Category/Index");
+            }
+
+            TempData["error"] = result.Message;
+            return Redirect("/Admin/Category/Index");
+        }
     }
 }

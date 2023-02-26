@@ -49,7 +49,7 @@
                                     <th scope="row">@p.Id</th>
                                     <td>
                                         @if (!string.IsNullOrWhiteSpace(p.LogoPath)) {
-                                            <img src="~/@p.LogoPath.Trim('\\')" class="shadow img-thumbnail img-rounded" width="50" height="50" />
+                                            <img src="~/@p.LogoPath.Trim('\\')" class="shadow img-thumbnail img-rounded" width="50" height="50" id="category_logo_@p.Id" />
                                         } else {
                                             <img src="" class="shadow img-thumbnail img-rounded" width="50" height="50" />
                                         }
@@ -65,7 +65,7 @@
                                     <td>
                                         <div>
                                             <button onclick="ShowModalAddChildCategory('@p.Id','@p.Name')" class="btn bg-green btn-sm waves-effect"><i class="fa fa-plus"></i></button>
-                                            <button class="btn bg-cyan  waves-effect btn-sm"><i class="fa fa-edit"></i></button>
+                                            <button onclick="UpdateCategory('@p.Id','@p.Name','@p.Description')" class="btn bg-cyan  waves-effect btn-sm"><i class="fa fa-edit"></i></button>
                                             <button onclick="DeleteParent('@p.Id','@p.Name')" class="btn bg-red waves-effect btn-sm"><i class="fa fa-trash"></i></button>
                                          @if (p.SubCategories.Any())
                                          {
@@ -152,6 +152,14 @@
                 }
             });
         }
+        //Edit Category
+        function UpdateCategory(id,name,des){
+            $('#edit_catId').val(id);
+            $('#edit_catName').val(name);
+            $('#edit_catDescription').val(des);
+            $('#edit_cat_img').attr('src', $('#category_logo_' + id).attr('src'));
+            $('#EditCategory').modal('show');
+            }
     </script>
 }
 @section Modals
@@ -223,6 +231,49 @@
                         <div class="form-group">
                             <div class="form-line">
                                 <textarea class="form-control" rows="3" name="Description"></textarea>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-info waves-effect"><i class="fas fa-save"></i></button>
+                            <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">لغو</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="EditCategory" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-orange waves-effect">
+                    <h5 class="modal-title text-white">ویرایش دسته بندی&nbsp;<span class="badg bg-info" id="parent-name"></span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/admin/category/UpdateCategory" enctype="multipart/form-data">
+                        <input type="hidden" name="Id" id="edit_catId" />
+                        <div class="row justify-content-center">
+                            <img id="edit_cat_img" width="65" height="65"  class="d-inline img-thumbnail img-rounded shadow"/>
+                        </div>
+                        <label>عنوان دسته&nbsp;<i class="text-danger">*</i></label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <input type="text" name="Name" id="edit_catName" class="form-control" placeholder="عنوان دسته بندی را مشخص کنید">
+                            </div>
+                        </div>
+                        <label>لوگو دسته</label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <input type="file" name="Image" class="form-control" accept="image/*">
+                            </div>
+                        </div>
+                        <label> توضیحات</label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <textarea class="form-control" rows="3" name="Description" id="edit_catDescription"></textarea>
                             </div>
                         </div>
                         <br>
