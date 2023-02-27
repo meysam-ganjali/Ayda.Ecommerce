@@ -1,0 +1,158 @@
+﻿@model IEnumerable<Ayda.Ecommerce.ShareModels.Role.RoleDto>
+@{
+    ViewData["Title"] = "نقش ها";
+}
+<partial name="_Notification" />
+<div class="block-header">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+                <li class="breadcrumb-item">
+                    <h4 class="page-title">لیست نقش ها</h4>
+                </li>
+                <li class="breadcrumb-item bcrumb-1">
+                    <a href="/admin/home/index">
+                        <i class="fas fa-home"></i> خانه
+                    </a>
+                </li>
+                <li class="breadcrumb-item bcrumb-2">
+                    <a href="/admin/role/index">@ViewData["Title"]</a>
+                </li>
+                <li class="breadcrumb-item active">@ViewData["Title"]</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <button type="button" class="btn bg-green" onclick="ShowModalAddeRole()"><i class="fa fa-plus"></i>&nbsp;ایجاد نقش</button>
+            </div>
+            <div class="body">
+                <table class="table mb-0 table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">نام</th>
+                        <th scope="col">تعداد کاربر در این نقش</th>
+                        <th scope="col">عملیات</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if (Model.ToList().Count < 1) {
+                        <tr class="alert alert-danger">
+                            <td colspan="5" class="text-center">نقشی ای برای نمایش یافت نشد ابتدا یک نقش ثبت کنید!</td>
+                        </tr>
+                    } else {
+                        foreach (var role in Model) {
+                            <tr>
+                                <td>@role.Id</td>
+                                <td>@role.Name</td>
+                                <td>@role.ApplicationUsers.Count</td>
+                                <td>
+                                    <button onclick="DeleteRole('@role.Id','@role.Name')" class="btn bg-red"><i class="fa fa-trash"></i>&nbsp;حذف </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+    {
+    <link rel="stylesheet" href="~/lib/Sweetalert2/sweetalert2.min.css" />
+    <script src="~/lib/Sweetalert2/sweetalert2.min.js"></script>
+    <script>
+        function ShowModalAddeRole() {
+        
+            $('#AddRole').modal('show');
+        }
+        function DeleteRole(Id, title) {
+            swal.fire({
+                title: 'حذف نقش ' + ' ( ' + title + ' )',
+                text: "کاربر گرامی  مطمئن هستید؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#7cacbe',
+                confirmButtonText: 'بله ',
+                cancelButtonText: 'خیر'
+            }).then((result) => {
+                if (result.value) {
+
+                    var postData = {
+                        'id': Id
+                    };
+
+                    $.ajax({
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        type: "POST",
+                        url: "/Admin/Role/DeleteRole/",
+                        data: postData,
+                        success: function (data) {
+                            if (data.isSuccess == true) {
+                                swal.fire(
+                                    'موفق!',
+                                    data.message,
+                                    'success'
+                                ).then(function (isConfirm) {
+                                    location.reload();
+                                });
+                            } else {
+
+                                swal.fire(
+                                    'هشدار!',
+                                    data.message,
+                                    'warning'
+                                );
+
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+
+                    });
+
+                }
+            });
+        }
+    </script>
+}
+@section Modals
+    {
+    <div class="modal" id="AddRole" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title text-white">ایجاد نقش جدید   <span id="parent_title"></span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/Admin/Role/CreateRole">
+                        <label>عنوان نقش&nbsp;<i class="text-danger">*</i></label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <input type="text" name="Name" class="form-control" placeholder="عنوان  را مشخص کنید">
+                            </div>
+                        </div>
+                        <br> <div class="modal-footer">
+                            <button type="submit" class="btn btn-info waves-effect"><i class="fas fa-save"></i></button>
+                            <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">لغو</button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+}

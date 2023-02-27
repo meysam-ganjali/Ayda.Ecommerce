@@ -1,0 +1,463 @@
+﻿@addTagHelper *, LazZiya.TagHelpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Ayda.Ecommerce.Utilities
+@model Ayda.Ecommerce.ShareModels.User.UserForAdmin
+@{
+    ViewData["Title"] = "کاربران";
+}
+<partial name="_Notification" />
+<div class="block-header">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+                <li class="breadcrumb-item">
+                    <h4 class="page-title">لیست کاربران</h4>
+                </li>
+                <li class="breadcrumb-item bcrumb-1">
+                    <a href="/admin/home/index">
+                        <i class="fas fa-home"></i> خانه
+                    </a>
+                </li>
+                <li class="breadcrumb-item bcrumb-2">
+                    <a href="/admin/user/index">@ViewData["Title"]</a>
+                </li>
+                <li class="breadcrumb-item active">@ViewData["Title"]</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <button type="button" class="btn bg-green" onclick="ShowModalAddParentCategory()"><i class="fa fa-plus"></i>&nbsp;ایجاد کاربر</button>
+            </div>
+            <div class="body">
+                @if (Model.UserDtos.Count > 0) {
+
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">نام</th>
+                            <th scope="col">نقش</th>
+                            <th scope="col">تاریخ ثبت نام</th>
+                            <th scope="col"><i class="fa fa-lock"></i></th>
+                            <th><i class="fa fa-toolbox"></i></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var p in Model.UserDtos) {
+                            <tr>
+                                <th scope="row">@p.Id</th>
+                                <td>@p.FName @p.LName</td>
+                                <td>@p.Role.Name</td>
+                                <td>@p.CreatedDate.ToPersianDate()</td>
+                                <td>@(p.IsActive ? "فعال" : "غیر فعال")</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            تنظیمات
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 36px, 0px);">
+                                            <li>
+                                                <a href="/Admin/Users/Detaile/@p.Id" class="dropdown-item text-left text-left"><i class="fa fa-info"></i>&nbsp;جزئیات </a>
+                                            </li>
+                                            <li>
+                                                <button onclick="UpdateUser('@p.Id','@p.Email')" class="dropdown-item text-left"><i class="fa fa-edit"></i>&nbsp;بروز رسانی </button>
+                                            </li>
+                                            <li>
+                                                <button onclick="DeleteUser('@p.Id')" class="dropdown-item text-left"><i class="fa fa-trash"></i>&nbsp;حذف </button>
+                                            </li>
+                                            <li role="separator" class="divider"></li>
+                                               
+                                            <li>
+                                                <button onclick="Createddress('@p.Id')" class="dropdown-item text-left"><i class="fa fa-plus"></i>&nbsp;آدرس جدید </button>
+                                            </li>
+                                            <li>
+                                                <button onclick="ChangeUserRole('@p.Id')" class="dropdown-item text-left"><i class="fa fa-edit"></i>&nbsp;تغییر نقش </button>
+                                            </li>
+                                               
+                                            <li>
+                                                @if (p.IsLocked == true) {
+                                                    <button onclick="LockUser('@p.Id','@p.FName')" class="dropdown-item text-left"><i class="fa fa-lock-open"></i>&nbsp;بازکردن قفل</button>
+                                                } else {
+                                                        <button onclick="LockUser('@p.Id','@p.FName')" class="dropdown-item text-left"><i class="fa fa-lock"></i>&nbsp; قفل</button>
+                                                }
+                                            </li>
+                                            <li>
+                                                @if (p.IsActive) {
+                                                        <button onclick="ActiveUser('@p.Id','@p.FName')" class="dropdown-item text-left"><i class="fa fa-shield"></i>&nbsp;غیر فعال</button>
+                                                } else {
+                                                        <button onclick="ActiveUser('@p.Id','@p.FName')" class="dropdown-item text-left"><i class="fa fa-check"></i>&nbsp; فعال</button>
+                                                }
+                                            </li>
+                                        </ul>
+                                    </div>
+                                       
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+
+                } else {
+                    <p>دسته بندی برای نمایش وجود ندارد</p>
+                }
+
+            </div>
+            <div class="row justify-content-center">
+                <paging total-records="@Model.RowCount"
+                        page-no="@Model.CurrentPage"
+                        page-size="@Model.PageSize"
+                        show-prev-next="true"
+                        show-total-pages="false"
+                        show-total-records="false"
+                        show-page-size-nav="true"
+                        show-first-numbered-page="true"
+                        show-last-numbered-page="true"
+                        query-string-key-page-no="Page"
+                        query-string-key-page-size="PageSize"
+                        sr-text-next="بعدی"
+                        sr-text-previous="قبلی"
+                        gap-size="2">
+                </paging>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+    {
+    <link rel="stylesheet" href="~/lib/Sweetalert2/sweetalert2.min.css" />
+    <script src="~/lib/Sweetalert2/sweetalert2.min.js"></script>
+    <script>
+        //Remove User
+        function DeleteUser(Id, title) {
+            swal.fire({
+                title: 'حذف نقش ' + ' ( ' + title + ' )',
+                text: "کاربر گرامی  مطمئن هستید؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#7cacbe',
+                confirmButtonText: 'بله ',
+                cancelButtonText: 'خیر'
+            }).then((result) => {
+                if (result.value) {
+
+                    var postData = {
+                        'id': Id
+                    };
+
+                    $.ajax({
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        type: "POST",
+                        url: "/Admin/Users/RemoveUser/",
+                        data: postData,
+                        success: function (data) {
+                            if (data.isSuccess == true) {
+                                swal.fire(
+                                    'موفق!',
+                                    data.message,
+                                    'success'
+                                ).then(function (isConfirm) {
+                                    location.reload();
+                                });
+                            } else {
+
+                                swal.fire(
+                                    'هشدار!',
+                                    data.message,
+                                    'warning'
+                                );
+
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+
+                    });
+
+                }
+            });
+        }
+        //Lock & Active
+        function LockUser(Id, userName) {
+            swal.fire({
+                title: 'قفل کردن / باز کردن قفل کاربر' + ' ' + userName,
+                text: "کاربر گرامی  مطمئن هستید؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#7cacbe',
+                confirmButtonText: 'بله ',
+                cancelButtonText: 'خیر'
+            }).then((result) => {
+                if (result.value) {
+
+                    var postData = {
+                        'id': Id
+                    };
+
+                    $.ajax({
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        type: "POST",
+                        url: "/Admin/User/ChangeLock/",
+                        data: postData,
+                        success: function (data) {
+                            if (data.isSuccess == true) {
+                                swal.fire(
+                                    'موفق!',
+                                    data.message,
+                                    'success'
+                                ).then(function (isConfirm) {
+                                    location.reload();
+                                });
+                            } else {
+
+                                swal.fire(
+                                    'هشدار!',
+                                    data.message,
+                                    'warning'
+                                );
+
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+
+                    });
+
+                }
+            });
+        }
+        function ActiveUser(Id, userName) {
+            swal.fire({
+                title: 'فعال کردن / غیر فعال کردن کاربر' + ' ' + userName,
+                text: "کاربر گرامی  مطمئن هستید؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#7cacbe',
+                confirmButtonText: 'بله ',
+                cancelButtonText: 'خیر'
+            }).then((result) => {
+                if (result.value) {
+
+                    var postData = {
+                        'id': Id
+                    };
+
+                    $.ajax({
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        type: "POST",
+                        url: "/Admin/User/ChangeActive/",
+                        data: postData,
+                        success: function (data) {
+                            if (data.isSuccess == true) {
+                                swal.fire(
+                                    'موفق!',
+                                    data.message,
+                                    'success'
+                                ).then(function (isConfirm) {
+                                    location.reload();
+                                });
+                            } else {
+
+                                swal.fire(
+                                    'هشدار!',
+                                    data.message,
+                                    'warning'
+                                );
+
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+
+                    });
+
+                }
+            });
+        }
+        //User Address
+        function Createddress(userId) {
+            $('#address-UserId').val(userId);
+            $('#AddressModal').modal('show');
+        }
+        //Chnage role
+        function ChangeUserRole(userId) {
+            $('#changeRole-UserId').val(userId);
+            $('#ChangeRoleModal').modal('show');
+        }
+        function EditUserRoel(Id, title) {
+            swal.fire({
+                title: 'تغییر نقش ',
+                text: "کاربر گرامی  مطمئن هستید؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#7cacbe',
+                confirmButtonText: 'بله ',
+                cancelButtonText: 'خیر'
+            }).then((result) => {
+                if (result.value) {
+                    var UserId = $('#changeRole-UserId').val();
+                    var RoleId = $('#changeRole-RoleId').val();
+                    var postData = {
+                        'roleId': RoleId,
+                        'userId': UserId,
+                    };
+
+                    $.ajax({
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        type: "POST",
+                        url: "/Admin/Users/ChangeRole",
+                        data: postData,
+                        success: function (data) {
+                            if (data.isSuccess == true) {
+                                swal.fire(
+                                    'موفق!',
+                                    data.message,
+                                    'success'
+                                ).then(function (isConfirm) {
+                                    location.reload();
+                                });
+                            } else {
+
+                                swal.fire(
+                                    'هشدار!',
+                                    data.message,
+                                    'warning'
+                                );
+
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+
+                    });
+
+                }
+            });
+        }
+        //Update User
+        function UpdateUser(id, name, email, phone) {
+            $('#edit-user-id').val(id);
+            $('#edit-user-Name').val(name);
+            $('#edit-user-email').val(email);
+            $('#edit-user-phone').val(phone);
+
+            $('#EditUser').modal('show');
+        }
+    </script>
+}
+@section Modals
+    {
+    @*Update User *@
+    <div class="modal" id="EditUser" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title text-white"> تغییر نقش <span id="parent_title"></span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/Admin/Users/Update">
+                        <input name="Id" type="hidden" id="edit-user-id" />
+                        <div class="input-group mb-3">
+                            <span class="input-group-text bg-light" id="basic-addon1">ایمیل</span>
+                            <input type="email" id="edit-user-email" name="Email" class="form-control" />
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text bg-light" id="basic-addon1">موبایل</span>
+                            <input type="text" id="edit-user-phone" name="CellPhone" class="form-control" />
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text bg-light" id="basic-addon1">نام و نام خانوادگی</span>
+                            <input type="text" id="edit-user-Name" name="FullName" class="form-control" />
+                        </div>
+                        <div class="row justify-content-around">
+                            <button type="submit" class="btn btn-success "><i class="fa fa-check"></i>&nbsp;ثبت </button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-arrow-left"></i>&nbsp;برگشت</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @*Change User Role*@
+    <div class="modal" id="ChangeRoleModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title text-white"> تغییر نقش <span id="parent_title"></span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input name="UserId" type="hidden" id="changeRole-UserId" />
+                    <div class="input-group mb-3">
+                        <span class="input-group-text bg-light" id="basic-addon1">فعال/غیرفعال</span>
+                        <select name="RoleId" class="form-select" id="changeRole-RoleId" asp-items="@ViewBag.Role">
+                        </select>
+                    </div>
+                    <div class="row justify-content-around">
+                        <a onclick="EditUserRoel()" class="btn btn-success "><i class="fa fa-check"></i>&nbsp;ثبت </a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-arrow-left"></i>&nbsp;برگشت</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @*Create New Address For User*@
+    <div class="modal" id="AddressModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title text-white">آدرس جدید  <span id="parent_title"></span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/Admin/Users/AddAddress">
+                        <input name="UserId" type="hidden" id="address-UserId" />
+                        <div class="input-group mb-3">
+                            <span class="input-group-text bg-light">آدرس</span>
+                            <textarea name="Address" type="text" class="form-control"></textarea>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text bg-light" id="basic-addon1">فعال/غیرفعال</span>
+                            <select name="IsShow" class="form-select">
+                                <option value="true">فعال باشد</option>
+                                <option value="false">غیرفعال باشد</option>
+                            </select>
+                        </div>
+                        <div class="row justify-content-around">
+                            <button type="submit" class="btn btn-success "><i class="fa fa-check"></i>&nbsp;ثبت </button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-arrow-left"></i>&nbsp;برگشت</button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+}

@@ -34,6 +34,7 @@ public class MappConf : Profile {
             config.CreateMap<RoleDto, Role>()
                 .ForMember(p => p.ApplicationUsers,
                 p => p.MapFrom(q => q.ApplicationUsers));
+            config.CreateMap<CreateRoleDto, Role>().ReverseMap();
 
             //User
             config.CreateMap<ApplicationUser, ApplicationUserDto>()

@@ -8,3 +8,8 @@ public class RoleDto:BaseDto<int>
     public string Name { get; set; }
     public  List<ApplicationUserDto> ApplicationUsers { get; set; }
 }
+
+public class CreateRoleDto
+{
+    public string Name { get; set; }
+}

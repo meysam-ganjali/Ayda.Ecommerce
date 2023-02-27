@@ -17,6 +17,8 @@ public class UnitOfWork : IUnitOfWork {
         _mapper = mapper;
         CategoryService = new CategoryRepository(_db, _environment, _mapper);
         AuthService = new AuthenticationRepository(_db, _mapper, _environment);
+        UserService = new UserRepository(_db, _mapper, _environment);
+        RoleService = new RoleRepository(_db, _mapper);
     }
     public void Dispose() {
         _db.Dispose();
@@ -24,4 +26,6 @@ public class UnitOfWork : IUnitOfWork {
 
     public ICategoryRepository CategoryService { get; }
     public IAuthenticationRepository AuthService { get; }
+    public IUserRepository UserService { get; }
+    public IRoleRepository RoleService { get; }
 }
