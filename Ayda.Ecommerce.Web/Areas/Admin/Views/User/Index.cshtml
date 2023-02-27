@@ -320,7 +320,7 @@
                         contentType: 'application/x-www-form-urlencoded',
                         dataType: 'json',
                         type: "POST",
-                        url: "/Admin/Users/ChangeRole",
+                        url: "/Admin/User/ChangeRole",
                         data: postData,
                         success: function (data) {
                             if (data.isSuccess == true) {
@@ -411,13 +411,15 @@
                 <div class="modal-body">
                     <input name="UserId" type="hidden" id="changeRole-UserId" />
                     <div class="input-group mb-3">
-                        <span class="input-group-text bg-light" id="basic-addon1">فعال/غیرفعال</span>
-                        <select name="RoleId" class="form-select" id="changeRole-RoleId" asp-items="@ViewBag.Role">
+                        <label class="input-group-text bg-light">عنوان نقش</label>
+                        <select name="RoleId" class="browser-default" id="changeRole-RoleId" asp-items="@ViewBag.Role">
                         </select>
                     </div>
+                    
+
                     <div class="row justify-content-around">
-                        <a onclick="EditUserRoel()" class="btn btn-success "><i class="fa fa-check"></i>&nbsp;ثبت </a>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-arrow-left"></i>&nbsp;برگشت</button>
+                        <a onclick="EditUserRoel()" class="btn bg-dreen "><i class="fa fa-check"></i>&nbsp;ثبت </a>
+                        <button type="button" class="btn bg-secondary" data-dismiss="modal"><i class="fa fa-arrow-left"></i>&nbsp;برگشت</button>
                     </div>
                 </div>
 
