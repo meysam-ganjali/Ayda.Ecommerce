@@ -60,26 +60,30 @@
 						</a>
 					</div>
 				</form>
-				<form id="register" tabindex="502">
+				<form id="register" tabindex="502" method="post" asp-controller="Auth" asp-action="Signup">
 					<h3>ثبت نام</h3>
-					<div class="name">
-						<input type="text">
-						<label>نام کامل</label>
-					</div>
+                    <div class="name">
+                        <input type="text" name="FName">
+                        <label>نام </label>
+                    </div>
+                    <div class="uid">
+						<input type="text" name="LName">
+                        <label>نام خانوادگی</label>
+                    </div>
 					<div class="mail">
-						<input type="email">
+						<input type="email" name="Email">
 						<label>ایمیل</label>
 					</div>
-					<div class="uid">
-						<input type="text">
-						<label>نام کاربری</label>
-					</div>
-					<div class="passwd">
-						<input type="password">
-						<label>رمزعبور</label>
-					</div>
+                    <div class="passwd">
+                        <input type="password" name="Password">
+                        <label>رمزعبور</label>
+                    </div>
+                    <div class="passwd">
+						<input type="password" name="ConfirmPassword">
+                        <label>تائید رمزعبور</label>
+                    </div>
 					<div class="submit">
-						<button class="dark">ثبت نام</button>
+						<button class="dark" type="submit">ثبت نام</button>
 					</div>
 				</form>
 			</div>

@@ -201,6 +201,7 @@ public class AuthenticationRepository : IAuthenticationRepository {
             user.PhoneConfirm = false;
             user.IsLocked = false;
             user.IsActive = false;
+            user.Gender = Ayda.Ecommerce.Domains.User.Gender.MAN;
             await _db.ApplicationUsers.AddAsync(user);
 
             await _db.SaveChangesAsync();

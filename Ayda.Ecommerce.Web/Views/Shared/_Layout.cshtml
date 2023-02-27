@@ -1,4 +1,7 @@
-﻿<!doctype html>
+﻿@using Ayda.Ecommerce.Web.Utility
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Ayda.Ecommerce.Web.ExtationConfigur
+<!doctype html>
 <html class="no-js" lang="en">
 
 <head>
@@ -43,7 +46,42 @@
     <!-- Page Wrapper -->
     <div id="wrap" class="layout-1">
 
-        <partial name="_TopBar" />
+        <!-- Top bar -->
+        <div class="top-bar">
+            <div class="container">
+                <p>به مرکز اسمارت تچ خوش آمدید!</p>
+                <div class="right-sec">
+                    <ul>
+                        @if (User.Identity.IsAuthenticated) {
+                            <li><a>خوش آمدید <small>@ClaimUtility.UserName(User)</small> </a></li>
+                            <li><a asp-controller="Auth" asp-action="SignOut"> خروج</a></li>
+                        } else {
+                            <li><a asp-controller="Auth" asp-action="Login">ورود / ثبت نام </a></li>
+                        }
+
+                        @if (User.Identity.IsAuthenticated) {
+                            if (@ClaimUtility.UserInRole(User) == SD.Role_Admin) {
+                                <li><a href="/Admin/Home/Index">پروفایل </a></li>
+                            }
+                            else
+                            {
+                                <li><a href="/">پروفایل </a></li>
+                            }
+                        }
+                        <li><a href="#.">پرسش و پاسخ </a></li>
+                        <li><a href="#.">خبرنامه </a></li>
+
+                    </ul>
+                    <div class="social-top">
+                        <a href="#."><i class="fa fa-facebook"></i></a> <a href="#.">
+                            <i class="fa fa-twitter"></i>
+                        </a> <a href="#."><i class="fa fa-linkedin"></i></a> <a href="#."><i class="fa fa-dribbble"></i></a> <a href="#.">
+                            <i class="fa fa-pinterest"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <partial name="_Header" />
         <partial name="_Slider" />
         <!-- Content -->
