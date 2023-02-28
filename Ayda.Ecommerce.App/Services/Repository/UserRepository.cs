@@ -1,19 +1,23 @@
 ﻿using AutoMapper;
 using Ayda.Ecommerce.App.Contract.IRepository;
 using Ayda.Ecommerce.Data.DataContext;
+using Ayda.Ecommerce.Domains.Ecommerce;
 using Ayda.Ecommerce.ShareModels.BaseModel;
+using Ayda.Ecommerce.ShareModels.EcommerceDto;
 using Ayda.Ecommerce.ShareModels.Role;
 using Ayda.Ecommerce.ShareModels.User;
 using Ayda.Ecommerce.Utilities;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace Ayda.Ecommerce.App.Services.Repository;
 
 public class UserRepository : IUserRepository {
     private readonly DataBaseContext _db;
-    private IMapper _mapper;
     private IHostingEnvironment _environment;
+    private IMapper _mapper;
 
     public UserRepository(DataBaseContext db, IMapper mapper, IHostingEnvironment environment) {
         _db = db;
@@ -141,6 +145,50 @@ public class UserRepository : IUserRepository {
         return new ResultDto {
             IsSuccess = true,
             Message = $"نقش کاربر {user.FName + " " + user.LName} به نقش {role.Name} تغییر کرد"
+        };
+    }
+
+    public async Task<ResultDto<ApplicationUserDto>> GetUserByIdAsync(long id) {
+        var userInDb = await _db.ApplicationUsers
+            .Include(x => x.Role)
+            .FirstOrDefaultAsync(x => x.Id == id);
+        if (userInDb == null) {
+            return new ResultDto<ApplicationUserDto>() {
+                Data = null,
+                IsSuccess = false,
+                Message = "کاربر یافت نشد"
+            };
+        }
+
+        ApplicationUserDto user = _mapper.Map<ApplicationUserDto>(userInDb);
+        return new ResultDto<ApplicationUserDto>() {
+            Data = user,
+            IsSuccess = true,
+        };
+    }
+
+    public async Task<ResultDto> AddOrChangeAvatar(long UserId, IFormFile avatar) {
+        var userInDb = await _db.ApplicationUsers
+            .FirstOrDefaultAsync(x => x.Id == UserId);
+        if (userInDb == null) {
+            return new ResultDto() {
+                IsSuccess = false,
+                Message = "کاربر یافت نشد"
+            };
+        }
+
+        if (!string.IsNullOrWhiteSpace(userInDb.Avatar)) {
+            string webRootPath = _environment.WebRootPath;
+            var oldImagePath = Path.Combine(webRootPath, userInDb.Avatar.TrimStart('\\'));
+            DeleteFile.DeleteFileFromRoot(oldImagePath);
+        }
+        UploadHelper uploadObj = new UploadHelper(_environment);
+        var uploadedResult = uploadObj.UploadFile(avatar, $@"\images\user\");
+        userInDb.Avatar = uploadedResult.FileNameAddress;
+        await _db.SaveChangesAsync();
+        return new ResultDto {
+            Message = "تصویر کاربر بروزرسانی شد",
+            IsSuccess = true
         };
     }
 }
