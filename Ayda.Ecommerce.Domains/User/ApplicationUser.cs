@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Ayda.Ecommerce.Domains.Base;
+using Ayda.Ecommerce.Domains.Ecommerce;
 
 namespace Ayda.Ecommerce.Domains.User;
 
@@ -22,4 +23,5 @@ public class ApplicationUser:BaseEntity<long>
     public bool? PhoneConfirm { get; set; }
     public Gender Gender { get; set; }
     public DateTime? LastLoginDateTime { get; set; }
+    public virtual ICollection<ProductComment> ProductComments { get; set; }
 }

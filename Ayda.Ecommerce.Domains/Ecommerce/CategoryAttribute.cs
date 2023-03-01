@@ -9,4 +9,6 @@ public class CategoryAttribute:BaseEntity<int>
     public int CategoryId { get; set; }
     [ForeignKey("CategoryId")]
     public virtual Category Category { get; set; }
+    public virtual ICollection<ProductAttribute> ProductAttributes { get; set; }
+
 }

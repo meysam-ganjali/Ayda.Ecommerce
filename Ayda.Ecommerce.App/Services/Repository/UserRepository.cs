@@ -25,14 +25,16 @@ public class UserRepository : IUserRepository {
         _environment = environment;
     }
 
-    public ResultDto<UserForAdmin> GetUserForAdmin(string? filterUser, string? filter = null, int pageSize = 100, int pageNumber = 1) {
+
+    public ResultDto<GetForAdmin<ApplicationUserDto>> GetUserForAdmin(string? filterUser, string? search = null, int pageSize = 100, int pageNumber = 1)
+    {
         int rowCount = 0;
         var users = _db.ApplicationUsers
             .Include(x => x.Role)
             .ToPaged(pageNumber, pageSize, out rowCount).AsQueryable();
-        if (!string.IsNullOrWhiteSpace(filter)) {
+        if (!string.IsNullOrWhiteSpace(search)) {
             users = users.Where(x =>
-                x.FName.Contains(filter) || x.LName.Contains(filter) || x.Email.Contains(filter)).AsQueryable();
+                x.FName.Contains(search) || x.LName.Contains(search) || x.Email.Contains(search)).AsQueryable();
         }
 
         if (!string.IsNullOrWhiteSpace(filterUser)) {
@@ -77,9 +79,10 @@ public class UserRepository : IUserRepository {
             },
             UpdatedDate = x.UpdatedDate
         }).ToList();
-        return new ResultDto<UserForAdmin> {
-            Data = new UserForAdmin() {
-                UserDtos = mappToDto,
+        return new ResultDto<GetForAdmin<ApplicationUserDto>>() {
+            Data =new GetForAdmin<ApplicationUserDto>()
+            {
+                EntityDto = mappToDto,
                 CurrentPage = pageNumber,
                 PageSize = pageSize,
                 RowCount = rowCount

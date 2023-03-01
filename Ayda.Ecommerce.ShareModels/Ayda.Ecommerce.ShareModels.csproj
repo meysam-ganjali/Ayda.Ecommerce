@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -8,7 +8,10 @@
 
   <ItemGroup>
     <Folder Include="BaseModel\" />
-    <Folder Include="EcommerceDto\" />
+    <Folder Include="EcommerceDto\Attribut\" />
+    <Folder Include="EcommerceDto\Product\ProductComment\" />
+    <Folder Include="EcommerceDto\Product\ProductColor\" />
+    <Folder Include="EcommerceDto\Product\ProductImage\" />
     <Folder Include="Role\" />
   </ItemGroup>
 

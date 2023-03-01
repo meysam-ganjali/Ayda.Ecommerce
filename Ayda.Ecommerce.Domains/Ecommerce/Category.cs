@@ -14,4 +14,5 @@ public class Category:BaseEntity<int>
     //برای نمایش زیر دسته های هر گروه
     public virtual ICollection<Category> SubCategories { get; set; }
     public virtual ICollection<CategoryAttribute> CategoryAttributes { get; set; }
+    public virtual ICollection<Product> Products { get; set; }
 }

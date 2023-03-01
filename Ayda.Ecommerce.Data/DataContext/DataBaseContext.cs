@@ -12,11 +12,23 @@ public class DataBaseContext : DbContext {
         _passwordHasher = new GenarateHashPass();
         _hashedPassword = _passwordHasher.HashPassword("Admin123!");
     }
-    public DbSet<Category> Categories { get; set; }
-    public DbSet<CategoryAttribute> CategoryAttributes { get; set; }
+    //Auth
     public DbSet<Role> Roles { get; set; }
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+    //Ecommerce
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<CategoryAttribute> CategoryAttributes { get; set; }
+
+    public DbSet<Product> Products { get; set; }
+    public DbSet<ProductAttribute> ProductAttributes { get; set; }
+    public DbSet<ProductImage> ProductImages { get; set; }
+    public DbSet<ProductColor> ProductColors { get; set; }
+    public DbSet<ProductComment> ProductComments { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
+        foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(s => s.GetForeignKeys())) {
+            relationship.DeleteBehavior = DeleteBehavior.Restrict;
+        }
         modelBuilder.Entity<Role>().HasData(new List<Role>()
         {
             new Role() { Id = 1, Name = RoleSD.Role_Admin },

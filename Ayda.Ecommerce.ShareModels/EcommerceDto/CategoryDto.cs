@@ -1,4 +1,5 @@
 ﻿using Ayda.Ecommerce.ShareModels.BaseModel;
+using Ayda.Ecommerce.ShareModels.EcommerceDto.Attribut;
 using Microsoft.AspNetCore.Http;
 
 namespace Ayda.Ecommerce.ShareModels.EcommerceDto;

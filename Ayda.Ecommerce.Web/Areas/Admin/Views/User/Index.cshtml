@@ -1,7 +1,8 @@
 ﻿@addTagHelper *, LazZiya.TagHelpers
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Ayda.Ecommerce.Utilities
-@model Ayda.Ecommerce.ShareModels.User.UserForAdmin
+@*@model Ayda.Ecommerce.ShareModels.User.UserForAdmin*@
+@model Ayda.Ecommerce.ShareModels.BaseModel.GetForAdmin<Ayda.Ecommerce.ShareModels.User.ApplicationUserDto>
 @{
     ViewData["Title"] = "کاربران";
 }
@@ -33,7 +34,7 @@
                 <button type="button" class="btn bg-green" onclick="ShowModalAddParentCategory()"><i class="fa fa-plus"></i>&nbsp;ایجاد کاربر</button>
             </div>
             <div class="body">
-                @if (Model.UserDtos.Count > 0) {
+                @if (Model.EntityDto.Count > 0) {
 
                     <table class="table table-bordered table-hover table-striped">
                         <thead>
@@ -47,7 +48,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach (var p in Model.UserDtos) {
+                        @foreach (var p in Model.EntityDto) {
                             <tr>
                                 <th scope="row">@p.Id</th>
                                 <td>@p.FName @p.LName</td>

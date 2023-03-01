@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <Folder Include="DataContext\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
   <ItemGroup>

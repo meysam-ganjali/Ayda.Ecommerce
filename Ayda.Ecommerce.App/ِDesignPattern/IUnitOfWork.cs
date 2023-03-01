@@ -7,4 +7,5 @@ public interface IUnitOfWork : IDisposable {
     IAuthenticationRepository AuthService { get; }
     IUserRepository UserService { get; }
     IRoleRepository RoleService { get; }
+    IProductRepository ProductService { get; }
 }

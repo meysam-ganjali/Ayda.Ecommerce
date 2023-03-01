@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ayda.Ecommerce.Data.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20230225144424_InitUserRole")]
-    partial class InitUserRole
+    [Migration("20230301122701_InitialAuth")]
+    partial class InitialAuth
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,6 +87,96 @@ namespace Ayda.Ecommerce.Data.Migrations
                     b.ToTable("CategoryAttributes");
                 });
 
+            modelBuilder.Entity("Ayda.Ecommerce.Domains.User.ApplicationUser", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Avatar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailConfirm")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsLocked")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastLoginDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LockoutEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OrganizationEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("PhoneConfirm")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("ApplicationUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreatedDate = new DateTime(2023, 3, 1, 15, 57, 1, 759, DateTimeKind.Local).AddTicks(1591),
+                            Email = "ganjalimeysam@gmail.com",
+                            EmailConfirm = true,
+                            FName = "Meysam",
+                            Gender = 1,
+                            IsActive = true,
+                            IsLocked = false,
+                            LName = "Ganjali",
+                            OrganizationEmail = "GANJALIMEYSAM@GMAIL.COM",
+                            Password = "AQAAAAEAACcQAAAAEMKCp20nPk1H9JpW59d1fXWk0WBqcdOA6JYEM2f7vmjvo3gQn5LAeKTFgQZWVbphYg==",
+                            PhoneConfirm = true,
+                            RoleId = 1,
+                            UserPhone = "09187504331"
+                        });
+                });
+
             modelBuilder.Entity("Ayda.Ecommerce.Domains.User.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -113,13 +203,13 @@ namespace Ayda.Ecommerce.Data.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 2, 25, 18, 14, 24, 558, DateTimeKind.Local).AddTicks(2829),
+                            CreatedDate = new DateTime(2023, 3, 1, 15, 57, 1, 759, DateTimeKind.Local).AddTicks(1460),
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2023, 2, 25, 18, 14, 24, 558, DateTimeKind.Local).AddTicks(2877),
+                            CreatedDate = new DateTime(2023, 3, 1, 15, 57, 1, 759, DateTimeKind.Local).AddTicks(1546),
                             Name = "Employee"
                         });
                 });
@@ -128,7 +218,8 @@ namespace Ayda.Ecommerce.Data.Migrations
                 {
                     b.HasOne("Ayda.Ecommerce.Domains.Ecommerce.Category", "ParentCategory")
                         .WithMany("SubCategories")
-                        .HasForeignKey("ParentCategoryId");
+                        .HasForeignKey("ParentCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("ParentCategory");
                 });
@@ -138,10 +229,21 @@ namespace Ayda.Ecommerce.Data.Migrations
                     b.HasOne("Ayda.Ecommerce.Domains.Ecommerce.Category", "Category")
                         .WithMany("CategoryAttributes")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Ayda.Ecommerce.Domains.User.ApplicationUser", b =>
+                {
+                    b.HasOne("Ayda.Ecommerce.Domains.User.Role", "Role")
+                        .WithMany("ApplicationUsers")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Ayda.Ecommerce.Domains.Ecommerce.Category", b =>
@@ -149,6 +251,11 @@ namespace Ayda.Ecommerce.Data.Migrations
                     b.Navigation("CategoryAttributes");
 
                     b.Navigation("SubCategories");
+                });
+
+            modelBuilder.Entity("Ayda.Ecommerce.Domains.User.Role", b =>
+                {
+                    b.Navigation("ApplicationUsers");
                 });
 #pragma warning restore 612, 618
         }

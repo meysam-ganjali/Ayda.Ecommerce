@@ -19,6 +19,7 @@ public class UnitOfWork : IUnitOfWork {
         AuthService = new AuthenticationRepository(_db, _mapper, _environment);
         UserService = new UserRepository(_db, _mapper, _environment);
         RoleService = new RoleRepository(_db, _mapper);
+        ProductService = new ProductRepository(_db, _environment, _mapper);
     }
     public void Dispose() {
         _db.Dispose();
@@ -28,4 +29,5 @@ public class UnitOfWork : IUnitOfWork {
     public IAuthenticationRepository AuthService { get; }
     public IUserRepository UserService { get; }
     public IRoleRepository RoleService { get; }
+    public IProductRepository ProductService { get; }
 }
