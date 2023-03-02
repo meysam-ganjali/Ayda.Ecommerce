@@ -41,5 +41,18 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers {
             TempData["error"] = result.Message;
             return Redirect("/Admin/Product/Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ProductDetailes(int id)
+        {
+            var result = await _product.ProductService.GetByIdAsync(id);
+            if (result.IsSuccess) {
+                return View(result.Data);
+            }
+
+            TempData["error"] = result.Message;
+            return Redirect("/Admin/Product/Index");
+            return View();
+        }
     }
 }

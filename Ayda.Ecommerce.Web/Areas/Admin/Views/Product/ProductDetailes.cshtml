@@ -1,0 +1,246 @@
+﻿@model Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductDto
+@{
+    ViewData["Title"] = "جزئیات محصول";
+}
+<div class="block-header">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+                <li class="breadcrumb-item">
+                    <h4 class="page-title">جزئیات محصول</h4>
+                </li>
+                <li class="breadcrumb-item bcrumb-1">
+                    <a href="/Admin">
+                        <i class="fas fa-home"></i> خانه
+                    </a>
+                </li>
+                <li class="breadcrumb-item bcrumb-2">
+                    <a href="/admin/product/index" onclick="return false;">فروشگاه</a>
+                </li>
+                <li class="breadcrumb-item active">جزئیات محصول</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="body">
+                <div class="block-header">
+                    <div class="row justify-content-end">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="btn-group" style="margin-right: 8rem;">
+                                <button type="button" class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="fas fa-cogs"></span>&nbsp;تنظیمات
+                                </button>
+                                <ul class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 36px, 0px);">
+                                    <li>
+                                        <a href="/Admin/User/Detaile/1" class="dropdown-item text-left text-left"><i class="fa fa-images"></i>&nbsp;افزودن تصویر به گالری </a>
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>
+                                        <button onclick="UpdateUser('1','ganjalimeysam@gmail.com')" class="dropdown-item text-left"><i class="fas fa-align-right"></i>&nbsp;افزودن مشخصات</button>
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>
+                                        <button onclick="DeleteUser('1')" class="dropdown-item text-left"><i class="fas fa-cookie-bite text-info"></i>&nbsp;افزودن رنگ  </button>
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+
+                                    <li>
+                                        <button onclick="Createddress('1')" class="dropdown-item text-left"><i class="fas fa-tv"></i>&nbsp;تغییر نحوه نمایش </button>
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>
+                                        <button onclick="ChangeUserRole('1')" class="dropdown-item text-left"><i class="fa fa-home"></i>&nbsp;تغییر نمایش در خانه </button>
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>
+                                        <button onclick="LockUser('1','Meysam')" class="dropdown-item text-left"><i class="fas fa-chart-line"></i>&nbsp; تبدیل به محصول تخفیفی</button>
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>
+                                        <button onclick="ActiveUser('1','Meysam')" class="dropdown-item text-left"><i class="fas fa-chess-queen"></i>&nbsp;تبدیل به محصول ویژه</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body ">
+                    <div class="product-store">
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                <div class="product-gallery">
+                                    <div class="product-gallery-thumbnails">
+                                        <ol class="thumbnails-list list-unstyled">
+                                            <li><img src="~/assets/images/products/p2.jpg" alt=""></li>
+                                            <li><img src="~/assets/images/products/p3.jpg" alt=""></li>
+                                            <li><img src="~/assets/images/products/p4.jpg" alt=""></li>
+                                            <li><img src="~/assets/images/products/p5.jpg" alt=""></li>
+                                            <li><img src="~/assets/images/products/p6.jpg" alt=""></li>
+                                        </ol>
+                                    </div>
+                                    <div class="product-gallery-featured">
+                                        <img src="~/@Model.ImageCoverPath.Trim('\\')">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                                <div class="product-payment-details">
+                                    <p class="last-sold text-muted"><small>145 مورد فروخته شد</small></p>
+                                    <h4 class="product-title mb-2">@Model.Name</h4>
+                                    <h2 class="product-price display-4">@Model.Price.ToString("#,##") تومان</h2>
+                                    <p>
+                                        <i class="fa fa-flash text-success"></i>
+                                        @if (Model.IsSotialProduct) {
+                                            <strong>محصول ویژه است</strong>
+                                        } else {
+                                            <strong>محصول ویژه نیست</strong>
+                                        }
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-comment col-cyan"></i>
+                                        @if (Model.AllowCustomerComment) {
+                                            <strong>اجازه نظر دارد</strong>
+                                        } else {
+                                            <strong>اجازه نظر ندارد</strong>
+                                        }
+
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-film col-red"></i>
+                                        @if (Model.ShowOnHomepage) {
+                                            <strong>نمایش در خانه</strong>
+                                        } else {
+                                            <strong>نمایش فقط در صفحه فروشگاره</strong>
+                                        }
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-chart-line text-success"></i>
+                                        @if (Model.Count == 2 || Model.Count == 1) {
+                                            <strong>محصول در حال اتمام است</strong>
+                                        }  @if (Model.Count < 1) {
+                                            <strong>محصول تمام شده است لطفا انبار را شارژ کنید</strong>
+                                        }  @if (Model.Count > 2) {
+                                            <strong>محصول موجود است</strong>
+                                        }
+                                    </p>
+                                    <label for="quant" class="active">تعداد</label>
+                                    <input type="number" name="quantity" min="1" id="quant" class="form-control mb-5 input-lg" placeholder="مقدار را انتخاب کنید">
+                                    <button type="button" class="btn btn-warning waves-effect">
+                                        <i class="fas fa-cart-plus"></i>
+                                        <span>افزودن به سبد خرید</span>
+                                    </button>
+                                    <button type="button" class="btn btn-info waves-effect">
+                                        <i class="fas fa-bolt"></i>
+                                        <span>خرید حالا</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="body">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs tab-nav-right" role="tablist">
+                    <li role="presentation">
+                        <a href="#home" data-toggle="tab" class="show">ویژگی ها</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#profile" data-toggle="tab" class="">توضیحات</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#messages" data-toggle="tab" class="active">پرسش و پاسخ</a>
+                    </li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade in" id="home">
+                        <div class="product-description">
+                            <h2 class="mb-5">ویژگی ها</h2>
+                            <dl class="row mb-5">
+                                <dt class="col-sm-3">برند</dt>
+                                <dd class="col-sm-9">برند خادملو</dd>
+                                <dt class="col-sm-3">ابعاد</dt>
+                                <dd class="col-sm-9">H 32 X W 18 X D 19؛ ارتفاع صندلی 18</dd>
+                                <dt class="col-sm-3">وزن</dt>
+                                <dd class="col-sm-9">5 کیلو </dd>
+                                <dt class="col-sm-3">گارانتی</dt>
+                                <dd class="col-sm-9">24 ماه گارانتی</dd>
+                                <dt class="col-sm-3">جنس</dt>
+                                <dd class="col-sm-9">آهن</dd>
+                                <dt class="col-sm-3">ارتفاع</dt>
+                                <dd class="col-sm-9">32 اینچ</dd>
+                                <dt class="col-sm-3">عرض</dt>
+                                <dd class="col-sm-9">18 اینچ</dd>
+                                <dt class="col-sm-3">عمق</dt>
+                                <dd class="col-sm-9">19 اینچ</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="profile">
+                        <div class="product-description">
+                            <h2 class="mb-5">توضیحات</h2>
+                            <p>
+                                لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
+                                !
+                            </p>
+                            <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.</p>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade active show" id="messages">
+                        <b>پرسش و پاسخ</b>
+                        <div class="product-faq mb-5">
+                            <p class="text-muted">چه اطلاعاتی نیاز دارید؟</p>
+                        </div>
+                        <div class="product-comments">
+                            <h5 class="mb-2">یا از فروشگاه دیوید بخواهید</h5>
+                            <form class="form-inline mb-5">
+                                <textarea cols="50" rows="2" class="form-control mr-4" placeholder="یک سوال بنویس"></textarea><button class="btn btn-lg btn-primary">پرسیدن</button>
+                            </form>
+                            <h5 class="mb-5">آخرین سوالات</h5>
+                            <ol class="list-unstyled last-questions-list">
+                                <li><i class="fa fa-comment"></i> <span>سلام دیوید، آیا می توانم با کارت اعتباری پرداخت کنم؟</span></li>
+                                <li><i class="fa fa-comment"></i> <span>آیا می توانم آن را به آدرس دیگری ارسال کنم؟</span></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+    {
+    <script>
+
+        (function ($) {
+            "use strict";
+
+            // select all thumbnails
+            const galleryThumbnail = document.querySelectorAll(".thumbnails-list li");
+            // select featured
+            const galleryFeatured = document.querySelector(".product-gallery-featured img");
+
+            // loop all items
+            galleryThumbnail.forEach((item) => {
+                item.addEventListener("mouseover", function () {
+                    let image = item.children[0].src;
+                    galleryFeatured.src = image;
+                });
+            });
+
+            // show popover
+            $(".main-questions").popover('show');
+
+        })(jQuery);
+    </script>
+}
