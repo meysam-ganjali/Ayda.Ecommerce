@@ -127,6 +127,20 @@ public class CategoryRepository : ICategoryRepository {
             Data = _mapper.Map<IEnumerable<CategoryDto>>(categories)
         };
     }
+    public async Task<ResultDto<IEnumerable<CategoryDto>>> GetAllAsync() {
+        IEnumerable<Category> categories;
+
+
+            categories = await _db.Categories
+                .Include(x => x.SubCategories)
+                .Include(x => x.CategoryAttributes)
+                .Where(x => x.ParentCategoryId != null).ToListAsync();
+
+        return new ResultDto<IEnumerable<CategoryDto>> {
+            IsSuccess = true,
+            Data = _mapper.Map<IEnumerable<CategoryDto>>(categories)
+        };
+    }
 
     public async Task<ResultDto<CategoryDto>> GetByIdAsync(int id) {
         var category = await _db.Categories.FindAsync(id);

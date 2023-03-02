@@ -3,11 +3,14 @@ using Ayda.Ecommerce.App.Contract.IRepository;
 using Ayda.Ecommerce.Data.DataContext;
 using Ayda.Ecommerce.Domains.Ecommerce;
 using Ayda.Ecommerce.ShareModels.BaseModel;
+using Ayda.Ecommerce.ShareModels.EcommerceDto;
+using Ayda.Ecommerce.ShareModels.EcommerceDto.Attribut;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductAttribute;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductColor;
+using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductComment;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductImage;
-
+using Ayda.Ecommerce.ShareModels.User;
 using Ayda.Ecommerce.Utilities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +32,7 @@ public class ProductRepository : IProductRepository {
         int rowCount = 0;
         var productList = _db.Products
             .Include(x => x.Category)
+            .ThenInclude(x => x.ParentCategory)
             .ThenInclude(x => x.CategoryAttributes)
             .Include(x => x.ProductAttributes)
             .Include(x => x.ProductColors)
@@ -66,11 +70,90 @@ public class ProductRepository : IProductRepository {
             }
         }
 
-        var mappToDto = _mapper.Map<IEnumerable<ProductDto>>(productList);
+        var mappToDto = productList.Select(p => new ProductDto() {
+            Category = new CategoryDto() {
+                Name = p.Category.Name,
+                CreatedDate = p.Category.CreatedDate,
+                Description = p.Category.Description,
+                LogoPath = p.Category.LogoPath
+            },
+            Id = p.Id,
+            IsDiscount = p.IsDiscount,
+            IsSotialProduct = p.IsSotialProduct,
+            ShowOnHomepage = p.ShowOnHomepage,
+            CreatedDate = p.CreatedDate,
+            AllowCustomerComment = p.AllowCustomerComment,
+            CategoryId = p.CategoryId,
+            Count = p.Count,
+            DiscountLableText = p.DiscountLableText,
+            FullDescription = p.FullDescription,
+            Height = p.Height,
+            ImageCoverPath = p.ImageCoverPath,
+            IsShow = p.IsShow,
+            Length = p.Length,
+            Name = p.Name,
+            ProductAttributes = p.ProductAttributes.Select(a => new ProductAttributeDto() {
+                Id = a.Id,
+                UpdatedDate = a.UpdatedDate,
+                IsShow = a.IsShow,
+                CreatedDate = a.CreatedDate,
+                AttributeId = a.AttributeId,
+                AttributeValue = a.AttributeValue,
+                CategoryAttribute = new CategoryAttributeDto() {
+                    IsShow = a.CategoryAttribute.IsShow,
+                    CreatedDate = a.CategoryAttribute.CreatedDate,
+                    CategoryId = a.CategoryAttribute.CategoryId,
+                    Id = a.CategoryAttribute.Id,
+                    Name = a.CategoryAttribute.Name,
+
+
+                },
+            }).ToList(),
+            UpdatedDate = p.UpdatedDate,
+            ProductColors = p.ProductColors.Select(c => new ProductColorDto {
+                IsShow = c.IsShow,
+                CreatedDate = c.CreatedDate,
+                Id = c.Id,
+                UpdatedDate = c.UpdatedDate,
+                ColorHex = c.ColorHex,
+                ColorName = c.ColorName,
+                ProductId = c.ProductId
+            }).ToList(),
+            ProductImages = p.ProductImages.Select(i => new ProductImageDto {
+                Id = i.Id,
+                CreatedDate = i.CreatedDate,
+                IsShow = i.IsShow,
+                AltTagAttribute = i.AltTagAttribute,
+                UpdatedDate = i.UpdatedDate,
+                ProductId = i.ProductId,
+                ImagePath = i.ImagePath,
+                TitleTagAttribute = i.TitleTagAttribute
+            }).ToList(),
+            ProductComments = p.ProductComments.Select(c => new ProductCommentDto() {
+                Id = c.Id,
+                CreatedDate = c.CreatedDate,
+                IsShow = c.IsShow,
+                CommentText = c.CommentText,
+                UpdatedDate = c.UpdatedDate,
+                ProductId = c.ProductId,
+                ApplicationUser = new ApplicationUserDto {
+                    FName = c.ApplicationUser.FName,
+                    LName = c.ApplicationUser.LName,
+                },
+                UserId = c.UserId
+            }).ToList(),
+            Price = p.Price,
+            Rate = p.Rate,
+            ShortDescription = p.ShortDescription,
+            ShowCount = p.ShowCount,
+            Weight = p.Weight,
+            Width = p.Width,
+        }).ToList();
+
         return new ResultDto<GetForAdmin<ProductDto>>() {
 
             Data = new GetForAdmin<ProductDto>() {
-                EntityDto = mappToDto.ToList(),
+                EntityDto =  mappToDto.ToList(),
                 CurrentPage = pageNumber,
                 PageSize = pageSize,
                 RowCount = rowCount

@@ -16,6 +16,7 @@ public class CreateProductDto
     public string DiscountLableText { get; set; }
     public bool ShowOnHomepage { get; set; }
     public bool AllowCustomerComment { get; set; }
+    public bool IsShow { get; set; }
     public int Count { get; set; }
     public int Rate { get; set; }
     public int? Weight { get; set; }
@@ -23,5 +24,5 @@ public class CreateProductDto
     public int? Width { get; set; }
     public int? Height { get; set; }
     //Relation
-    public int CategoryId { get; set; }
+    public int CategoryId { get; set; }//
 }

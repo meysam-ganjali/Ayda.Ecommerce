@@ -110,6 +110,10 @@ namespace Ayda.Ecommerce.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("DiscountLableText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FullDescription")
                         .HasColumnType("nvarchar(max)");
 
@@ -387,7 +391,7 @@ namespace Ayda.Ecommerce.Data.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedDate = new DateTime(2023, 3, 1, 16, 39, 45, 460, DateTimeKind.Local).AddTicks(9963),
+                            CreatedDate = new DateTime(2023, 3, 2, 16, 40, 27, 685, DateTimeKind.Local).AddTicks(5503),
                             Email = "ganjalimeysam@gmail.com",
                             EmailConfirm = true,
                             FName = "Meysam",
@@ -397,7 +401,7 @@ namespace Ayda.Ecommerce.Data.Migrations
                             IsShow = true,
                             LName = "Ganjali",
                             OrganizationEmail = "GANJALIMEYSAM@GMAIL.COM",
-                            Password = "AQAAAAEAACcQAAAAEL3EKlTsYEhkVZNF2P7FMBOWjMeY0wq6F33VmFgA4DGH9Z6fHy+d0VTmAyE2XSo7jQ==",
+                            Password = "AQAAAAEAACcQAAAAEFBDtSfbfdvW2X7JF97wWmn97dxY2TYpFoupz/914sxfRqMXS9fKrQV4YJQI1SKczw==",
                             PhoneConfirm = true,
                             RoleId = 1,
                             UserPhone = "09187504331"
@@ -433,14 +437,14 @@ namespace Ayda.Ecommerce.Data.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 3, 1, 16, 39, 45, 460, DateTimeKind.Local).AddTicks(9809),
+                            CreatedDate = new DateTime(2023, 3, 2, 16, 40, 27, 685, DateTimeKind.Local).AddTicks(5389),
                             IsShow = true,
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2023, 3, 1, 16, 39, 45, 460, DateTimeKind.Local).AddTicks(9916),
+                            CreatedDate = new DateTime(2023, 3, 2, 16, 40, 27, 685, DateTimeKind.Local).AddTicks(5448),
                             IsShow = true,
                             Name = "Employee"
                         });
