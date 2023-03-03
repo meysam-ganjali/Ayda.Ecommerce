@@ -98,12 +98,12 @@ public class MappConf : Profile {
             #region Category Attribute Mapp
 
             config.CreateMap<CategoryAttribute, CategoryAttributeDto>()
-                .ForMember(p => p.CategoryId,
+                .ForMember(p => p.Category,
                     p => p.MapFrom(q => q.Category))
                 .ForMember(p => p.ProductAttributes,
                     p => p.MapFrom(q => q.ProductAttributes));
             config.CreateMap<CategoryAttributeDto, CategoryAttribute>()
-                .ForMember(p => p.CategoryId,
+                .ForMember(p => p.Category,
                     p => p.MapFrom(q => q.Category))
                 .ForMember(p => p.ProductAttributes,
                     p => p.MapFrom(q => q.ProductAttributes));

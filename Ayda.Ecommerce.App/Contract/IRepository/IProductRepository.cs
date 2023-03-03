@@ -1,4 +1,5 @@
 ﻿using Ayda.Ecommerce.ShareModels.BaseModel;
+using Ayda.Ecommerce.ShareModels.EcommerceDto.Attribut;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductAttribute;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductColor;
@@ -22,4 +23,5 @@ public interface IProductRepository
     Task<ResultDto> YesOrNoProductIsSotialAsync(int id);
     Task<ResultDto> ShowOrHideProductInHomePageAsync(int id);
     Task<ResultDto> AllowOrNotAllowCommentAsync(int id);
+    Task<ResultDto<IEnumerable<CategoryAttributeDto>>> GetAttribute(int categoryId);
 }

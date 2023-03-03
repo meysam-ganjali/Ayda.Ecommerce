@@ -153,7 +153,7 @@ public class ProductRepository : IProductRepository {
         return new ResultDto<GetForAdmin<ProductDto>>() {
 
             Data = new GetForAdmin<ProductDto>() {
-                EntityDto =  mappToDto.ToList(),
+                EntityDto = mappToDto.ToList(),
                 CurrentPage = pageNumber,
                 PageSize = pageSize,
                 RowCount = rowCount
@@ -446,6 +446,26 @@ public class ProductRepository : IProductRepository {
         return new ResultDto {
             IsSuccess = true,
             Message = showInHome
+        };
+    }
+
+    public async Task<ResultDto<IEnumerable<CategoryAttributeDto>>> GetAttribute(int categoryId) {
+        var category = await _db.Categories.FindAsync(categoryId);
+        var attribute =await _db.CategoryAttributes
+            .Include(x => x.Category)
+            .Include(x => x.ProductAttributes)
+            .Where(w => w.CategoryId == categoryId).ToListAsync();
+        if (attribute == null) {
+            return new ResultDto<IEnumerable<CategoryAttributeDto>>() {
+                Data = null,
+                IsSuccess = false,
+                Message = $"مشخصهای برای دسته {category.Name} ثبت نشده لطفا مشخصات دسته را ثبت کنید"
+            };
+        }
+        
+        return new ResultDto<IEnumerable<CategoryAttributeDto>> {
+            IsSuccess = true,
+            Data = _mapper.Map<IEnumerable<CategoryAttributeDto>>(attribute)
         };
     }
 }

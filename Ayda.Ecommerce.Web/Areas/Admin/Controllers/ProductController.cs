@@ -1,5 +1,7 @@
 ﻿using Ayda.Ecommerce.App;
+using Ayda.Ecommerce.ShareModels.EcommerceDto.Attribut;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product;
+using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductAttribute;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductImage;
 using Ayda.Ecommerce.Web.ExtationConfigur;
 using Microsoft.AspNetCore.Authorization;
@@ -46,8 +48,13 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers {
         [HttpGet]
         public async Task<IActionResult> ProductDetailes(int id)
         {
+           
             var result = await _product.ProductService.GetByIdAsync(id);
-            if (result.IsSuccess) {
+
+            if (result.IsSuccess)
+            {
+                var categoryAttribute = await _product.ProductService.GetAttribute(result.Data.CategoryId);
+                ViewBag.Attribute = new SelectList(categoryAttribute.Data, "Id", "Name");
                 return View(result.Data);
             }
 
@@ -78,6 +85,17 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers {
 
             TempData["error"] = result.Message;
             return Redirect($"/Admin/Product/ProductDetailes/{gallery.ProductId}");
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddProductAttribute(CreateProductAttributeDto attr) {
+            var result = await _product.ProductService.AddAttributeAsync(attr);
+            if (result.IsSuccess) {
+                TempData["success"] = result.Message;
+                return Redirect($"/Admin/Product/ProductDetailes/{attr.ProductId}");
+            }
+
+            TempData["error"] = result.Message;
+            return Redirect($"/Admin/Product/ProductDetailes/{attr.ProductId}");
         }
     }
 }
