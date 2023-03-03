@@ -158,51 +158,60 @@
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs tab-nav-right" role="tablist">
                     <li role="presentation">
-                        <a href="#home" data-toggle="tab" class="show">ویژگی ها</a>
+                        <a href="#attr-list" data-toggle="tab" class="active">ویژگی ها</a>
                     </li>
                     <li role="presentation">
                         <a href="#profile" data-toggle="tab" class="">توضیحات</a>
                     </li>
                     <li role="presentation">
-                        <a href="#messages" data-toggle="tab" class="active">پرسش و پاسخ</a>
+                        <a href="#messages" data-toggle="tab" class="show">پرسش و پاسخ</a>
                     </li>
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane fade in" id="home">
+                    <div role="tabpanel" class="tab-pane fade in active show" id="attr-list">
                         <div class="product-description">
-                            <h2 class="mb-5">ویژگی ها</h2>
-                            <dl class="row mb-5">
-                                <dt class="col-sm-3">برند</dt>
-                                <dd class="col-sm-9">برند خادملو</dd>
-                                <dt class="col-sm-3">ابعاد</dt>
-                                <dd class="col-sm-9">H 32 X W 18 X D 19؛ ارتفاع صندلی 18</dd>
-                                <dt class="col-sm-3">وزن</dt>
-                                <dd class="col-sm-9">5 کیلو </dd>
-                                <dt class="col-sm-3">گارانتی</dt>
-                                <dd class="col-sm-9">24 ماه گارانتی</dd>
-                                <dt class="col-sm-3">جنس</dt>
-                                <dd class="col-sm-9">آهن</dd>
-                                <dt class="col-sm-3">ارتفاع</dt>
-                                <dd class="col-sm-9">32 اینچ</dd>
-                                <dt class="col-sm-3">عرض</dt>
-                                <dd class="col-sm-9">18 اینچ</dd>
-                                <dt class="col-sm-3">عمق</dt>
-                                <dd class="col-sm-9">19 اینچ</dd>
-                            </dl>
+                            <p class="mb-2">ویژگی ها</p>
+                            @if (Model.ProductAttributes.Any()) {
+                                <table class="table table-bordered table-striped table-hover">
+                                    <tr>
+                                        <td>عنوان مشخصه</td>
+                                        <td>مقدار مشخصه</td>
+                                        <td>عملیات</td>
+                                    </tr>
+                                    @foreach (var a in Model.ProductAttributes) {
+                                        <tr>
+                                            |
+                                            <td>@a.CategoryAttribute.Name</td>
+                                            <td>@a.AttributeValue</td>
+                                            <td>
+                                                <button type="button" class="btn bg-light-blue btn-circle waves-effect waves-circle waves-float">
+                                                    <i class="fa fa-edit"></i>
+                                                </button>
+                                                <button type="button" class="btn bg-deep-orange btn-circle waves-effect waves-circle waves-float">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            } else {
+                                <p>فاقد مشخصات است یا ادمین مشخصاتی برای این محصول اضافه نکرده است</p>
+                            }
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="profile">
                         <div class="product-description">
                             <h2 class="mb-5">توضیحات</h2>
                             <p>
-                                لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
-                                !
+                                @Html.Raw(Model.ShortDescription)
                             </p>
-                            <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.</p>
+                            <p>
+                                @Html.Raw(Model.FullDescription)
+                            </p>
                         </div>
                     </div>
-                    <div role="tabpanel" class="tab-pane fade active show" id="messages">
+                    <div role="tabpanel" class="tab-pane fade " id="messages">
                         <b>پرسش و پاسخ</b>
                         <div class="product-faq mb-5">
                             <p class="text-muted">چه اطلاعاتی نیاز دارید؟</p>
@@ -225,7 +234,7 @@
     </div>
 </div>
 @section Scripts
-{
+    {
     <link rel="stylesheet" href="~/lib/Sweetalert2/sweetalert2.min.css" />
     <script src="~/lib/Sweetalert2/sweetalert2.min.js"></script>
     <script>
@@ -260,8 +269,7 @@
     </script>
 }
 @section Modals
-    {
-
+{
     <div class="modal" id="AddImage" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -318,8 +326,7 @@
                         <div class="form-group">
                             <div class="form-line">
                                 <label>لیست مشخصات</label>
-                                <select class="browser-default valid" asp-items="@ViewBag.Attribute" name="AttributeId" >
-                                   
+                                <select class="browser-default valid" asp-items="@ViewBag.Attribute" name="AttributeId">
                                 </select>
                             </div>
                         </div>
