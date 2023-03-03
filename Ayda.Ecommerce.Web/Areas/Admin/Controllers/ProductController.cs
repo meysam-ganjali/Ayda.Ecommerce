@@ -1,5 +1,6 @@
 ﻿using Ayda.Ecommerce.App;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product;
+using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductImage;
 using Ayda.Ecommerce.Web.ExtationConfigur;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -53,6 +54,30 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers {
             TempData["error"] = result.Message;
             return Redirect("/Admin/Product/Index");
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddImageToGallery(CreateProductImageDto gallery)
+        {
+            var Images = HttpContext.Request.Form.Files;
+            if (Images == null)
+            {
+                TempData["error"] = "تصویری انتخاب نکرده اید";
+                return Redirect($"/Admin/Product/ProductDetailes/{gallery.ProductId}");
+            }
+            else
+            {
+                gallery.Image = Images[0];
+            }
+
+            var result = await _product.ProductService.AddImagesAsync(gallery);
+            if (result.IsSuccess) {
+                TempData["success"] = result.Message;
+                return Redirect($"/Admin/Product/ProductDetailes/{gallery.ProductId}");
+            }
+
+            TempData["error"] = result.Message;
+            return Redirect($"/Admin/Product/ProductDetailes/{gallery.ProductId}");
         }
     }
 }

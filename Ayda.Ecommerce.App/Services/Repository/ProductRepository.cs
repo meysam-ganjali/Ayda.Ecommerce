@@ -339,7 +339,7 @@ public class ProductRepository : IProductRepository {
     public async Task<ResultDto> AddImagesAsync(CreateProductImageDto ProductImages) {
         var mappToproductImage = _mapper.Map<ProductImage>(ProductImages);
         UploadHelper uploadObj = new UploadHelper(_environment);
-        var uploadedResult = uploadObj.UploadFile(ProductImages.Image, $@"\images\product\gallery");
+        var uploadedResult = uploadObj.UploadFile(ProductImages.Image, $@"\images\product\gallery\");
         mappToproductImage.ImagePath = uploadedResult.FileNameAddress;
         try {
             await _db.ProductImages.AddAsync(mappToproductImage);

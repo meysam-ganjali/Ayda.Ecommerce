@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "جزئیات محصول";
 }
+<partial name="_Notification" />
 <div class="block-header">
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -35,7 +36,7 @@
                                 </button>
                                 <ul class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 36px, 0px);">
                                     <li>
-                                        <a href="/Admin/User/Detaile/1" class="dropdown-item text-left text-left"><i class="fa fa-images"></i>&nbsp;افزودن تصویر به گالری </a>
+                                        <a onclick="AddImageToGallery('@Model.Id')" class="dropdown-item text-left text-left"><i class="fa fa-images"></i>&nbsp;افزودن تصویر به گالری </a>
                                     </li>
                                     <li role="separator" class="divider"></li>
                                     <li>
@@ -74,11 +75,16 @@
                                 <div class="product-gallery">
                                     <div class="product-gallery-thumbnails">
                                         <ol class="thumbnails-list list-unstyled">
-                                            <li><img src="~/assets/images/products/p2.jpg" alt=""></li>
-                                            <li><img src="~/assets/images/products/p3.jpg" alt=""></li>
-                                            <li><img src="~/assets/images/products/p4.jpg" alt=""></li>
-                                            <li><img src="~/assets/images/products/p5.jpg" alt=""></li>
-                                            <li><img src="~/assets/images/products/p6.jpg" alt=""></li>
+                                            @if (Model.ProductImages.Count > 0) { 
+                                                <li><img src="~/@Model.ImageCoverPath.Trim('\\')" alt=""></li>
+                                                foreach (var i in Model.ProductImages) {
+                                                    <li><img src="~/@i.ImagePath.Trim('\\')" alt=""></li>
+                                                }
+                                               
+                                            } else {
+                                                <li><img src="~/@Model.ImageCoverPath.Trim('\\')" alt=""></li>
+                                            }
+
                                         </ol>
                                     </div>
                                     <div class="product-gallery-featured">
@@ -220,8 +226,9 @@
 </div>
 @section Scripts
     {
+    <link rel="stylesheet" href="~/lib/Sweetalert2/sweetalert2.min.css" />
+    <script src="~/lib/Sweetalert2/sweetalert2.min.js"></script>
     <script>
-
         (function ($) {
             "use strict";
 
@@ -242,5 +249,137 @@
             $(".main-questions").popover('show');
 
         })(jQuery);
+        function AddImageToGallery(productId) {
+            $('#add_image_productId').val(productId);
+            $('#AddImage').modal('show');
+        }
     </script>
+}
+@section Modals
+    {
+
+    <div class="modal" id="AddImage" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-light-blue waves-effect">
+                    <h5 class="modal-title text-white">ثبت تصوبر در گالری محصول</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/admin/Product/AddImageToGallery" enctype="multipart/form-data">
+                        <input type="hidden" name="ProductId" id="add_image_productId" />
+
+                        <div class="form-group">
+                            <label>Alt Attribute &nbsp;<i class="text-danger">*</i></label>
+                            <div class="form-line">
+                                <input type="text" name="AltTagAttribute" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Title Attribute &nbsp;<i class="text-danger">*</i></label>
+                            <div class="form-line">
+                                <input type="text" name="TitleTagAttribute" class="form-control">
+                            </div>
+                        </div>
+                        <label>لوگو دسته</label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <input type="file" name="Image" class="form-control" accept="image/*">
+                            </div>
+                        </div>
+                        <br> <div class="modal-footer">
+                            <button type="submit" class="btn btn-info waves-effect"><i class="fas fa-save"></i></button>
+                            <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">لغو</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="AddChild" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-light-green waves-effect">
+                    <h5 class="modal-title text-white">ثبت زیردسته برای&nbsp;<span class="badg bg-info" id="parent-name"></span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/admin/category/CreateCategory" enctype="multipart/form-data">
+                        <input type="hidden" name="ParentCategoryId" id="Add-Childcategory_ParentId" />
+                        <label>عنوان دسته&nbsp;<i class="text-danger">*</i></label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <input type="text" name="Name" class="form-control" placeholder="عنوان دسته بندی را مشخص کنید">
+                            </div>
+                        </div>
+                        <label>لوگو دسته</label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <input type="file" name="Image" class="form-control" accept="image/*">
+                            </div>
+                        </div>
+                        <label> توضیحات</label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <textarea class="form-control" rows="3" name="Description"></textarea>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-info waves-effect"><i class="fas fa-save"></i></button>
+                            <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">لغو</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="EditCategory" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-orange waves-effect">
+                    <h5 class="modal-title text-white">ویرایش دسته بندی&nbsp;<span class="badg bg-info" id="parent-name"></span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/admin/category/UpdateCategory" enctype="multipart/form-data">
+                        <input type="hidden" name="Id" id="edit_catId" />
+                        <div class="row justify-content-center">
+                            <img id="edit_cat_img" width="65" height="65" class="d-inline img-thumbnail img-rounded shadow" />
+                        </div>
+                        <label>عنوان دسته&nbsp;<i class="text-danger">*</i></label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <input type="text" name="Name" id="edit_catName" class="form-control" placeholder="عنوان دسته بندی را مشخص کنید">
+                            </div>
+                        </div>
+                        <label>لوگو دسته</label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <input type="file" name="Image" class="form-control" accept="image/*">
+                            </div>
+                        </div>
+                        <label> توضیحات</label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <textarea class="form-control" rows="3" name="Description" id="edit_catDescription"></textarea>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-info waves-effect"><i class="fas fa-save"></i></button>
+                            <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">لغو</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 }
