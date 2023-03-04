@@ -21,8 +21,7 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers {
 
         [HttpPost]
         public async Task<IActionResult> CreateCategory(CreateCategoryDto categoryDto) {
-            if (categoryDto.Image != null)
-            {
+            if (categoryDto.Image != null) {
                 var Images = HttpContext.Request.Form.Files;
                 if (Images != null) {
                     categoryDto.Image = Images[0];
@@ -45,8 +44,7 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers {
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateCategory(UpdateCategoryDto categoryDto)
-        {
+        public async Task<IActionResult> UpdateCategory(UpdateCategoryDto categoryDto) {
             if (categoryDto.Image != null) {
                 var Images = HttpContext.Request.Form.Files;
                 if (Images != null) {
@@ -64,8 +62,7 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers {
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAttribute(CreateCategoryAttributeDto attr,int parentId)
-        {
+        public async Task<IActionResult> CreateAttribute(CreateCategoryAttributeDto attr, int parentId) {
             var result = await _categoryService.CategoryService.AddAtributeAsync(attr);
             if (result.IsSuccess) {
                 TempData["success"] = result.Message;
@@ -74,6 +71,16 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers {
 
             TempData["error"] = result.Message;
             return Redirect($"/Admin/Category/Index/{parentId}");
+        }
+        //id => category id
+        public async Task<IActionResult> AttributeList(int id, int parentId) {
+            var result = await _categoryService.CategoryService.GetAllCategoryAttributeAsync(id);
+            if (result.IsSuccess) {
+                return View(result.Data);
+            }
+
+            return Redirect($"/Admin/Category/index/{parentId}");
+
         }
     }
 }

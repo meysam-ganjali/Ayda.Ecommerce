@@ -163,8 +163,7 @@ public class CategoryRepository : ICategoryRepository {
         try {
             await _db.CategoryAttributes.AddAsync(mappToCategoryAttribute);
             await _db.SaveChangesAsync();
-            return new ResultDto
-            {
+            return new ResultDto {
                 IsSuccess = true,
                 Message = $"مشخصع با عنوان {attr.Name} به لیست مشخصات دسته بندی {cat.Data.Name} اضافه شد"
             };
@@ -174,5 +173,23 @@ public class CategoryRepository : ICategoryRepository {
                 Message = e.Message
             };
         }
+    }
+
+    public async Task<ResultDto<IEnumerable<CategoryAttributeDto>>> GetAllCategoryAttributeAsync(int childCategoryId) {
+        var categoryAttribute = await _db.CategoryAttributes
+            .Include(x => x.Category)
+            .Where(x => x.CategoryId == childCategoryId)
+            .ToListAsync();
+        if (categoryAttribute == null || !categoryAttribute.Any()) {
+            return new ResultDto<IEnumerable<CategoryAttributeDto>>() {
+                Data = null,
+                IsSuccess = false,
+                Message = "مشخصه ای برای این دسته ثبت نشده است"
+            };
+        }
+
+        return new ResultDto<IEnumerable<CategoryAttributeDto>> {
+            Data = _mapper.Map<IEnumerable<CategoryAttributeDto>>(categoryAttribute), IsSuccess = true
+        };
     }
 }

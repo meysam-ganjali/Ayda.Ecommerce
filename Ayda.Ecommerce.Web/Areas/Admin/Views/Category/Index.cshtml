@@ -72,6 +72,11 @@
                                             }
                                             @if (p.ParentCategoryId != null || p.ParentCategoryId > 0) {
                                                 <button onclick="AttributeModal('@p.Id','@p.Name','@p.ParentCategoryId')" class="btn bg-light-blue waves-effect btn-sm"><i class="fa fa-plus"></i>&nbsp;ثبت مشخصات</button>
+                                                
+                                            }
+                                            @if (p.CategoryAttributes.Any())
+                                            {
+                                                <a href="/admin/category/AttributeList/@p.Id" class="btn bg-orange waves-effect btn-sm"><i class="fa fa-eye"></i>&nbsp مشخصات <span class="badg bg-light-blue rounded-circle">@p.CategoryAttributes.Count</span></a>
                                             }
                                         </div>
                                     </td>

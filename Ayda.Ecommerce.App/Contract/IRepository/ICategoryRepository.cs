@@ -13,4 +13,5 @@ public interface ICategoryRepository
     Task<ResultDto<IEnumerable<CategoryDto>>> GetAllAsync();
     Task<ResultDto<CategoryDto>> GetByIdAsync(int id);
     Task<ResultDto> AddAtributeAsync(CreateCategoryAttributeDto attr);
+    Task<ResultDto<IEnumerable<CategoryAttributeDto>>> GetAllCategoryAttributeAsync(int childCategoryId);
 }
