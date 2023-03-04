@@ -69,8 +69,38 @@ public class ProductRepository : IProductRepository {
                     }
             }
         }
+        var mappToDto = _mapper.Map<IEnumerable<ProductDto>>(productList);
+        return new ResultDto<GetForAdmin<ProductDto>>() {
 
-        var mappToDto = productList.Select(p => new ProductDto() {
+            Data = new GetForAdmin<ProductDto>() {
+                EntityDto = mappToDto.ToList(),
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                RowCount = rowCount
+            },
+            IsSuccess = true,
+        };
+    }
+
+    public async Task<ResultDto<ProductDto>> GetByIdAsync(int id) {
+        var product =  _db.Products
+            .Include(x => x.Category)
+            .ThenInclude(x => x.CategoryAttributes)
+            .Include(x => x.ProductAttributes)
+            .Include(x => x.ProductColors)
+            .Include(x => x.ProductImages)
+            .Include(x => x.ProductComments)
+            .ThenInclude(x => x.ApplicationUser)
+            .Where(c => c.Id == id);
+        if (product == null) {
+            return new ResultDto<ProductDto> {
+                Message = "محصول یافت نشد",
+                Data = null,
+                IsSuccess = false,
+            };
+        }
+
+        var mappToDto =await  product.Select(p => new ProductDto() {
             Category = new CategoryDto() {
                 Name = p.Category.Name,
                 CreatedDate = p.Category.CreatedDate,
@@ -148,39 +178,7 @@ public class ProductRepository : IProductRepository {
             ShowCount = p.ShowCount,
             Weight = p.Weight,
             Width = p.Width,
-        }).ToList();
-
-        return new ResultDto<GetForAdmin<ProductDto>>() {
-
-            Data = new GetForAdmin<ProductDto>() {
-                EntityDto = mappToDto.ToList(),
-                CurrentPage = pageNumber,
-                PageSize = pageSize,
-                RowCount = rowCount
-            },
-            IsSuccess = true,
-        };
-    }
-
-    public async Task<ResultDto<ProductDto>> GetByIdAsync(int id) {
-        var product = await _db.Products
-            .Include(x => x.Category)
-            .ThenInclude(x => x.CategoryAttributes)
-            .Include(x => x.ProductAttributes)
-            .Include(x => x.ProductColors)
-            .Include(x => x.ProductImages)
-            .Include(x => x.ProductComments)
-            .ThenInclude(x => x.ApplicationUser)
-            .FirstOrDefaultAsync(c => c.Id == id);
-        if (product == null) {
-            return new ResultDto<ProductDto> {
-                Message = "محصول یافت نشد",
-                Data = null,
-                IsSuccess = false,
-            };
-        }
-
-        var mappToDto = _mapper.Map<ProductDto>(product);
+        }).FirstOrDefaultAsync();
         return new ResultDto<ProductDto> {
             Data = mappToDto,
             IsSuccess = true

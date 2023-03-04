@@ -2,6 +2,7 @@
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Attribut;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductAttribute;
+using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductColor;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductImage;
 using Ayda.Ecommerce.Web.ExtationConfigur;
 using Microsoft.AspNetCore.Authorization;
@@ -96,6 +97,17 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers {
 
             TempData["error"] = result.Message;
             return Redirect($"/Admin/Product/ProductDetailes/{attr.ProductId}");
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddProductColor(CreateProductColorDto color) {
+            var result = await _product.ProductService.AddColorAsync(color);
+            if (result.IsSuccess) {
+                TempData["success"] = result.Message;
+                return Redirect($"/Admin/Product/ProductDetailes/{color.ProductId}");
+            }
+
+            TempData["error"] = result.Message;
+            return Redirect($"/Admin/Product/ProductDetailes/{color.ProductId}");
         }
     }
 }
