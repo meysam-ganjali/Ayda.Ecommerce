@@ -4,6 +4,7 @@ using Ayda.Ecommerce.Data.DataContext;
 using Ayda.Ecommerce.Domains.Ecommerce;
 using Ayda.Ecommerce.ShareModels.BaseModel;
 using Ayda.Ecommerce.ShareModels.EcommerceDto;
+using Ayda.Ecommerce.ShareModels.EcommerceDto.Attribut;
 using Ayda.Ecommerce.Utilities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -107,15 +108,13 @@ public class CategoryRepository : ICategoryRepository {
 
     public async Task<ResultDto<IEnumerable<CategoryDto>>> GetAllAsync(int? id) {
         IEnumerable<Category> categories;
-       
+
         if (id > 0 || id != null) {
             categories = await _db.Categories
                 .Include(x => x.SubCategories)
                 .Include(x => x.CategoryAttributes)
                 .Where(x => x.ParentCategoryId == id).ToListAsync();
-        }
-        else
-        {
+        } else {
             categories = await _db.Categories
                 .Include(x => x.SubCategories)
                 .Include(x => x.CategoryAttributes)
@@ -131,10 +130,10 @@ public class CategoryRepository : ICategoryRepository {
         IEnumerable<Category> categories;
 
 
-            categories = await _db.Categories
-                .Include(x => x.SubCategories)
-                .Include(x => x.CategoryAttributes)
-                .Where(x => x.ParentCategoryId != null).ToListAsync();
+        categories = await _db.Categories
+            .Include(x => x.SubCategories)
+            .Include(x => x.CategoryAttributes)
+            .Where(x => x.ParentCategoryId != null).ToListAsync();
 
         return new ResultDto<IEnumerable<CategoryDto>> {
             IsSuccess = true,
@@ -156,5 +155,24 @@ public class CategoryRepository : ICategoryRepository {
             Data = _mapper.Map<CategoryDto>(category),
             IsSuccess = true
         };
+    }
+
+    public async Task<ResultDto> AddAtributeAsync(CreateCategoryAttributeDto attr) {
+        var cat = await GetByIdAsync(attr.CategoryId);
+        var mappToCategoryAttribute = _mapper.Map<CategoryAttribute>(attr);
+        try {
+            await _db.CategoryAttributes.AddAsync(mappToCategoryAttribute);
+            await _db.SaveChangesAsync();
+            return new ResultDto
+            {
+                IsSuccess = true,
+                Message = $"مشخصع با عنوان {attr.Name} به لیست مشخصات دسته بندی {cat.Data.Name} اضافه شد"
+            };
+        } catch (Exception e) {
+            return new ResultDto {
+                IsSuccess = false,
+                Message = e.Message
+            };
+        }
     }
 }

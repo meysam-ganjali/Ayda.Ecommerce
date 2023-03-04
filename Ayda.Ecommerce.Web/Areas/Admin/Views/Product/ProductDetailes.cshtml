@@ -49,19 +49,19 @@
                                     <li role="separator" class="divider"></li>
 
                                     <li>
-                                        <button onclick="Createddress('1')" class="dropdown-item text-left"><i class="fas fa-tv"></i>&nbsp;تغییر نحوه نمایش </button>
+                                        <button onclick="ChangeIsShow('@Model.Id')" class="dropdown-item text-left"><i class="fas fa-tv"></i>&nbsp;تغییر نحوه نمایش </button>
                                     </li>
                                     <li role="separator" class="divider"></li>
                                     <li>
-                                        <button onclick="ChangeUserRole('1')" class="dropdown-item text-left"><i class="fa fa-home"></i>&nbsp;تغییر نمایش در خانه </button>
+                                        <button onclick="ChangeShowInHome('@Model.Id')" class="dropdown-item text-left"><i class="fa fa-home"></i>&nbsp;تغییر نمایش در خانه </button>
                                     </li>
                                     <li role="separator" class="divider"></li>
                                     <li>
-                                        <button onclick="LockUser('1','Meysam')" class="dropdown-item text-left"><i class="fas fa-chart-line"></i>&nbsp; تبدیل به محصول تخفیفی</button>
+                                        <button onclick="DiscountProductModal('@Model.Id')" class="dropdown-item text-left"><i class="fas fa-chart-line"></i>&nbsp; تبدیل به محصول تخفیفی</button>
                                     </li>
                                     <li role="separator" class="divider"></li>
                                     <li>
-                                        <button onclick="ActiveUser('1','Meysam')" class="dropdown-item text-left"><i class="fas fa-chess-queen"></i>&nbsp;تبدیل به محصول ویژه</button>
+                                        <button onclick="ChangeIsSotial('@Model.Id')" class="dropdown-item text-left"><i class="fas fa-chess-queen"></i>&nbsp;تبدیل به محصول ویژه</button>
                                     </li>
                                 </ul>
                             </div>
@@ -78,13 +78,13 @@
                                             @if (Model.ProductImages.Count > 0) {
                                                 <li><img src="~/@Model.ImageCoverPath.Trim('\\')" alt=""></li>
                                                 foreach (var i in Model.ProductImages) {
-                                                    <li><img src="~/@i.ImagePath.Trim('\\')" alt=""></li>
+                                                    <li>
+                                                        <img src="~/@i.ImagePath.Trim('\\')" alt="">
+                                                    </li>
                                                 }
-
                                             } else {
                                                 <li><img src="~/@Model.ImageCoverPath.Trim('\\')" alt=""></li>
                                             }
-
                                         </ol>
                                     </div>
                                     <div class="product-gallery-featured">
@@ -132,16 +132,23 @@
                                             <strong>محصول موجود است</strong>
                                         }
                                     </p>
-                                    <label for="quant" class="active">تعداد</label>
-                                    <input type="number" name="quantity" min="1" id="quant" class="form-control mb-5 input-lg" placeholder="مقدار را انتخاب کنید">
-                                    <button type="button" class="btn btn-warning waves-effect">
-                                        <i class="fas fa-cart-plus"></i>
-                                        <span>افزودن به سبد خرید</span>
-                                    </button>
-                                    <button type="button" class="btn btn-info waves-effect">
-                                        <i class="fas fa-bolt"></i>
-                                        <span>خرید حالا</span>
-                                    </button>
+                                    <div>
+                                        <p>
+                                            <i class="fas fa-cookie-bite text-info"></i>
+                                            <strong>رنگهای موجود :</strong>
+                                        </p>
+                                        @if (Model.ProductColors.Any() || Model.ProductColors.Count > 0) {
+                                            foreach (var c in Model.ProductColors) {
+                                                <button type="button" class="btn  btn-circle waves-effect waves-circle waves-float" style="background-color: @c.ColorHex ;">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            }
+
+                                        } else {
+                                            <p>برای محصول فعلا رنگی مشخص نشده است</p>
+                                        }
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -238,6 +245,7 @@
     <link rel="stylesheet" href="~/lib/Sweetalert2/sweetalert2.min.css" />
     <script src="~/lib/Sweetalert2/sweetalert2.min.js"></script>
     <script>
+        //carousel
         (function ($) {
             "use strict";
 
@@ -258,17 +266,234 @@
             $(".main-questions").popover('show');
 
         })(jQuery);
+        //add Images
         function AddImageToGallery(productId) {
             $('#add_image_productId').val(productId);
             $('#AddImage').modal('show');
         }
+        //add atribute
         function AddAttribute(productId) {
             $('#add_attr_productId').val(productId);
             $('#AddProductAttr').modal('show');
         }
+        //add color
         function AddColor(productId) {
             $('#add_color_productId').val(productId);
             $('#AddColorModal').modal('show');
+        }
+        //change is show
+        function ChangeIsShow(p) {
+            swal.fire({
+                title: 'مخفی / نمایش محصول',
+                text: "کاربر گرامی  مطمئن هستید؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#7cacbe',
+                confirmButtonText: 'بله ',
+                cancelButtonText: 'خیر'
+            }).then((result) => {
+                if (result.value) {
+
+                    var postData = {
+                        'id': p
+                    };
+
+                    $.ajax({
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        type: "POST",
+                        url: "/Admin/Product/ChangeIsShow/",
+                        data: postData,
+                        success: function (data) {
+                            if (data.isSuccess == true) {
+                                swal.fire(
+                                    'موفق!',
+                                    data.message,
+                                    'success'
+                                ).then(function (isConfirm) {
+                                    location.reload();
+                                });
+                            } else {
+
+                                swal.fire(
+                                    'هشدار!',
+                                    data.message,
+                                    'warning'
+                                );
+
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+
+                    });
+
+                }
+            });
+        }
+        //change show in home page
+        function ChangeShowInHome(p) {
+            swal.fire({
+                title: 'مخفی / نمایش محصول در صفحه اصلی',
+                text: "کاربر گرامی  مطمئن هستید؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#7cacbe',
+                confirmButtonText: 'بله ',
+                cancelButtonText: 'خیر'
+            }).then((result) => {
+                if (result.value) {
+
+                    var postData = {
+                        'id': p
+                    };
+
+                    $.ajax({
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        type: "POST",
+                        url: "/Admin/Product/ChangeShowInHomePage/",
+                        data: postData,
+                        success: function (data) {
+                            if (data.isSuccess == true) {
+                                swal.fire(
+                                    'موفق!',
+                                    data.message,
+                                    'success'
+                                ).then(function (isConfirm) {
+                                    location.reload();
+                                });
+                            } else {
+
+                                swal.fire(
+                                    'هشدار!',
+                                    data.message,
+                                    'warning'
+                                );
+
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+
+                    });
+
+                }
+            });
+        }
+        //Change Discount
+        function DiscountProductModal(productId) {
+            $('#add_discount_productId').val(productId);
+            $('#DiscountModal').modal('show');
+        }
+        function ChangeDiscount() {
+            swal.fire({
+                title: 'تبدیل محصول به محصول تخفیف دار',
+                text: "کاربر گرامی  مطمئن هستید؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#7cacbe',
+                confirmButtonText: 'بله ',
+                cancelButtonText: 'خیر'
+            }).then((result) => {
+                if (result.value) {
+
+                    var postData = {
+                        'id': $('#add_discount_productId').val(),
+                        'lable': $('#add_discount_lable').val(),
+                        'flag': $('#add_discount_flag').val(),
+                    };
+
+                    $.ajax({
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        type: "POST",
+                        url: "/Admin/Product/YesOrNoProductDiscount/",
+                        data: postData,
+                        success: function (data) {
+                            if (data.isSuccess == true) {
+                                swal.fire(
+                                    'موفق!',
+                                    data.message,
+                                    'success'
+                                ).then(function (isConfirm) {
+                                    location.reload();
+                                });
+                            } else {
+
+                                swal.fire(
+                                    'هشدار!',
+                                    data.message,
+                                    'warning'
+                                );
+
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+
+                    });
+
+                }
+            });
+        }
+        //change sotial
+        function ChangeIsSotial(p) {
+            swal.fire({
+                title: 'تعیین ویژه بودن محصول',
+                text: "کاربر گرامی  مطمئن هستید؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#7cacbe',
+                confirmButtonText: 'بله ',
+                cancelButtonText: 'خیر'
+            }).then((result) => {
+                if (result.value) {
+
+                    var postData = {
+                        'id': p
+                    };
+
+                    $.ajax({
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        type: "POST",
+                        url: "/Admin/Product/ChangeIsSotial/",
+                        data: postData,
+                        success: function (data) {
+                            if (data.isSuccess == true) {
+                                swal.fire(
+                                    'موفق!',
+                                    data.message,
+                                    'success'
+                                ).then(function (isConfirm) {
+                                    location.reload();
+                                });
+                            } else {
+
+                                swal.fire(
+                                    'هشدار!',
+                                    data.message,
+                                    'warning'
+                                );
+
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+
+                    });
+
+                }
+            });
         }
     </script>
 }
@@ -383,6 +608,42 @@
                             <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">لغو</button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="DiscountModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-orange waves-effect">
+                    <h5 class="modal-title text-white">اضافه کردن محصول به لیست تخفیفات&nbsp;<span class="badg bg-info" id="parent-name"></span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <input type="hidden" id="add_discount_productId" />
+                    <div class="form-group">
+                        <div class="form-line">
+                            <label>محصول تبدیل به :</label>
+                            <select class="browser-default valid" id="add_discount_flag">
+                                <option value="true">تخفیف دار</option>
+                                <option value="false">معمولی</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>عنوان تخفیف&nbsp;<i class="text-danger">*</i></label>
+                        <div class="form-line">
+                            <input type="text" name="ColorName" id="add_discount_lable" class="form-control" placeholder="برای نمایش روی لیبل تخفیف">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="modal-footer">
+                        <button onclick="ChangeDiscount()" class="btn btn-info waves-effect"><i class="fas fa-save"></i></button>
+                        <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">لغو</button>
+                    </div>
                 </div>
             </div>
         </div>

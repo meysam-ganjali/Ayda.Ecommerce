@@ -1,5 +1,6 @@
 ﻿using Ayda.Ecommerce.ShareModels.BaseModel;
 using Ayda.Ecommerce.ShareModels.EcommerceDto;
+using Ayda.Ecommerce.ShareModels.EcommerceDto.Attribut;
 
 namespace Ayda.Ecommerce.App.Contract.IRepository;
 
@@ -11,4 +12,5 @@ public interface ICategoryRepository
     Task<ResultDto<IEnumerable<CategoryDto>>> GetAllAsync(int? id);
     Task<ResultDto<IEnumerable<CategoryDto>>> GetAllAsync();
     Task<ResultDto<CategoryDto>> GetByIdAsync(int id);
+    Task<ResultDto> AddAtributeAsync(CreateCategoryAttributeDto attr);
 }

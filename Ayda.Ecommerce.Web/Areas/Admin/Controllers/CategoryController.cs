@@ -1,5 +1,6 @@
 ﻿using Ayda.Ecommerce.App;
 using Ayda.Ecommerce.ShareModels.EcommerceDto;
+using Ayda.Ecommerce.ShareModels.EcommerceDto.Attribut;
 using Ayda.Ecommerce.Web.ExtationConfigur;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -60,6 +61,19 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers {
 
             TempData["error"] = result.Message;
             return Redirect("/Admin/Category/Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateAttribute(CreateCategoryAttributeDto attr,int parentId)
+        {
+            var result = await _categoryService.CategoryService.AddAtributeAsync(attr);
+            if (result.IsSuccess) {
+                TempData["success"] = result.Message;
+                return Redirect($"/Admin/Category/Index/{parentId}");
+            }
+
+            TempData["error"] = result.Message;
+            return Redirect($"/Admin/Category/Index/{parentId}");
         }
     }
 }

@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "دسته بندی ها";
 }
-<partial name="_Notification"/>
+<partial name="_Notification" />
 <div class="block-header">
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -67,10 +67,12 @@
                                             <button onclick="ShowModalAddChildCategory('@p.Id','@p.Name')" class="btn bg-green btn-sm waves-effect"><i class="fa fa-plus"></i></button>
                                             <button onclick="UpdateCategory('@p.Id','@p.Name','@p.Description')" class="btn bg-cyan  waves-effect btn-sm"><i class="fa fa-edit"></i></button>
                                             <button onclick="DeleteParent('@p.Id','@p.Name')" class="btn bg-red waves-effect btn-sm"><i class="fa fa-trash"></i></button>
-                                         @if (p.SubCategories.Any())
-                                         {
-                                             <a href="/admin/category/index/@p.Id" class="btn bg-deep-purple waves-effect btn-sm"><i class="fa fa-eye"></i>&nbsp;زیرمجموعه</a>
-                                         }
+                                            @if (p.SubCategories.Any()) {
+                                                <a href="/admin/category/index/@p.Id" class="btn bg-deep-purple waves-effect btn-sm"><i class="fa fa-eye"></i>&nbsp;زیرمجموعه</a>
+                                            }
+                                            @if (p.ParentCategoryId != null || p.ParentCategoryId > 0) {
+                                                <button onclick="AttributeModal('@p.Id','@p.Name','@p.ParentCategoryId')" class="btn bg-light-blue waves-effect btn-sm"><i class="fa fa-plus"></i>&nbsp;ثبت مشخصات</button>
+                                            }
                                         </div>
                                     </td>
                                 </tr>
@@ -95,7 +97,7 @@
         function ShowModalAddParentCategory() {
             $('#AddParent').modal('show');
         }
-        function ShowModalAddChildCategory(parentId,parentName) {
+        function ShowModalAddChildCategory(parentId, parentName) {
             $('#Add-Childcategory_ParentId').val(parentId)
             $('#parent-name').html(parentName)
             $('#AddChild').modal('show');
@@ -153,18 +155,25 @@
             });
         }
         //Edit Category
-        function UpdateCategory(id,name,des){
+        function UpdateCategory(id, name, des) {
             $('#edit_catId').val(id);
             $('#edit_catName').val(name);
             $('#edit_catDescription').val(des);
             $('#edit_cat_img').attr('src', $('#category_logo_' + id).attr('src'));
             $('#EditCategory').modal('show');
-            }
+        }
+        //add Attribute
+        function AttributeModal(catId, catName, parentId) {
+            $('#add_attr_cat_id').val(catId);
+            $('#add_attr_cat_name').html(catName);
+            $('#add_attr_cat_parentId').val(parentId);
+            $('#AddAttributeModal').modal('show');
+        }
     </script>
 }
 @section Modals
     {
-  
+
     <div class="modal" id="AddParent" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -256,7 +265,7 @@
                     <form method="post" action="/admin/category/UpdateCategory" enctype="multipart/form-data">
                         <input type="hidden" name="Id" id="edit_catId" />
                         <div class="row justify-content-center">
-                            <img id="edit_cat_img" width="65" height="65"  class="d-inline img-thumbnail img-rounded shadow"/>
+                            <img id="edit_cat_img" width="65" height="65" class="d-inline img-thumbnail img-rounded shadow" />
                         </div>
                         <label>عنوان دسته&nbsp;<i class="text-danger">*</i></label>
                         <div class="form-group">
@@ -278,6 +287,34 @@
                         </div>
                         <br>
                         <div class="modal-footer">
+                            <button type="submit" class="btn btn-info waves-effect"><i class="fas fa-save"></i></button>
+                            <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">لغو</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="AddAttributeModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-light-blue waves-effect">
+                    <h5 class="modal-title text-white"> ثبت مشخصات برای دسته <span id="add_attr_cat_name"></span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/admin/category/CreateAttribute">
+                        <input type="hidden" id="add_attr_cat_id" name="CategoryId" />
+                        <input type="hidden" id="add_attr_cat_parentId" name="parentId" />
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label>عنوان مشخصات</label>
+                                <input type="text" name="Name" id="edit_catName" class="form-control" placeholder="عنوان مشخصه را مشخص کنید">
+                            </div>
+                        </div>
+                        <br> <div class="modal-footer">
                             <button type="submit" class="btn btn-info waves-effect"><i class="fas fa-save"></i></button>
                             <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">لغو</button>
                         </div>

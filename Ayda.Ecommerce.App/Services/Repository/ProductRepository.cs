@@ -83,7 +83,7 @@ public class ProductRepository : IProductRepository {
     }
 
     public async Task<ResultDto<ProductDto>> GetByIdAsync(int id) {
-        var product =  _db.Products
+        var product = _db.Products
             .Include(x => x.Category)
             .ThenInclude(x => x.CategoryAttributes)
             .Include(x => x.ProductAttributes)
@@ -100,7 +100,7 @@ public class ProductRepository : IProductRepository {
             };
         }
 
-        var mappToDto =await  product.Select(p => new ProductDto() {
+        var mappToDto = await product.Select(p => new ProductDto() {
             Category = new CategoryDto() {
                 Name = p.Category.Name,
                 CreatedDate = p.Category.CreatedDate,
@@ -372,7 +372,7 @@ public class ProductRepository : IProductRepository {
         };
     }
 
-    public async Task<ResultDto> YesOrNoProductDiscountAsync(int id, string? DiscountLableText) {
+    public async Task<ResultDto> YesOrNoProductDiscountAsync(int id, string? DiscountLableText, bool flag) {
         var product = await _db.Products.FindAsync(id);
         if (product == null) {
             return new ResultDto {
@@ -380,9 +380,12 @@ public class ProductRepository : IProductRepository {
                 Message = "محصول یافت نشد"
             };
         }
-        product.IsDiscount = !product.IsDiscount;
-        if (product.IsDiscount) {
+        if (flag) {
             product.DiscountLableText = DiscountLableText;
+            product.IsDiscount = true;
+        } else {
+            product.DiscountLableText = "";
+            product.IsDiscount = false;
         }
         product.UpdatedDate = DateTime.Now;
         string isDiscount = product.IsDiscount == true ? "محصول دارای تخفیف است" : "محصول دارای تخفیف نیست";
@@ -449,7 +452,7 @@ public class ProductRepository : IProductRepository {
 
     public async Task<ResultDto<IEnumerable<CategoryAttributeDto>>> GetAttribute(int categoryId) {
         var category = await _db.Categories.FindAsync(categoryId);
-        var attribute =await _db.CategoryAttributes
+        var attribute = await _db.CategoryAttributes
             .Include(x => x.Category)
             .Include(x => x.ProductAttributes)
             .Where(w => w.CategoryId == categoryId).ToListAsync();
@@ -460,7 +463,7 @@ public class ProductRepository : IProductRepository {
                 Message = $"مشخصهای برای دسته {category.Name} ثبت نشده لطفا مشخصات دسته را ثبت کنید"
             };
         }
-        
+
         return new ResultDto<IEnumerable<CategoryAttributeDto>> {
             IsSuccess = true,
             Data = _mapper.Map<IEnumerable<CategoryAttributeDto>>(attribute)

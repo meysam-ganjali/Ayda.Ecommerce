@@ -19,7 +19,7 @@ public interface IProductRepository
     Task<ResultDto> AddColorAsync(CreateProductColorDto productColor);
     Task<ResultDto> AddImagesAsync(CreateProductImageDto ProductImages);
     Task<ResultDto> YesOrNoIsShowProductAsync(int id);
-    Task<ResultDto> YesOrNoProductDiscountAsync(int id,string? DiscountLableText);
+    Task<ResultDto> YesOrNoProductDiscountAsync(int id,string? DiscountLableText,bool flag);
     Task<ResultDto> YesOrNoProductIsSotialAsync(int id);
     Task<ResultDto> ShowOrHideProductInHomePageAsync(int id);
     Task<ResultDto> AllowOrNotAllowCommentAsync(int id);
