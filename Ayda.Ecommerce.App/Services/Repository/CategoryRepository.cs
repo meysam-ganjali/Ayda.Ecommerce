@@ -192,4 +192,54 @@ public class CategoryRepository : ICategoryRepository {
             Data = _mapper.Map<IEnumerable<CategoryAttributeDto>>(categoryAttribute), IsSuccess = true
         };
     }
+
+    public async Task<ResultDto> UpdateAttributeAsync(UpdateCategoryAttributeDto attr) {
+        var attribute = await _db.CategoryAttributes.FindAsync(attr.Id);
+        if (attribute == null) {
+            return new ResultDto {
+                IsSuccess = false,
+                Message = "مشخصات یافت نشد"
+            };
+        }
+
+        attribute.Name = attr.Name;
+        attribute.UpdatedDate = DateTime.Now;
+        await _db.SaveChangesAsync();
+        return new ResultDto {
+            Message = "بروزرسانی مشخصه با موففقیت به اتمام رسید",
+            IsSuccess = true
+        };
+
+    }
+
+    public async Task<ResultDto> RemoveCategoryAttrbuteAsync(int id) {
+        var attribute = await _db.CategoryAttributes
+            .Include(x => x.ProductAttributes)
+            .ThenInclude(x => x.Product)
+            .FirstOrDefaultAsync(x => x.Id == id);
+        var productAttr = await _db.ProductAttributes
+            .Include(x => x.Product)
+            .FirstOrDefaultAsync(x => x.AttributeId == attribute.Id);
+        if (attribute == null) {
+            return new ResultDto {
+                IsSuccess = false,
+                Message = "مشخصات یافت نشد"
+            };
+        }
+
+        if (attribute.ProductAttributes.Any() || attribute.ProductAttributes.Count > 0) {
+            return new ResultDto {
+                IsSuccess = false,
+                Message = $"این مشخصه برای محصول {productAttr.Product.Name} به کار برده شده لطفا اول مشخصه را از لیست مشخصات محصول حذف کنید ومجدد امتحان کنید"
+            };
+        }
+
+        _db.CategoryAttributes.Remove(attribute);
+        await _db.SaveChangesAsync();
+        return new ResultDto
+        {
+            IsSuccess = true,
+            Message = "مشخصه منتخب از سیستم حذف گردید"
+        };
+    }
 }

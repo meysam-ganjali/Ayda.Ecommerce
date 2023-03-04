@@ -78,9 +78,13 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers {
             if (result.IsSuccess) {
                 return View(result.Data);
             }
-
             return Redirect($"/Admin/Category/index/{parentId}");
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> RemoveAttribute(int id) {
+            var result = await _categoryService.CategoryService.RemoveCategoryAttrbuteAsync(id);
+            return Json(result);
         }
     }
 }

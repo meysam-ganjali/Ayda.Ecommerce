@@ -50,7 +50,7 @@
                                     <td>
                                         <div>
                                             <button onclick="ShowModalAddChildCategory('@p.Id','@p.Name')" class="btn bg-light-blue btn-sm waves-effect"><i class="fa fa-edit"></i></button>
-                                            <button onclick="UpdateCategory('@p.Id','@p.Name')" class="btn bg-red  waves-effect btn-sm"><i class="fa fa-trash"></i></button>
+                                            <button onclick="DeleteAttribute('@p.Id','@p.Name')" class="btn bg-red  waves-effect btn-sm"><i class="fa fa-trash"></i></button>
                                           
                                         </div>
                                     </td>
@@ -73,9 +73,9 @@
     <script src="~/lib/Sweetalert2/sweetalert2.min.js"></script>
     <script>
         //Remove Category attribute
-        function DeleteParent(parentId, title) {
+        function DeleteAttribute(attrId, title) {
             swal.fire({
-                title: 'حذف دسته بندی ' + ' ( ' + title + ' )',
+                title: 'حذف مشخصه ' + ' ( ' + title + ' )',
                 text: "کاربر گرامی  مطمئن هستید؟",
                 icon: 'warning',
                 showCancelButton: true,
@@ -87,14 +87,14 @@
                 if (result.value) {
 
                     var postData = {
-                        'id': parentId
+                        'id': attrId
                     };
 
                     $.ajax({
                         contentType: 'application/x-www-form-urlencoded',
                         dataType: 'json',
                         type: "POST",
-                        url: "/Admin/Category/RemoveCategory/",
+                        url: "/Admin/Category/RemoveAttribute/",
                         data: postData,
                         success: function (data) {
                             if (data.isSuccess == true) {
