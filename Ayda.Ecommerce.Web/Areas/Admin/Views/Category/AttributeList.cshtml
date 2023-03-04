@@ -49,9 +49,8 @@
                                     <td>@p.Category.Name</td>
                                     <td>
                                         <div>
-                                            <button onclick="ShowModalAddChildCategory('@p.Id','@p.Name')" class="btn bg-light-blue btn-sm waves-effect"><i class="fa fa-edit"></i></button>
+                                            <button onclick="UpdateCategoryAttr('@p.Id','@p.Name','@p.CategoryId')" class="btn bg-light-blue btn-sm waves-effect"><i class="fa fa-edit"></i></button>
                                             <button onclick="DeleteAttribute('@p.Id','@p.Name')" class="btn bg-red  waves-effect btn-sm"><i class="fa fa-trash"></i></button>
-                                          
                                         </div>
                                     </td>
                                 </tr>
@@ -62,7 +61,6 @@
                 } else {
                     <p>دسته بندی برای نمایش وجود ندارد</p>
                 }
-
             </div>
         </div>
     </div>
@@ -125,19 +123,18 @@
             });
         }
         //Edit Category attribute
-        function UpdateCategory(id, name, des) {
-            $('#edit_catId').val(id);
-            $('#edit_catName').val(name);
-            $('#edit_catDescription').val(des);
-            $('#edit_cat_img').attr('src', $('#category_logo_' + id).attr('src'));
-            $('#EditCategory').modal('show');
+        function UpdateCategoryAttr(attrId, name,catId) {
+            $('#edit_catattr_Id').val(attrId);
+            $('#edit_catattr_Name').val(name);
+            $('#edit_catattr_CatId').val(catId);
+            $('#EditCategoryAttribute').modal('show');
         }
     </script>
 }
 @section Modals
     {
 
-    <div class="modal" id="AddParent" tabindex="-1" role="dialog">
+    <div class="modal" id="EditCategoryAttribute" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-light-blue waves-effect">
@@ -147,23 +144,13 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="/admin/category/CreateCategory" enctype="multipart/form-data">
-                        <label>عنوان دسته&nbsp;<i class="text-danger">*</i></label>
+                    <form method="post" action="/admin/category/UpdateCategoryAttrbiute">
+                        <input type="hidden" id="edit_catattr_Id" name="Id" />
+                        <input type="hidden" id="edit_catattr_CatId" name="CategoryId" />
                         <div class="form-group">
+                            <label>عنوان مشخصه&nbsp;<i class="text-danger">*</i></label>
                             <div class="form-line">
-                                <input type="text" name="Name" class="form-control" placeholder="عنوان دسته بندی را مشخص کنید">
-                            </div>
-                        </div>
-                        <label>لوگو دسته</label>
-                        <div class="form-group">
-                            <div class="form-line">
-                                <input type="file" name="Image" class="form-control" accept="image/*">
-                            </div>
-                        </div>
-                        <label> توضیحات</label>
-                        <div class="form-group">
-                            <div class="form-line">
-                                <textarea class="form-control" rows="3" name="Description"></textarea>
+                                <input type="text" name="Name" class="form-control" placeholder="عنوان دسته بندی را مشخص کنید" id="edit_catattr_Name">
                             </div>
                         </div>
                         <br> <div class="modal-footer">

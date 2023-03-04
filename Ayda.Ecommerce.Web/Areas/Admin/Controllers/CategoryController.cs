@@ -86,5 +86,18 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers {
             var result = await _categoryService.CategoryService.RemoveCategoryAttrbuteAsync(id);
             return Json(result);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateCategoryAttrbiute(UpdateCategoryAttributeDto attribute)
+        {
+            var result = await _categoryService.CategoryService.UpdateAttributeAsync(attribute);
+            if (result.IsSuccess) {
+                TempData["success"] = result.Message;
+                return Redirect($"/Admin/Category/AttributeList/{attribute.CategoryId}");
+            }
+
+            TempData["error"] = result.Message;
+            return Redirect($"/Admin/Category/AttributeList/{attribute.CategoryId}");
+        }
     }
 }
