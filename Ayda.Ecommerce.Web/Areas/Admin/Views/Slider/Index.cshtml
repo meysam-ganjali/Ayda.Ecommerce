@@ -49,14 +49,16 @@
                                 <tr>
                                     <th scope="row">@p.Id</th>
                                     <td>
-                                        <img src="~/@p.ImagePath.Trim('\\')" class="shadow img-thumbnail img-rounded" width="320" height="200" id="slider_image_@p.Id" />
+                                        <img src="~/@p.ImagePath.Trim('\\')" class="shadow img-thumbnail img-rounded" width="220" height="150" id="slider_image_@p.Id" />
                                     </td>
-                                    <td>@p.Title</td>
+                                    <td>
+                                        <a href="@p.Link" class="text-reset">@p.Title</a>
+                                    </td>
                                     <td><small>@p.Description</small></td>
                                     <td>
                                         <div>
-                                            <button onclick="UpdateCategory('@p.Id','@p.Title','@p.Description')" class="btn bg-cyan  waves-effect btn-sm"><i class="fa fa-edit"></i></button>
-                                            <button onclick="DeleteParent('@p.Id','@p.Title')" class="btn bg-red waves-effect btn-sm"><i class="fa fa-trash"></i></button>
+                                            <button onclick="UpdateSliderModal('@p.Id','@p.Title','@p.Link','@p.PossitionId','@p.Description')" class="btn bg-cyan  waves-effect btn-sm"><i class="fa fa-edit"></i></button>
+                                            <button onclick="DeleteSlider('@p.Id','@p.Title')" class="btn bg-red waves-effect btn-sm"><i class="fa fa-trash"></i></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -80,9 +82,9 @@
             $('#AddSlider').modal('show');
         }
         //Remove Slider
-        function DeleteParent(parentId, title) {
+        function DeleteSlider(parentId, title) {
             swal.fire({
-                title: 'حذف دسته بندی ' + ' ( ' + title + ' )',
+                title: 'حذف اسلایدر ' + ' ( ' + title + ' )',
                 text: "کاربر گرامی  مطمئن هستید؟",
                 icon: 'warning',
                 showCancelButton: true,
@@ -101,7 +103,7 @@
                         contentType: 'application/x-www-form-urlencoded',
                         dataType: 'json',
                         type: "POST",
-                        url: "/Admin/Category/RemoveCategory/",
+                        url: "/Admin/Slider/RemoveSlider/",
                         data: postData,
                         success: function (data) {
                             if (data.isSuccess == true) {
@@ -132,12 +134,14 @@
             });
         }
         //Edit Slider
-        function UpdateCategory(id, name, des) {
-            $('#edit_catId').val(id);
-            $('#edit_catName').val(name);
-            $('#edit_catDescription').val(des);
-            $('#edit_cat_img').attr('src', $('#category_logo_' + id).attr('src'));
-            $('#EditCategory').modal('show');
+        function UpdateSliderModal(id, title, link, possition, des) {
+            $('#edit_sliderId').val(id);
+            $('#edit_sliderTitle').val(title);
+            $('#edit_sliderLink').val(link);
+            $('#edit_sliderPossition').val(possition);
+            $('#edit_sliderDescription').val(des);
+            $('#edit_slider_img').attr('src', $('#slider_image_' + id).attr('src'));
+            $('#EditSlider').modal('show');
         }
     </script>
 }
@@ -187,6 +191,62 @@
                             </div>
                         </div>
                         <br> <div class="modal-footer">
+                            <button type="submit" class="btn btn-info waves-effect"><i class="fas fa-save"></i></button>
+                            <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">لغو</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="EditSlider" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-light-blue waves-effect">
+                    <h5 class="modal-title text-white mb-3">بروزرسانی اسلایدر جدید </h5>
+                    <div class="row">
+                        <div class="col-12">
+                            <img src="" id="edit_slider_img" class="form-control" style="width: 100%; height: 220px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/Admin/Slider/UpdateSlider" enctype="multipart/form-data">
+                        <input type="hidden" id="edit_sliderId" name="Id" />
+                        <div class="form-group">
+                            <label>عنوان اسلایدر&nbsp;<i class="text-danger">*</i></label>
+                            <div class="form-line">
+                                <input type="text" name="Title" class="form-control" placeholder="عنوان اسلایدر" id="edit_sliderTitle">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label>مکان قرار گیری</label>
+                                <select class="browser-default" asp-items="@ViewBag.Possition" name="PossitionId" id="edit_sliderPossition">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>لینک اسلایدر&nbsp;<i class="text-danger">*</i></label>
+                            <div class="form-line">
+                                <input type="text" name="Link" class="form-control" placeholder="لینک هدایت کننده به صفحه اسلایدر" id="edit_sliderLink">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>تصویر اسلایدر&nbsp;<i class="text-danger">*</i></label>
+                            <div class="form-line">
+                                <input type="file" name="Images" class="form-control" accept="image/*">
+                            </div>
+                        </div>
+                        <label> توضیحات</label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <textarea class="form-control" name="Description" id="edit_sliderDescription"></textarea>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="modal-footer">
                             <button type="submit" class="btn btn-info waves-effect"><i class="fas fa-save"></i></button>
                             <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">لغو</button>
                         </div>

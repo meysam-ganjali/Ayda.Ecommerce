@@ -41,7 +41,17 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers {
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateSlider(UpdateSliderDto slider) {
+        public async Task<IActionResult> UpdateSlider(UpdateSliderDto slider)
+        {
+            var Images = HttpContext.Request.Form.Files;
+            if (Images != null)
+            {
+                slider.Image = Images[0];
+            }
+            else
+            {
+                slider.Image = null;
+            }
             var result = await _slider.SliderService.UpdateAsync(slider);
             if (result.IsSuccess) {
                 TempData["success"] = result.Message;
