@@ -1,5 +1,6 @@
 ﻿using Ayda.Ecommerce.Data.DataContext.Tools;
 using Ayda.Ecommerce.Domains.Ecommerce;
+using Ayda.Ecommerce.Domains.Slider;
 using Ayda.Ecommerce.Domains.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +25,10 @@ public class DataBaseContext : DbContext {
     public DbSet<ProductImage> ProductImages { get; set; }
     public DbSet<ProductColor> ProductColors { get; set; }
     public DbSet<ProductComment> ProductComments { get; set; }
+    //slider banner
+    public DbSet<Slider> Sliders { get; set; }
+    public DbSet<Banner> Banners { get; set; }
+    public DbSet<Possition> Possitions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(s => s.GetForeignKeys())) {
@@ -55,6 +60,81 @@ public class DataBaseContext : DbContext {
                 Password =_hashedPassword,
 
             }
+        });
+        modelBuilder.Entity<Possition>().HasData(new List<Possition>()
+        {
+            new Possition()
+            {
+                Id=1,
+                CreatedDate = DateTime.Now,
+                IsShow = true,
+                PossitionNameFA = "بالا",
+                ProssitionNameEN = "UP",
+            },
+            new Possition()
+            {
+                Id=2,
+                CreatedDate = DateTime.Now,
+                IsShow = true,
+                PossitionNameFA = "پایین",
+                ProssitionNameEN = "BUTTOM",
+            },
+            new Possition()
+            {
+                Id=3,
+                CreatedDate = DateTime.Now,
+                IsShow = true,
+                PossitionNameFA = "چپ",
+                ProssitionNameEN = "LEFT",
+            },
+            new Possition()
+            {
+                Id=4,
+                CreatedDate = DateTime.Now,
+                IsShow = true,
+                PossitionNameFA = "راست",
+                ProssitionNameEN = "RIGHT",
+            },
+            new Possition()
+            {
+                Id=5,
+                CreatedDate = DateTime.Now,
+                IsShow = true,
+                PossitionNameFA = "بالا - چپ",
+                ProssitionNameEN = "UP-LEFT",
+            },
+             new Possition()
+            {
+                Id=6,
+                CreatedDate = DateTime.Now,
+                IsShow = true,
+                PossitionNameFA = "بالا - راست",
+                ProssitionNameEN = "UP-RIGHT",
+            },
+             new Possition()
+             {
+             Id=7,
+             CreatedDate = DateTime.Now,
+             IsShow = true,
+             PossitionNameFA = "وسط",
+             ProssitionNameEN = "CENTER",
+             },
+             new Possition()
+             {
+                 Id=8,
+                 CreatedDate = DateTime.Now,
+                 IsShow = true,
+                 PossitionNameFA = "وسط - راست",
+                 ProssitionNameEN = "CENTER-RIGHT",
+             },
+             new Possition()
+             {
+                 Id=9,
+                 CreatedDate = DateTime.Now,
+                 IsShow = true,
+                 PossitionNameFA = "وسط - چپ",
+                 ProssitionNameEN = "CENTER-Left",
+             }
         });
         base.OnModelCreating(modelBuilder);
     }

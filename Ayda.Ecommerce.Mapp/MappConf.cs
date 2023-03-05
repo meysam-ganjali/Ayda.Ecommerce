@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Ayda.Ecommerce.Domains.Ecommerce;
+using Ayda.Ecommerce.Domains.Slider;
 using Ayda.Ecommerce.Domains.User;
 using Ayda.Ecommerce.ShareModels.EcommerceDto;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Attribut;
@@ -9,6 +10,7 @@ using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductColor;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductComment;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductImage;
 using Ayda.Ecommerce.ShareModels.Role;
+using Ayda.Ecommerce.ShareModels.Slider;
 using Ayda.Ecommerce.ShareModels.User;
 
 namespace Ayda.Ecommerce.Mapp;
@@ -171,6 +173,49 @@ public class MappConf : Profile {
                     p => p.MapFrom(q => q.Product));
 
             config.CreateMap<ProductImage, CreateProductImageDto>().ReverseMap();
+
+            #endregion
+
+            #region Slider Mapp
+
+            config.CreateMap<Slider, SliderDto>()
+                .ForMember(p => p.Possition,
+                    p => p.MapFrom(q => q.Possition));
+            config.CreateMap<SliderDto, Slider>()
+                .ForMember(p => p.Possition,
+                    p => p.MapFrom(q => q.Possition));
+            config.CreateMap<Slider,CreateSliderDto>().ReverseMap();
+            config.CreateMap<Slider,UpdateSliderDto>().ReverseMap();
+            #endregion
+
+            #region Banner Mapp
+
+            config.CreateMap<Banner, BannerDto>()
+                .ForMember(p => p.Possition,
+                    p => p.MapFrom(q => q.Possition));
+            config.CreateMap<BannerDto, Banner>()
+                .ForMember(p => p.Possition,
+                    p => p.MapFrom(q => q.Possition));
+            config.CreateMap<Banner, CreateBannerDto>().ReverseMap();
+            config.CreateMap<Banner, UpdateBannerDto>().ReverseMap();
+
+            #endregion
+
+            #region Possition Mapp
+
+            config.CreateMap<Possition, PossitionDto>()
+                .ForMember(p => p.Sliders,
+                    p => p.MapFrom(q => q.Sliders))
+                .ForMember(p => p.Banners,
+                    p => p.MapFrom(q => q.Banners));
+
+            config.CreateMap<PossitionDto, Possition>()
+                .ForMember(p => p.Sliders,
+                    p => p.MapFrom(q => q.Sliders))
+                .ForMember(p => p.Banners,
+                    p => p.MapFrom(q => q.Banners));
+            config.CreateMap<Possition, CreatePossitionDto>().ReverseMap();
+            config.CreateMap<Possition, UpdatePossitionDto>().ReverseMap();
 
             #endregion
         });

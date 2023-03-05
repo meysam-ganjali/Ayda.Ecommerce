@@ -8,4 +8,6 @@ public interface IUnitOfWork : IDisposable {
     IUserRepository UserService { get; }
     IRoleRepository RoleService { get; }
     IProductRepository ProductService { get; }
+    ISliderRepository SliderService { get; }
+    IPossitionRepository PossitionService { get; }
 }

@@ -1,17 +1,19 @@
 ﻿using Ayda.Ecommerce.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Ayda.Ecommerce.App;
 
 namespace Ayda.Ecommerce.Web.Controllers {
     public class HomeController : Controller {
-        private readonly ILogger<HomeController> _logger;
+       private readonly IUnitOfWork _unitOfWork;
 
-        public HomeController(ILogger<HomeController> logger) {
-            _logger = logger;
-        }
-
-        public IActionResult Index() {
-            return View();
+       public HomeController(IUnitOfWork unitOfWork)
+       {
+           _unitOfWork = unitOfWork;
+       }
+       public async Task<IActionResult> Index() {
+            HomePageVM model = new HomePageVM();
+            return View(model);
         }
 
         public IActionResult Privacy() {
