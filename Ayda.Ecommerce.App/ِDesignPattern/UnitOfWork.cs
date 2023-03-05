@@ -23,6 +23,7 @@ public class UnitOfWork : IUnitOfWork {
         SliderService = new SliderRepository(_db, _mapper, _environment);
         BannerService = new BannerRepository(_db, _mapper, _environment);
         PossitionService = new PossitionRepository(_db, _mapper);
+        MenuService = new MenuRepository(_db, _mapper);
 
     }
     public void Dispose() {
@@ -37,4 +38,5 @@ public class UnitOfWork : IUnitOfWork {
     public ISliderRepository SliderService { get; }
     public IPossitionRepository PossitionService { get; }
     public IBannerRepository BannerService { get; }
+    public IMenuRepository MenuService { get; }
 }

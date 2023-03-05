@@ -9,6 +9,7 @@
   <ItemGroup>
     <Folder Include="Base\" />
     <Folder Include="Ecommerce\" />
+    <Folder Include="Menu\" />
     <Folder Include="Slider\" />
     <Folder Include="User\" />
   </ItemGroup>

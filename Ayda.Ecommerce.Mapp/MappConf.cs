@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Ayda.Ecommerce.Domains.Ecommerce;
+using Ayda.Ecommerce.Domains.Menu;
 using Ayda.Ecommerce.Domains.Slider;
 using Ayda.Ecommerce.Domains.User;
 using Ayda.Ecommerce.ShareModels.EcommerceDto;
@@ -9,6 +10,7 @@ using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductAttribute;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductColor;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductComment;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductImage;
+using Ayda.Ecommerce.ShareModels.Menu;
 using Ayda.Ecommerce.ShareModels.Role;
 using Ayda.Ecommerce.ShareModels.Slider;
 using Ayda.Ecommerce.ShareModels.User;
@@ -217,6 +219,31 @@ public class MappConf : Profile {
             config.CreateMap<Possition, CreatePossitionDto>().ReverseMap();
             config.CreateMap<Possition, UpdatePossitionDto>().ReverseMap();
 
+            #endregion
+
+            #region Menu Mapp
+
+            config.CreateMap<MenuItemDto, MenuItem>()
+                .ForMember(p => p.SubMenus,
+                    p => p.MapFrom(q => q.SubMenus));
+            config.CreateMap<MenuItem, MenuItemDto>()
+                .ForMember(p => p.SubMenus,
+                    p => p.MapFrom(q => q.SubMenus));
+            config.CreateMap<MenuItem, CreateMenuItemDto>().ReverseMap();
+            config.CreateMap<MenuItem, UpdateMenuItemDto>().ReverseMap();
+            //
+            config.CreateMap<SubMenu, SubMenuDto>()
+                .ForMember(p => p.Category,
+                    p => p.MapFrom(q => q.Category))
+                .ForMember(p => p.MenuItem,
+                    p => p.MapFrom(q => q.MenuItem));
+            config.CreateMap<SubMenuDto, SubMenu>()
+                .ForMember(p => p.Category,
+                    p => p.MapFrom(q => q.Category))
+                .ForMember(p => p.MenuItem,
+                    p => p.MapFrom(q => q.MenuItem));
+            config.CreateMap<SubMenu, CreateSubMenuDto>().ReverseMap();
+            config.CreateMap<SubMenu, UpdateSubMenuDto>().ReverseMap();
             #endregion
         });
         return mappingConfig;

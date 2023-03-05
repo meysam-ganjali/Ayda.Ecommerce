@@ -1,4 +1,5 @@
 ﻿using Ayda.Ecommerce.Domains.Base;
+using Ayda.Ecommerce.Domains.Menu;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ayda.Ecommerce.Domains.Ecommerce;
@@ -15,4 +16,5 @@ public class Category:BaseEntity<int>
     public virtual ICollection<Category> SubCategories { get; set; }
     public virtual ICollection<CategoryAttribute> CategoryAttributes { get; set; }
     public virtual ICollection<Product> Products { get; set; }
+    public virtual ICollection<SubMenu> SubMenus { get; set; }
 }

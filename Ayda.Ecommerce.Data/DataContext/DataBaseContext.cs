@@ -1,5 +1,6 @@
 ﻿using Ayda.Ecommerce.Data.DataContext.Tools;
 using Ayda.Ecommerce.Domains.Ecommerce;
+using Ayda.Ecommerce.Domains.Menu;
 using Ayda.Ecommerce.Domains.Slider;
 using Ayda.Ecommerce.Domains.User;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,9 @@ public class DataBaseContext : DbContext {
     public DbSet<Slider> Sliders { get; set; }
     public DbSet<Banner> Banners { get; set; }
     public DbSet<Possition> Possitions { get; set; }
+    //Menu
+    public DbSet<MenuItem> MenuItems { get; set; }
+    public DbSet<SubMenu> SubMenus { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(s => s.GetForeignKeys())) {
