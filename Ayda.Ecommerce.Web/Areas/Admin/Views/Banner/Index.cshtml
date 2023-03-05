@@ -1,6 +1,6 @@
-﻿@model Ayda.Ecommerce.ShareModels.BaseModel.ResultDto<IEnumerable<Ayda.Ecommerce.ShareModels.Slider.SliderDto>>
+﻿@model Ayda.Ecommerce.ShareModels.BaseModel.ResultDto<IEnumerable<Ayda.Ecommerce.ShareModels.Slider.BannerDto>>
 @{
-    ViewData["Title"] = "اسلایدر ها";
+    ViewData["Title"] = "بنر ها";
 }
 <partial name="_Notification" />
 <div class="block-header">
@@ -8,7 +8,7 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <ul class="breadcrumb breadcrumb-style ">
                 <li class="breadcrumb-item">
-                    <h4 class="page-title">لیست اسلایدر ها</h4>
+                    <h4 class="page-title">لیست بنر ها</h4>
                 </li>
                 <li class="breadcrumb-item bcrumb-1">
                     <a href="/admin/home/index">
@@ -27,11 +27,11 @@
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
             <div class="header">
-                <button type="button" class="btn bg-green" onclick="CreateSliderModal()"><i class="fa fa-plus"></i>&nbsp;ایجاد اسلایدر</button>
+                <button type="button" class="btn bg-green" onclick="CreateBannerModal()"><i class="fa fa-plus"></i>&nbsp;ایجاد بنر</button>
             </div>
             <div class="body table-responsive">
                 @if (!Model.IsSuccess) {
-                    <p>اسلایدری برای نمایش وجود ندارد</p>
+                    <p>بنری برای نمایش وجود ندارد</p>
 
                 } else {
                     <table class="table table-bordered table-hover table-striped">
@@ -49,7 +49,7 @@
                                 <tr>
                                     <th scope="row">@p.Id</th>
                                     <td>
-                                        <img src="~/@p.ImagePath.Trim('\\')" class="shadow img-thumbnail img-rounded" width="180" height="95" id="slider_image_@p.Id" />
+                                        <img src="~/@p.ImagePath.Trim('\\')" class="shadow img-thumbnail img-rounded" width="110" height="78" id="Banner_image_@p.Id" />
                                     </td>
                                     <td>
                                         <a href="@p.Link" class="text-reset">@p.Title</a>
@@ -57,9 +57,9 @@
                                     <td><small>@p.Description</small></td>
                                     <td>
                                         <div>
-                                            <button onclick="UpdateSliderModal('@p.Id','@p.Title','@p.Link','@p.PossitionId','@p.Description')" class="btn bg-cyan  waves-effect btn-sm"><i class="fa fa-edit"></i></button>
-                                            <button onclick="DeleteSlider('@p.Id','@p.Title')" class="btn bg-red waves-effect btn-sm"><i class="fa fa-trash"></i></button>
-                                            <button onclick="ChangeIsShowSlider('@p.Id','@p.Title')" class="btn bg-light-green waves-effect btn-sm"><i class="fa fa-eye"></i></button>
+                                            <button onclick="UpdateBannerModal('@p.Id','@p.Title','@p.Link','@p.PossitionId','@p.Description')" class="btn bg-cyan  waves-effect btn-sm"><i class="fa fa-edit"></i></button>
+                                            <button onclick="DeleteBanner('@p.Id','@p.Title')" class="btn bg-red waves-effect btn-sm"><i class="fa fa-trash"></i></button>
+                                            <button onclick="ChangeIsShowBanner('@p.Id','@p.Title')" class="btn bg-light-green waves-effect btn-sm"><i class="fa fa-eye"></i></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -78,14 +78,14 @@
     <link rel="stylesheet" href="~/lib/Sweetalert2/sweetalert2.min.css" />
     <script src="~/lib/Sweetalert2/sweetalert2.min.js"></script>
     <script>
-        //Add Slider
-        function CreateSliderModal() {
-            $('#AddSlider').modal('show');
+        //Add Banner
+        function CreateBannerModal() {
+            $('#AddBanner').modal('show');
         }
-        //Remove Slider
-        function DeleteSlider(parentId, title) {
+        //Remove Banner
+        function DeleteBanner(parentId, title) {
             swal.fire({
-                title: 'حذف اسلایدر ' + ' ( ' + title + ' )',
+                title: 'حذف بنر ' + ' ( ' + title + ' )',
                 text: "کاربر گرامی  مطمئن هستید؟",
                 icon: 'warning',
                 showCancelButton: true,
@@ -104,7 +104,7 @@
                         contentType: 'application/x-www-form-urlencoded',
                         dataType: 'json',
                         type: "POST",
-                        url: "/Admin/Slider/RemoveSlider/",
+                        url: "/Admin/Banner/RemoveBanner/",
                         data: postData,
                         success: function (data) {
                             if (data.isSuccess == true) {
@@ -134,8 +134,8 @@
                 }
             });
         }
-        //Chabge Is Show Slider
-        function ChangeIsShowSlider(parentId, title) {
+        //Chabge Is Show Banner
+        function ChangeIsShowBanner(parentId, title) {
             swal.fire({
                 title: 'مخفی / آشکار ' + ' ( ' + title + ' )',
                 text: "کاربر گرامی  مطمئن هستید؟",
@@ -156,7 +156,7 @@
                         contentType: 'application/x-www-form-urlencoded',
                         dataType: 'json',
                         type: "POST",
-                        url: "/Admin/Slider/ChangeShow/",
+                        url: "/Admin/Banner/ChangeShow/",
                         data: postData,
                         success: function (data) {
                             if (data.isSuccess == true) {
@@ -186,35 +186,35 @@
                 }
             });
         }
-        //Edit Slider
-        function UpdateSliderModal(id, title, link, possition, des) {
-            $('#edit_sliderId').val(id);
-            $('#edit_sliderTitle').val(title);
-            $('#edit_sliderLink').val(link);
-            $('#edit_sliderPossition').val(possition);
-            $('#edit_sliderDescription').val(des);
-            $('#edit_slider_img').attr('src', $('#slider_image_' + id).attr('src'));
-            $('#EditSlider').modal('show');
+        //Edit Banner
+        function UpdateBannerModal(id, title, link, possition, des) {
+            $('#edit_BannerId').val(id);
+            $('#edit_BannerTitle').val(title);
+            $('#edit_BannerLink').val(link);
+            $('#edit_BannerPossition').val(possition);
+            $('#edit_BannerDescription').val(des);
+            $('#edit_Banner_img').attr('src', $('#Banner_image_' + id).attr('src'));
+            $('#EditBanner').modal('show');
         }
     </script>
 }
 @section Modals
     {
-    <div class="modal" id="AddSlider" tabindex="-1" role="dialog">
+    <div class="modal" id="AddBanner" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-light-blue waves-effect">
-                    <h5 class="modal-title text-white">ایجاد اسلایدر جدید </h5>
+                    <h5 class="modal-title text-white">ایجاد بنر جدید </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="/Admin/Slider/CreateSlider" enctype="multipart/form-data">
+                    <form method="post" action="/Admin/Banner/CreateBanner" enctype="multipart/form-data">
                         <div class="form-group">
-                            <label>عنوان اسلایدر&nbsp;<i class="text-danger">*</i></label>
+                            <label>عنوان بنر&nbsp;<i class="text-danger">*</i></label>
                             <div class="form-line">
-                                <input type="text" name="Title" class="form-control" placeholder="عنوان اسلایدر">
+                                <input type="text" name="Title" class="form-control" placeholder="عنوان بنر">
                             </div>
                         </div>
                         <div class="form-group">
@@ -225,14 +225,14 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>لینک اسلایدر&nbsp;<i class="text-danger">*</i></label>
+                            <label>لینک بنر&nbsp;<i class="text-danger">*</i></label>
                             <div class="form-line">
-                                <input type="text" name="Link" class="form-control" placeholder="لینک هدایت کننده به صفحه اسلایدر">
+                                <input type="text" name="Link" class="form-control" placeholder="لینک هدایت کننده به صفحه بنر">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label>تصویر اسلایدر&nbsp;<i class="text-danger">*</i></label>
+                            <label>تصویر بنر&nbsp;<i class="text-danger">*</i></label>
                             <div class="form-line">
                                 <input type="file" name="Images" class="form-control" accept="image/*">
                             </div>
@@ -252,42 +252,42 @@
             </div>
         </div>
     </div>
-    <div class="modal" id="EditSlider" tabindex="-1" role="dialog">
+    <div class="modal" id="EditBanner" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-light-blue waves-effect">
-                    <h5 class="modal-title text-white mb-3">بروزرسانی اسلایدر جدید </h5>
+                    <h5 class="modal-title text-white mb-3">بروزرسانی بنر جدید </h5>
                     <div class="row">
                         <div class="col-12">
-                            <img src="" id="edit_slider_img" class="form-control" style="width: 100%; height: 220px;">
+                            <img src="" id="edit_Banner_img" class="form-control" style="width: 100%; height: 220px;">
                         </div>
                     </div>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="/Admin/Slider/UpdateSlider" enctype="multipart/form-data">
-                        <input type="hidden" id="edit_sliderId" name="Id" />
+                    <form method="post" action="/Admin/Banner/UpdateBanner" enctype="multipart/form-data">
+                        <input type="hidden" id="edit_BannerId" name="Id" />
                         <div class="form-group">
-                            <label>عنوان اسلایدر&nbsp;<i class="text-danger">*</i></label>
+                            <label>عنوان بنر&nbsp;<i class="text-danger">*</i></label>
                             <div class="form-line">
-                                <input type="text" name="Title" class="form-control" placeholder="عنوان اسلایدر" id="edit_sliderTitle">
+                                <input type="text" name="Title" class="form-control" placeholder="عنوان بنر" id="edit_BannerTitle">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="form-line">
                                 <label>مکان قرار گیری</label>
-                                <select class="browser-default" asp-items="@ViewBag.Possition" name="PossitionId" id="edit_sliderPossition">
+                                <select class="browser-default" asp-items="@ViewBag.Possition" name="PossitionId" id="edit_BannerPossition">
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>لینک اسلایدر&nbsp;<i class="text-danger">*</i></label>
+                            <label>لینک بنر&nbsp;<i class="text-danger">*</i></label>
                             <div class="form-line">
-                                <input type="text" name="Link" class="form-control" placeholder="لینک هدایت کننده به صفحه اسلایدر" id="edit_sliderLink">
+                                <input type="text" name="Link" class="form-control" placeholder="لینک هدایت کننده به صفحه بنر" id="edit_BannerLink">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label>تصویر اسلایدر&nbsp;<i class="text-danger">*</i></label>
+                            <label>تصویر بنر&nbsp;<i class="text-danger">*</i></label>
                             <div class="form-line">
                                 <input type="file" name="Images" class="form-control" accept="image/*">
                             </div>
@@ -295,7 +295,7 @@
                         <label> توضیحات</label>
                         <div class="form-group">
                             <div class="form-line">
-                                <textarea class="form-control" name="Description" id="edit_sliderDescription"></textarea>
+                                <textarea class="form-control" name="Description" id="edit_BannerDescription"></textarea>
                             </div>
                         </div>
                         <br>

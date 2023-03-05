@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers
+namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers.ECommerce
 {
     [Area("Admin")]
     [Authorize(Roles = SD.Role_Admin)]
@@ -141,14 +141,15 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> YesOrNoProductDiscount(int id, string? lable,bool flag)
+        public async Task<IActionResult> YesOrNoProductDiscount(int id, string? lable, bool flag)
         {
-            var result = await _product.ProductService.YesOrNoProductDiscountAsync(id,lable,flag);
+            var result = await _product.ProductService.YesOrNoProductDiscountAsync(id, lable, flag);
             return Json(result);
         }
-        
+
         [HttpPost]
-        public async Task<IActionResult> ChangeIsSotial(int id) {
+        public async Task<IActionResult> ChangeIsSotial(int id)
+        {
             var result = await _product.ProductService.YesOrNoProductIsSotialAsync(id);
             return Json(result);
         }

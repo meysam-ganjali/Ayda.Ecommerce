@@ -21,7 +21,9 @@ public class UnitOfWork : IUnitOfWork {
         RoleService = new RoleRepository(_db, _mapper);
         ProductService = new ProductRepository(_db, _environment, _mapper);
         SliderService = new SliderRepository(_db, _mapper, _environment);
+        BannerService = new BannerRepository(_db, _mapper, _environment);
         PossitionService = new PossitionRepository(_db, _mapper);
+
     }
     public void Dispose() {
         _db.Dispose();
@@ -34,4 +36,5 @@ public class UnitOfWork : IUnitOfWork {
     public IProductRepository ProductService { get; }
     public ISliderRepository SliderService { get; }
     public IPossitionRepository PossitionService { get; }
+    public IBannerRepository BannerService { get; }
 }
