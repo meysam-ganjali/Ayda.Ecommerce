@@ -1247,10 +1247,7 @@ section {
 }
 
 .week-sale-bnr {
-
-	background: url(../images/week-sale-bg.jpg) center center no-repeat;
-
-	height: 250px;
+    height: 250px;
 
 	text-align: center;
 
@@ -1259,7 +1256,7 @@ section {
 	padding-bottom: 0px;
 
 	padding-top: 45px;
-
+    border-radius: 10px;
 }
 
 .week-sale-bnr h4 {
@@ -1633,8 +1630,7 @@ section {
 .product article {
 
 	border: 1px solid #e6e6e6;
-
-	padding: 9px;
+    padding: 9px;
 
 	background: #fff;
 

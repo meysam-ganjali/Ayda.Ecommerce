@@ -2,6 +2,45 @@
 @{
     ViewData["Title"] = "خانه";
 }
+<section class="slid-sec">
+    <div class="container">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Main Slider  -->
+                @await Component.InvokeAsync("GetSlider")
+                <!-- Main Slider  -->
+                <div class="col-md-3 no-padding">
+                    @if (Model.BannerDto.Any()) {
+                        foreach (var b in Model.BannerDto.Where(x => x.PossitionId == 5)) {
+                            <div class="week-sale-bnr" style="background: url('@b.ImagePath.Replace('\\','/')') center center no-repeat">
+                                <h4>@b.Title</h4>
+                                <p>@b.Description</p>
+                                <a href="@b.Link" class="btn-round">خرید کنید</a>
+                            </div>
+                        }
+                    } else {
+                        <!-- New line required  -->
+                        <div class="product">
+                            <div class="like-bnr">
+                                <div class="position-center-center">
+                                    <h5>خط جدید مورد نیاز است</h5>
+                                    <h4>گوشی هوشمند s7</h4>
+                                    <span class="price">259.99 تومان</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Weekly Slaes  -->
+                        <div class="week-sale-bnr">
+                            <h4>فروش <span>هفتگی!</span></h4>
+                            <p>در این هفته تا 50٪ تخفیف در همه موارد فروشگاه آنلاین ذخیره شده است.</p>
+                            <a href="#." class="btn-round">خرید کنید</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 <!-- Shipping Info -->
 <section class="shipping-info">
     <div class="container">
@@ -422,171 +461,56 @@
 
         <!-- Items -->
         <div class="item-col-5">
-
-            <!-- Product -->
-            <div class="product col-2x">
-                <div class="like-bnr">
-                    <div class="position-center-center">
-                        <h5>ساعت هوشمند 2.0</h5>
-                        <p>
-                            مورد آلومینیوم خاکستری فضایی با گروه سیاه و سفید / واقعی وسترن <span>
-                                38میلی متر |
-                                42میلی متر
-                            </span>
-                        </p>
-                        <a href="#." class="btn-round">نمایش جزئیات</a>
+            @if (Model.BannerDto.Where(x => x.PossitionId == 8).Any()) {
+                <div class="product col-2x">
+                    <div class="like-bnr" style="background: #f5f5f5 url('@Model.BannerDto.FirstOrDefault(x => x.PossitionId == 8).ImagePath.Replace('\\','/')') right top no-repeat;">
+                        <div class="position-center-center">
+                            <h5>@Model.BannerDto.FirstOrDefault(x => x.PossitionId == 8).Title</h5>
+                            <p>
+                                <span>
+                                    @Model.BannerDto.FirstOrDefault(x => x.PossitionId == 8).Description
+                                </span>
+                            </p>
+                            <a  href="@Model.BannerDto.FirstOrDefault(x => x.PossitionId == 8).Link" class="btn-round">نمایش جزئیات</a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
+            @if (Model.ProductDtos.Count > 0) {
+                for (int i = 0; i < 7; i++) {
+                    <div class="product" style="height: 378px; min-height: 378px;  max-height: 378px;">
+                        <article style="height: 378px; min-height: 378px;  max-height: 378px;">
+                            <img class="img-responsive" src="@Model.ProductDtos[i].ImageCoverPath.Trim('\\')" alt=""> 
+                           @if (Model.ProductDtos[i].IsDiscount)
+                           {
+                               <span class="sale-tag">@Model.ProductDtos[i].DiscountLableText</span>
+                           }
+
+                            <!-- Content -->
+                            <span class="tag">"@Model.ProductDtos[i].Category.Name</span> <a href="#." class="tittle">
+                                "@Model.ProductDtos[i].Name
+                            </a>
+                            <!-- Reviews -->
+                            <p class="rev">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <span class="margin-left-10">5 نظر</span>
+                            </p>
+                                <div class="price">"@Model.ProductDtos[i].Price.ToString("#,##") تومان</div>
+                                <a href="#." class="cart-btn"><i class="icon-basket-loaded"></i></a>
+                          
+                        </article>
+                    </div>
+                }
+            }
 
             <!-- Product -->
-            <div class="product">
-                <article>
-                    <img class="img-responsive" src="~/images/item-img-1-6.jpg" alt=""> <span class="sale-tag">-25%</span>
 
-                    <!-- Content -->
-                    <span class="tag">تبلت ها</span> <a href="#." class="tittle">
-                        Mp3 Sumergible Deportivo
-                        Slim Con 8GB
-                    </a>
-                    <!-- Reviews -->
-                    <p class="rev">
-                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> <i class="fa fa-star"></i>
-                        <span class="margin-left-10">5 نظر</span>
-                    </p>
-                    <div class="price">350 هزار <span>200 هزار</span></div>
-                    <a href="#." class="cart-btn"><i class="icon-basket-loaded"></i></a>
-                </article>
-            </div>
 
-            <!-- Product -->
-            <div class="product">
-                <article>
-                    <img class="img-responsive" src="~/images/item-img-1-7.jpg" alt="">
-                    <!-- Content -->
-                    <span class="tag">لوازم خانگی</span> <a href="#." class="tittle">
-                        بلوتوث لمسی Smartjatch
-                        M26 لمسی هوش مصنوعی
-                    </a>
-                    <!-- Reviews -->
-                    <p class="rev">
-                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> <i class="fa fa-star-o"></i>
-                        <span class="margin-left-10">5 نظر</span>
-                    </p>
-                    <div class="price">350 هزار تومان</div>
-                    <a href="#." class="cart-btn"><i class="icon-basket-loaded"></i></a>
-                </article>
-            </div>
 
-            <!-- Product -->
-            <div class="product">
-                <article>
-                    <img class="img-responsive" src="~/images/item-img-1-8.jpg" alt=""> <span class="new-tag">جدید</span>
-
-                    <!-- Content -->
-                    <span class="tag">تجهیزات جانبی</span> <a href="#." class="tittle">
-                        صفحه کلید بلوتوث بی
-                        سیم با موشواره هوا
-                    </a>
-                    <!-- Reviews -->
-                    <p class="rev">
-                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> <i class="fa fa-star-o"></i>
-                        <span class="margin-left-10">5 نظر</span>
-                    </p>
-                    <div class="price">350 هزار تومان</div>
-                    <a href="#." class="cart-btn"><i class="icon-basket-loaded"></i></a>
-                </article>
-            </div>
-
-            <!-- Product -->
-            <div class="product">
-                <article>
-                    <img class="img-responsive" src="~/images/item-img-1-9.jpg" alt="">
-                    <!-- Content -->
-                    <span class="tag">لوازم خانگی</span> <a href="#." class="tittle">لپ تاپ</a>
-                    <!-- Reviews -->
-                    <p class="rev">
-                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> <i class="fa fa-star-o"></i>
-                        <span class="margin-left-10">5 نظر</span>
-                    </p>
-                    <div class="price">350 هزار تومان</div>
-                    <a href="#." class="cart-btn"><i class="icon-basket-loaded"></i></a>
-                </article>
-            </div>
-
-            <!-- Product -->
-            <div class="product">
-                <article>
-                    <img class="img-responsive" src="~/images/item-img-1-10.jpg" alt="">
-                    <!-- Content -->
-                    <span class="tag">لوازم خانگی</span> <a href="#." class="tittle">
-                        بلوتوث لمسی Smartjatch
-                        M26 لمسی هوش مصنوعی
-                    </a>
-                    <!-- Reviews -->
-                    <p class="rev">
-                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> <i class="fa fa-star-o"></i>
-                        <span class="margin-left-10">5 نظر</span>
-                    </p>
-                    <div class="price">350 هزار تومان</div>
-                    <a href="#." class="cart-btn"><i class="icon-basket-loaded"></i></a>
-                </article>
-            </div>
-
-            <!-- Product -->
-            <div class="product">
-                <article>
-                    <img class="img-responsive" src="~/images/item-img-1-11.jpg" alt=""> <span class="new-tag">جدید</span>
-
-                    <!-- Content -->
-                    <span class="tag">تجهیزات جانبی</span> <a href="#." class="tittle">
-                        صفحه کلید بلوتوث بی
-                        سیم
-                    </a>
-                    <!-- Reviews -->
-                    <p class="rev">
-                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> <i class="fa fa-star"></i>
-                        <span class="margin-left-10">5 نظر</span>
-                    </p>
-                    <div class="price">350 هزار تومان</div>
-                    <a href="#." class="cart-btn"><i class="icon-basket-loaded"></i></a>
-                </article>
-            </div>
-
-            <!-- Product -->
-            <div class="product">
-                <article>
-                    <img class="img-responsive" src="~/images/item-img-1-12.jpg" alt="">
-                    <!-- Content -->
-                    <span class="tag">لوازم خانگی</span> <a href="#." class="tittle">لپ تاپ</a>
-                    <!-- Reviews -->
-                    <p class="rev">
-                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> <i class="fa fa-star"></i>
-                        <span class="margin-left-10">5 نظر</span>
-                    </p>
-                    <div class="price">350 هزار تومان</div>
-                    <a href="#." class="cart-btn"><i class="icon-basket-loaded"></i></a>
-                </article>
-            </div>
-
-            <!-- Product -->
-            <div class="product">
-                <article>
-                    <img class="img-responsive" src="~/images/item-img-1-13.jpg" alt="">
-                    <!-- Content -->
-                    <span class="tag">لوازم خانگی</span> <a href="#." class="tittle">
-                        بلوتوث لمسی Smartjatch
-                        M26 لمسی هوش مصنوعی
-                    </a>
-                    <!-- Reviews -->
-                    <p class="rev">
-                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> <i class="fa fa-star"></i>
-                        <span class="margin-left-10">5 نظر</span>
-                    </p>
-                    <div class="price">350 هزار تومان</div>
-                    <a href="#." class="cart-btn"><i class="icon-basket-loaded"></i></a>
-                </article>
-            </div>
         </div>
     </div>
 </section>
@@ -594,40 +518,40 @@
 <!-- Main Tabs Sec -->
 <section class="main-tabs-sec padding-top-60 padding-bottom-0">
     <div class="container">
-    <ul class="nav margin-bottom-40" role="tablist">
+        <ul class="nav margin-bottom-40" role="tablist">
 
-        <li role="presentation" class="active">
-            <a href="#tv-au" aria-controls="featur" role="tab"
-               data-toggle="tab">
-                <i class="flaticon-computer"></i> تلویزیون و صوتی
-                <span>
-                    236 مورد
-                </span>
-            </a>
-        </li>
-        <li role="presentation">
-            <a href="#smart" aria-controls="special" role="tab" data-toggle="tab">
-                <i class="flaticon-smartphone"></i>گوشی های هوشمند <span>150 مورد</span>
-            </a>
-        </li>
-        <li role="presentation">
-            <a href="#deks-lap" aria-controls="on-sal" role="tab"
-               data-toggle="tab"><i class="flaticon-laptop"></i>میز و لپ تاپ <span>268 مورد</span></a>
-        </li>
-        <li role="presentation">
-            <a href="#game-com" aria-controls="special" role="tab"
-               data-toggle="tab"><i class="flaticon-gamepad-1"></i>کنسول بازی <span>79 مورد</span></a>
-        </li>
-        <li role="presentation">
-            <a href="#watches" aria-controls="on-sal" role="tab"
-               data-toggle="tab"><i class="flaticon-computer-1"></i>ساعت ها <span>105 مورد</span></a>
-        </li>
-        <li role="presentation">
-            <a href="#access" aria-controls="on-sal" role="tab" data-toggle="tab">
-                <i class="flaticon-keyboard"></i>تجهیزات جانبی <span>816 مورد</span>
-            </a>
-        </li>
-    </ul>
+            <li role="presentation" class="active">
+                <a href="#tv-au" aria-controls="featur" role="tab"
+                   data-toggle="tab">
+                    <i class="flaticon-computer"></i> تلویزیون و صوتی
+                    <span>
+                        236 مورد
+                    </span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="#smart" aria-controls="special" role="tab" data-toggle="tab">
+                    <i class="flaticon-smartphone"></i>گوشی های هوشمند <span>150 مورد</span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="#deks-lap" aria-controls="on-sal" role="tab"
+                   data-toggle="tab"><i class="flaticon-laptop"></i>میز و لپ تاپ <span>268 مورد</span></a>
+            </li>
+            <li role="presentation">
+                <a href="#game-com" aria-controls="special" role="tab"
+                   data-toggle="tab"><i class="flaticon-gamepad-1"></i>کنسول بازی <span>79 مورد</span></a>
+            </li>
+            <li role="presentation">
+                <a href="#watches" aria-controls="on-sal" role="tab"
+                   data-toggle="tab"><i class="flaticon-computer-1"></i>ساعت ها <span>105 مورد</span></a>
+            </li>
+            <li role="presentation">
+                <a href="#access" aria-controls="on-sal" role="tab" data-toggle="tab">
+                    <i class="flaticon-keyboard"></i>تجهیزات جانبی <span>816 مورد</span>
+                </a>
+            </li>
+        </ul>
 
         <!-- Tab panes -->
         <div class="tab-content">

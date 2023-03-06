@@ -13,6 +13,10 @@ namespace Ayda.Ecommerce.Web.Controllers {
        }
        public async Task<IActionResult> Index() {
             HomePageVM model = new HomePageVM();
+            var banners = await _unitOfWork.BannerService.GetAllAsync();
+            model.BannerDto = banners.Data.ToList();
+            var products =  _unitOfWork.ProductService.GetProductForAdmin(null, null,100,1);
+            model.ProductDtos = products.Data.EntityDto;
             return View(model);
         }
 
