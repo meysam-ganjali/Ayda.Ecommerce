@@ -53,8 +53,8 @@
                                     <td><small>@p.SubMenus.Count</small></td>
                                     <td>
                                         <div>
-                                            <button onclick="UpdateBannerModal('@p.Id')" class="btn bg-cyan  waves-effect btn-sm"><i class="fa fa-edit"></i></button>
-                                            <button onclick="DeleteBanner('@p.Id','@p.Name')" class="btn bg-red waves-effect btn-sm"><i class="fa fa-trash"></i></button>
+                                            <button onclick="UpdateParentMenuModal('@p.Id','@p.Name')" class="btn bg-cyan  waves-effect btn-sm"><i class="fa fa-edit"></i></button>
+                                            <button onclick="DeleteParentMenu('@p.Id','@p.Name')" class="btn bg-red waves-effect btn-sm"><i class="fa fa-trash"></i></button>
                                             <button onclick="AddSubMenu('@p.Id')" class="btn bg-light-green waves-effect btn-sm"><i class="fa fa-plus"></i>&nbsp;افزودن زیرمنو</button>
                                             <a href="/admin/menu/submenulist/@p.Id" class="btn bg-green waves-effect btn-sm"><i class="fa fa-eye"></i></a>
                                         </div>
@@ -82,10 +82,10 @@
             $('#Add_sub_pId').val(parentid);
             $('#AddSubMenu').modal('show');
             }
-        //Remove Banner
-        function DeleteBanner(parentId, title) {
+        //Remove Parent Menu
+        function DeleteParentMenu(parentId, title) {
             swal.fire({
-                title: 'حذف بنر ' + ' ( ' + title + ' )',
+                title: 'حذف منو ' + ' ( ' + title + ' )',
                 text: "کاربر گرامی  مطمئن هستید؟",
                 icon: 'warning',
                 showCancelButton: true,
@@ -104,7 +104,7 @@
                         contentType: 'application/x-www-form-urlencoded',
                         dataType: 'json',
                         type: "POST",
-                        url: "/Admin/Banner/RemoveBanner/",
+                        url: "/Admin/Menu/RemoveParentMenu/",
                         data: postData,
                         success: function (data) {
                             if (data.isSuccess == true) {
@@ -186,15 +186,11 @@
                 }
             });
         }
-        //Edit Banner
-        function UpdateBannerModal(id, title, link, possition, des) {
-            $('#edit_BannerId').val(id);
-            $('#edit_BannerTitle').val(title);
-            $('#edit_BannerLink').val(link);
-            $('#edit_BannerPossition').val(possition);
-            $('#edit_BannerDescription').val(des);
-            $('#edit_Banner_img').attr('src', $('#Banner_image_' + id).attr('src'));
-            $('#EditBanner').modal('show');
+        //Edit Parent Menu
+        function UpdateParentMenuModal(id, title) {
+            $('#edit_Id').val(id);
+            $('#edit_Title').val(title);
+            $('#EditParent').modal('show');
         }
     </script>
 }
@@ -227,7 +223,36 @@
             </div>
         </div>
     </div>
-    @*Sub*@
+    @*Edit Parent Menu*@
+
+    <div class="modal" id="EditParent" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-light-blue waves-effect">
+                    <h5 class="modal-title text-white">ویرایش منوی والد </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/Admin/Menu/UpdateParentMenu">
+                        <input type="hidden" id="edit_Id" name="Id" />
+                        <div class="form-group">
+                            <label>عنوان &nbsp;<i class="text-danger">*</i></label>
+                            <div class="form-line">
+                                <input type="text" name="Name" class="form-control" id="edit_Title" placeholder="عنوان منو">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-info waves-effect"><i class="fas fa-save"></i></button>
+                            <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">لغو</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>@*Sub*@
     <div class="modal" id="AddSubMenu" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

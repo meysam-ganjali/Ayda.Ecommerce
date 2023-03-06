@@ -40,6 +40,23 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers.Tools {
             return Redirect("/Admin/Menu/Index");
         }
         [HttpPost]
+        public async Task<IActionResult> UpdateParentMenu(UpdateMenuItemDto menu) {
+            var result = await _menuService.MenuService.UpdateParentMenuAsync(menu);
+            if (result.IsSuccess) {
+                TempData["success"] = result.Message;
+                return Redirect("/Admin/Menu/Index");
+            }
+
+            TempData["error"] = result.Message;
+            return Redirect("/Admin/Menu/Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveParentMenu(int id) {
+            var res = await _menuService.MenuService.DeleteParentMenuAsync(id);
+            return Json(res);
+        }
+        [HttpPost]
         public async Task<IActionResult> CreateSubMenu(CreateSubMenuDto menu) {
             var result = await _menuService.MenuService.AddSubMenuAsync(menu);
             if (result.IsSuccess) {
@@ -62,8 +79,7 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers.Tools {
             return Redirect($"/Admin/Menu/SubMenuList/{menu.MenuItemId}");
         }
         [HttpPost]
-        public async Task<IActionResult> RemoveSubMenu(int id)
-        {
+        public async Task<IActionResult> RemoveSubMenu(int id) {
             var res = await _menuService.MenuService.DeleteSubMenuAsync(id);
             return Json(res);
         }
