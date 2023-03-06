@@ -21,8 +21,9 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers.Tools {
             return View(fullMenu.Data);
         }
 
-        public async Task<IActionResult> SubMenuList(int id)
-        {
+        public async Task<IActionResult> SubMenuList(int id) {
+            var category = await _menuService.CategoryService.GetAllAsync();
+            ViewBag.Category = new SelectList(category.Data, "Id", "Name");
             var sub = await _menuService.MenuService.GetSubMenuByParentIdAsync(id);
 
             return View(sub.Data);
