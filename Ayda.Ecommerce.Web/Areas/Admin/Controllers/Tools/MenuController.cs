@@ -49,5 +49,12 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers.Tools {
             TempData["error"] = result.Message;
             return Redirect("/Admin/Menu/Index");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveSubMenu(int id)
+        {
+            var res = await _menuService.MenuService.DeleteSubMenuAsync(id);
+            return Json(res);
+        }
     }
 }

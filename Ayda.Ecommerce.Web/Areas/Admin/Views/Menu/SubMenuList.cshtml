@@ -33,30 +33,30 @@
                 } else {
                     <table class="table table-bordered table-hover table-striped">
                         <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>عنوان</th>
-                                <th>دسته بندی</th>
-                                <th><i class="fa fa-toolbox"></i></th>
-                            </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>عنوان</th>
+                            <th>دسته بندی</th>
+                            <th><i class="fa fa-toolbox"></i></th>
+                        </tr>
                         </thead>
                         <tbody>
-                            @foreach (var p in Model) {
-                                <tr>
-                                    <th scope="row">@p.Id</th>
-                                    <td>
-                                        @p.Title
-                                    </td>
-                                    <td>@p.Category.Name</td>
-                                    <td>
-                                        <div>
-                                            <button onclick="UpdateBannerModal('@p.Id')" class="btn bg-cyan  waves-effect btn-sm"><i class="fa fa-edit"></i></button>
-                                            <button onclick="DeleteBanner('@p.Id','@p.Title')" class="btn bg-red waves-effect btn-sm"><i class="fa fa-trash"></i></button>
+                        @foreach (var p in Model) {
+                            <tr>
+                                <th scope="row">@p.Id</th>
+                                <td>
+                                    @p.Title
+                                </td>
+                                <td>@p.Category.Name</td>
+                                <td>
+                                    <div>
+                                        <button onclick="UpdateBannerModal('@p.Id')" class="btn bg-cyan  waves-effect btn-sm"><i class="fa fa-edit"></i></button>
+                                            <button onclick="Remove('@p.Id','@p.Title')" class="btn bg-red waves-effect btn-sm"><i class="fa fa-trash"></i></button>
                                            
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
                         </tbody>
                     </table>
                 }
@@ -64,3 +64,62 @@
         </div>
     </div>
 </div>
+@section Scripts
+{
+    <link rel="stylesheet" href="~/lib/Sweetalert2/sweetalert2.min.css" />
+    <script src="~/lib/Sweetalert2/sweetalert2.min.js"></script>
+    <script>
+        //Remove Banner
+        function Remove(Id, title) {
+            swal.fire({
+                title: 'حذف زیر منوی  ' + ' ( ' + title + ' )',
+                text: "کاربر گرامی  مطمئن هستید؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#7cacbe',
+                confirmButtonText: 'بله ',
+                cancelButtonText: 'خیر'
+            }).then((result) => {
+                if (result.value) {
+
+                    var postData = {
+                        'id': Id
+                    };
+
+                    $.ajax({
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        type: "POST",
+                        url: "/Admin/Menu/RemoveSubMenu/",
+                        data: postData,
+                        success: function (data) {
+                            if (data.isSuccess == true) {
+                                swal.fire(
+                                    'موفق!',
+                                    data.message,
+                                    'success'
+                                ).then(function (isConfirm) {
+                                    location.reload();
+                                });
+                            } else {
+
+                                swal.fire(
+                                    'هشدار!',
+                                    data.message,
+                                    'warning'
+                                );
+
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+
+                    });
+
+                }
+            });
+        }
+    </script>
+}
