@@ -57,6 +57,11 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers.Tools {
             return Json(res);
         }
         [HttpPost]
+        public async Task<IActionResult> ChangeShowParentMenu(int id) {
+            var res = await _menuService.MenuService.ChangeShowForParent(id);
+            return Json(res);
+        }
+        [HttpPost]
         public async Task<IActionResult> CreateSubMenu(CreateSubMenuDto menu) {
             var result = await _menuService.MenuService.AddSubMenuAsync(menu);
             if (result.IsSuccess) {
@@ -81,6 +86,11 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers.Tools {
         [HttpPost]
         public async Task<IActionResult> RemoveSubMenu(int id) {
             var res = await _menuService.MenuService.DeleteSubMenuAsync(id);
+            return Json(res);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ChangeShowSubMenu(int id) {
+            var res = await _menuService.MenuService.ChangeShowForSub(id);
             return Json(res);
         }
     }

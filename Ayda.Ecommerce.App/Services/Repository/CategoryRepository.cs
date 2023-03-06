@@ -236,10 +236,23 @@ public class CategoryRepository : ICategoryRepository {
 
         _db.CategoryAttributes.Remove(attribute);
         await _db.SaveChangesAsync();
-        return new ResultDto
-        {
+        return new ResultDto {
             IsSuccess = true,
             Message = "مشخصه منتخب از سیستم حذف گردید"
+        };
+    }
+
+    public async Task<ResultDto<IEnumerable<CategoryDto>>> GetForCategory() {
+        IEnumerable<Category> categories;
+
+
+        categories = await _db.Categories
+            .Include(x => x.SubCategories)
+            .Include(x => x.ParentCategory).ToListAsync();
+
+        return new ResultDto<IEnumerable<CategoryDto>> {
+            IsSuccess = true,
+            Data = _mapper.Map<IEnumerable<CategoryDto>>(categories)
         };
     }
 }

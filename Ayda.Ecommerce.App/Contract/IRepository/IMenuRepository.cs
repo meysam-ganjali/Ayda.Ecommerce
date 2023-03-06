@@ -9,6 +9,7 @@ public interface IMenuRepository {
     Task<ResultDto> DeleteParentMenuAsync(int id);
     Task<ResultDto<IEnumerable<MenuItemDto>>> GetAllParentMenuAsync();
     Task<ResultDto<MenuItemDto>> GetParentMenuAsync(int id);
+    Task<ResultDto> ChangeShowForParent(int id);
 
     /*******************/
     Task<ResultDto> AddSubMenuAsync(CreateSubMenuDto subDto);
@@ -16,4 +17,5 @@ public interface IMenuRepository {
     Task<ResultDto> DeleteSubMenuAsync(int id);
     Task<ResultDto<IEnumerable<SubMenuDto>>> GetSubMenuByParentIdAsync(int parentId);
     Task<ResultDto<SubMenuDto>> GetSubMenuAsync(int id);
+    Task<ResultDto> ChangeShowForSub(int id);
 }

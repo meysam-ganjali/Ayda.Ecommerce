@@ -1,0 +1,19 @@
+﻿@model IEnumerable<Ayda.Ecommerce.ShareModels.Menu.MenuItemDto>
+<ul class="nav">
+    <li> <a href="/">خانه </a></li>
+    @if (Model.Any()) {
+        foreach (var parent in Model) {
+            <li class="dropdown">
+                <a href="index-2.html" class="dropdown-toggle"
+           data-toggle="dropdown">@parent.Name </a>
+                <ul class="dropdown-menu multi-level animated-2s fadeInUpHalf">
+                    @foreach (var sub in parent.SubMenus) {
+                        <li><a href="About.html"> @sub.Title </a></li>
+                    }
+                </ul>
+            </li>
+        }
+    }
+    <li> <a href="index-2.html">درباره ما </a></li>
+    <li> <a href="index-2.html">تماس ما </a></li>
+</ul>

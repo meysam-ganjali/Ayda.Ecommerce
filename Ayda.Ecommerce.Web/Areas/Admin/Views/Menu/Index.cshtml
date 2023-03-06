@@ -56,6 +56,7 @@
                                             <button onclick="UpdateParentMenuModal('@p.Id','@p.Name')" class="btn bg-cyan  waves-effect btn-sm"><i class="fa fa-edit"></i></button>
                                             <button onclick="DeleteParentMenu('@p.Id','@p.Name')" class="btn bg-red waves-effect btn-sm"><i class="fa fa-trash"></i></button>
                                             <button onclick="AddSubMenu('@p.Id')" class="btn bg-light-green waves-effect btn-sm"><i class="fa fa-plus"></i>&nbsp;افزودن زیرمنو</button>
+                                            <button onclick="ChangeShow('@p.Id')" class="btn bg-light-green waves-effect btn-sm"><i class="fa fa-lock"></i>&nbsp;تغییر حالت</button>
                                             <a href="/admin/menu/submenulist/@p.Id" class="btn bg-green waves-effect btn-sm"><i class="fa fa-eye"></i></a>
                                         </div>
                                     </td>
@@ -134,10 +135,10 @@
                 }
             });
         }
-        //Chabge Is Show Banner
-        function ChangeIsShowBanner(parentId, title) {
+        //Chabge Is Show Menu
+        function ChangeShow(parentId) {
             swal.fire({
-                title: 'مخفی / آشکار ' + ' ( ' + title + ' )',
+                title: 'مخفی / آشکار ',
                 text: "کاربر گرامی  مطمئن هستید؟",
                 icon: 'warning',
                 showCancelButton: true,
@@ -156,7 +157,7 @@
                         contentType: 'application/x-www-form-urlencoded',
                         dataType: 'json',
                         type: "POST",
-                        url: "/Admin/Banner/ChangeShow/",
+                        url: "/Admin/Menu/ChangeShowParentMenu/",
                         data: postData,
                         success: function (data) {
                             if (data.isSuccess == true) {

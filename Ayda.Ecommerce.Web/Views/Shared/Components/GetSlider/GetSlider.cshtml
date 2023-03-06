@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Ayda.Ecommerce.ShareModels.Slider.SliderDto>
+
+
+<div class="col-md-9 no-padding">
+
+    <!-- Main Slider Start -->
+    <div class="tp-banner-container">
+        <div class="tp-banner">
+            <ul>
+                @if (Model.Any()) {
+                    foreach (var s in Model) {
+                        <li data-transition="random" data-slotamount="7" data-masterspeed="300"
+                    style="background: url('@s.ImagePath.Replace('\\','/')');background-repeat: no-repeat;background-size: cover; background-position: center;">
+                           
+
+                            <!-- LAYER NR. 1 -->
+                            <div class="tp-caption sfl tp-resizeme" data-x="left" data-hoffset="60"
+                         data-y="center" data-voffset="-110" data-speed="800" data-start="800"
+                         data-easing="Power3.easeInOut" data-splitout="none"
+                         data-elementdelay="0.03" data-endelementdelay="0.4" data-endspeed="300"
+                         style="z-index: 5; font-size:30px; font-weight:500; color:#888888;  max-width: auto; max-height: auto; white-space: nowrap;">
+                             @s.Title
+                            </div>
+
+                            <!-- LAYER NR. 2 -->
+                            <div class="tp-caption sfr tp-resizeme" data-x="left" data-hoffset="60"
+                         data-y="center" data-voffset="-60" data-speed="800" data-start="1000"
+                         data-easing="Power3.easeInOut" data-splitout="none"
+                         data-elementdelay="0.03" data-endelementdelay="0.1" data-endspeed="300"
+                         style="z-index: 6; font-size:50px; color:#0088cc; font-weight:800; white-space: nowrap;">
+                             @s.Description
+                            </div>
+
+                            <div class="tp-caption lfb tp-resizeme scroll" data-x="left"
+                         data-hoffset="60" data-y="center" data-voffset="80" data-speed="800"
+                         data-start="1300" data-easing="Power3.easeInOut" data-elementdelay="0.1"
+                         data-endelementdelay="0.1" data-endspeed="300" data-scrolloffset="0"
+                         style="z-index: 8;">
+                                <a href="@s.Link" class="btn-round big">خرید کنید</a>
+                            </div>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+</div>

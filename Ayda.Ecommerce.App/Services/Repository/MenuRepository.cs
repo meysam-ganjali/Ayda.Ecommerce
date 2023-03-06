@@ -116,6 +116,33 @@ public class MenuRepository : IMenuRepository {
         };
     }
 
+    public async Task<ResultDto> ChangeShowForParent(int id) {
+        var parentMenu = await _db.MenuItems
+            .Include(x => x.SubMenus).FirstOrDefaultAsync(x => x.Id == id);
+        if (parentMenu == null) {
+            return new ResultDto() {
+                IsSuccess = false,
+                Message = "منوی با این مشخصات یافت نشد"
+            };
+        }
+
+        if (parentMenu.SubMenus.Any() || parentMenu.SubMenus.Count > 1) {
+            return new ResultDto() {
+                IsSuccess = false,
+                Message = "این منو زیر مجموعه دارد و به مشکل می خورید لطفا ابتدا زیر مجموعه هارا مدیریت کنید"
+            };
+        }
+
+        parentMenu.IsShow = !parentMenu.IsShow;
+        parentMenu.UpdatedDate = DateTime.Now;
+        await _db.SaveChangesAsync();
+        string state = parentMenu.IsShow == false ? "منوی فوق به حالت مخفی تغییر کرد" : "منوی فوق به حالت آشکار تغییر کرد";
+        return new ResultDto {
+            IsSuccess = true,
+            Message = state
+        };
+    }
+
     public async Task<ResultDto> AddSubMenuAsync(CreateSubMenuDto subDto) {
         var subMenu = _mapper.Map<SubMenu>(subDto);
         try {
@@ -176,9 +203,9 @@ public class MenuRepository : IMenuRepository {
     }
 
     public async Task<ResultDto<IEnumerable<SubMenuDto>>> GetSubMenuByParentIdAsync(int parentId) {
-        var subMenu =await _db.SubMenus
+        var subMenu = await _db.SubMenus
             .Include(x => x.MenuItem)
-            .Include(x=>x.Category)
+            .Include(x => x.Category)
             .Where(x => x.MenuItemId == parentId).ToListAsync();
         if (subMenu == null) {
             return new ResultDto<IEnumerable<SubMenuDto>> {
@@ -209,6 +236,24 @@ public class MenuRepository : IMenuRepository {
         return new ResultDto<SubMenuDto> {
             Data = _mapper.Map<SubMenuDto>(subMenu),
             IsSuccess = true,
+        };
+    }
+
+    public async Task<ResultDto> ChangeShowForSub(int id) {
+        var subMenu = await _db.SubMenus.FirstOrDefaultAsync(x => x.Id == id);
+        if (subMenu == null) {
+            return new ResultDto() {
+                IsSuccess = false,
+                Message = "منوی با این مشخصات یافت نشد"
+            };
+        }
+        subMenu.IsShow = !subMenu.IsShow;
+        subMenu.UpdatedDate = DateTime.Now;
+        await _db.SaveChangesAsync();
+        string state = subMenu.IsShow == false ? "منوی فوق به حالت مخفی تغییر کرد" : "منوی فوق به حالت آشکار تغییر کرد";
+        return new ResultDto {
+            IsSuccess = true,
+            Message = state
         };
     }
 }

@@ -1,0 +1,18 @@
+﻿@model IEnumerable<Ayda.Ecommerce.ShareModels.EcommerceDto.CategoryDto>
+<ul>
+    @if (Model.Any()) {
+        foreach (var parent in Model.Where(x => x.ParentCategoryId == null)) {
+            <li class="@(parent.SubCategories.Any()?"sub-menu":"")">
+                <a href="#."> @parent.Name</a>
+                <ul>
+                    @foreach (var sub in parent.SubCategories) {
+                        <li><a href="#."> @sub.Name</a></li>
+                    }
+
+                </ul>
+            </li>
+        }
+
+    }
+
+</ul>

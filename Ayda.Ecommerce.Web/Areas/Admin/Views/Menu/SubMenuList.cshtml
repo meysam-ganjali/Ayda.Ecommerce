@@ -52,6 +52,7 @@
                                         <div>
                                             <a onclick="UpdateModal('@p.Id','@p.Title','@p.CategoryId','@p.MenuItemId')" class="btn bg-cyan  waves-effect btn-sm"><i class="fa fa-edit"></i></a>
                                             <button onclick="Remove('@p.Id','@p.Title')" class="btn bg-red waves-effect btn-sm"><i class="fa fa-trash"></i></button>
+                                            <button onclick="ChangeShow('@p.Id')" class="btn bg-red waves-effect btn-sm"><i class="fa fa-lock"></i>&nbsp;تغییر حالت</button>
 
                                         </div>
                                     </td>
@@ -128,6 +129,58 @@
             $('#cat_id').val(cat);
             $('#parent_id').val(parent);
             $('#EditSubMenu').modal('show');
+        }
+        //Chabge Is Show Menu
+        function ChangeShow(Id) {
+            swal.fire({
+                title: 'مخفی / آشکار ',
+                text: "کاربر گرامی  مطمئن هستید؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#7cacbe',
+                confirmButtonText: 'بله ',
+                cancelButtonText: 'خیر'
+            }).then((result) => {
+                if (result.value) {
+
+                    var postData = {
+                        'id': Id
+                    };
+
+                    $.ajax({
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        type: "POST",
+                        url: "/Admin/Menu/ChangeShowSubMenu/",
+                        data: postData,
+                        success: function (data) {
+                            if (data.isSuccess == true) {
+                                swal.fire(
+                                    'موفق!',
+                                    data.message,
+                                    'success'
+                                ).then(function (isConfirm) {
+                                    location.reload();
+                                });
+                            } else {
+
+                                swal.fire(
+                                    'هشدار!',
+                                    data.message,
+                                    'warning'
+                                );
+
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+
+                    });
+
+                }
+            });
         }
     </script>
 }
