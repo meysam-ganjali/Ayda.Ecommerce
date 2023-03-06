@@ -137,24 +137,25 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-light-blue waves-effect">
-                    <h5 class="modal-title text-white">ایجاد زیرمنو </h5>
+                    <h5 class="modal-title text-white">ویرایش زیرمنو </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="/Admin/Menu/CreateSubMenu">
-                        <input type="hidden" id="Add_sub_pId" name="MenuItemId" />
+                    <form method="post" action="/Admin/Menu/UpdateSubMenu">
+                        <input type="hidden" id="sub_id" name="Id" />
+                        <input type="hidden" id="parent_id" name="MenuItemId" />
                         <div class="form-group">
                             <label>عنوان &nbsp;<i class="text-danger">*</i></label>
                             <div class="form-line">
-                                <input type="text" name="Title" class="form-control" placeholder="عنوان منو">
+                                <input type="text" name="Title" class="form-control" placeholder="عنوان منو" id="sub_title">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="form-line">
                                 <label>دسته بندی</label>
-                                <select class="browser-default" asp-items="@ViewBag.Category" name="CategoryId">
+                                <select class="browser-default" asp-items="@ViewBag.Category" name="CategoryId" id="cat_id">
                                 </select>
                             </div>
                         </div>

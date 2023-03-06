@@ -50,7 +50,17 @@ namespace Ayda.Ecommerce.Web.Areas.Admin.Controllers.Tools {
             TempData["error"] = result.Message;
             return Redirect("/Admin/Menu/Index");
         }
+        [HttpPost]
+        public async Task<IActionResult> UpdateSubMenu(UpdateSubMenuDto menu) {
+            var result = await _menuService.MenuService.UpdateSubMenuAsync(menu);
+            if (result.IsSuccess) {
+                TempData["success"] = result.Message;
+                return Redirect($"/Admin/Menu/SubMenuList/{menu.MenuItemId}");
+            }
 
+            TempData["error"] = result.Message;
+            return Redirect($"/Admin/Menu/SubMenuList/{menu.MenuItemId}");
+        }
         [HttpPost]
         public async Task<IActionResult> RemoveSubMenu(int id)
         {
