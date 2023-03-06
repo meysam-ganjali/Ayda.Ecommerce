@@ -176,8 +176,9 @@ public class MenuRepository : IMenuRepository {
     }
 
     public async Task<ResultDto<IEnumerable<SubMenuDto>>> GetSubMenuByParentIdAsync(int parentId) {
-        var subMenu = _db.SubMenus
+        var subMenu =await _db.SubMenus
             .Include(x => x.MenuItem)
+            .Include(x=>x.Category)
             .Where(x => x.MenuItemId == parentId).ToListAsync();
         if (subMenu == null) {
             return new ResultDto<IEnumerable<SubMenuDto>> {

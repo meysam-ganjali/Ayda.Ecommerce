@@ -1,5 +1,323 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<Ayda.Ecommerce.ShareModels.Menu.MenuItemDto>
 @{
+    ViewData["Title"] = "مدیریت منو";
+}
+<partial name="_Notification" />
+<div class="block-header">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+                <li class="breadcrumb-item">
+                    <h4 class="page-title">لیست  منو</h4>
+                </li>
+                <li class="breadcrumb-item bcrumb-1">
+                    <a href="/admin/home/index">
+                        <i class="fas fa-home"></i> خانه
+                    </a>
+                </li>
+                <li class="breadcrumb-item bcrumb-2">
+                    <a href="/admin/category/index">@ViewData["Title"]</a>
+                </li>
+                <li class="breadcrumb-item active">@ViewData["Title"]</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <button type="button" class="btn bg-green" onclick="CreateParentModal()"><i class="fa fa-plus"></i>&nbsp;ایجاد منوی والد</button>
+            </div>
+            <div class="body table-responsive">
+                @if (Model.Count() < 1) {
+                    <p>منو برای نمایش وجود ندارد</p>
+
+                } else {
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>عنوان</th>
+                                <th>تعداد زیر منو</th>
+                                <th><i class="fa fa-toolbox"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var p in Model) {
+                                <tr>
+                                    <th scope="row">@p.Id</th>
+                                    <td>
+                                       @p.Name
+                                    </td>
+                                    <td><small>@p.SubMenus.Count</small></td>
+                                    <td>
+                                        <div>
+                                            <button onclick="UpdateBannerModal('@p.Id')" class="btn bg-cyan  waves-effect btn-sm"><i class="fa fa-edit"></i></button>
+                                            <button onclick="DeleteBanner('@p.Id','@p.Name')" class="btn bg-red waves-effect btn-sm"><i class="fa fa-trash"></i></button>
+                                            <button onclick="AddSubMenu('@p.Id')" class="btn bg-light-green waves-effect btn-sm"><i class="fa fa-plus"></i>&nbsp;افزودن زیرمنو</button>
+                                            <a href="/admin/menu/submenulist/@p.Id" class="btn bg-green waves-effect btn-sm"><i class="fa fa-eye"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+    {
+    <link rel="stylesheet" href="~/lib/Sweetalert2/sweetalert2.min.css" />
+    <script src="~/lib/Sweetalert2/sweetalert2.min.js"></script>
+<script>
+        //Add Parent Menu
+        function CreateParentModal() {
+            $('#AddMenu').modal('show');
+        }
+        //Add Sub Menu
+        function AddSubMenu(parentid){
+            $('#Add_sub_pId').val(parentid);
+            $('#AddSubMenu').modal('show');
+            }
+        //Remove Banner
+        function DeleteBanner(parentId, title) {
+            swal.fire({
+                title: 'حذف بنر ' + ' ( ' + title + ' )',
+                text: "کاربر گرامی  مطمئن هستید؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#7cacbe',
+                confirmButtonText: 'بله ',
+                cancelButtonText: 'خیر'
+            }).then((result) => {
+                if (result.value) {
+
+                    var postData = {
+                        'id': parentId
+                    };
+
+                    $.ajax({
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        type: "POST",
+                        url: "/Admin/Banner/RemoveBanner/",
+                        data: postData,
+                        success: function (data) {
+                            if (data.isSuccess == true) {
+                                swal.fire(
+                                    'موفق!',
+                                    data.message,
+                                    'success'
+                                ).then(function (isConfirm) {
+                                    location.reload();
+                                });
+                            } else {
+
+                                swal.fire(
+                                    'هشدار!',
+                                    data.message,
+                                    'warning'
+                                );
+
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+
+                    });
+
+                }
+            });
+        }
+        //Chabge Is Show Banner
+        function ChangeIsShowBanner(parentId, title) {
+            swal.fire({
+                title: 'مخفی / آشکار ' + ' ( ' + title + ' )',
+                text: "کاربر گرامی  مطمئن هستید؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#7cacbe',
+                confirmButtonText: 'بله ',
+                cancelButtonText: 'خیر'
+            }).then((result) => {
+                if (result.value) {
+
+                    var postData = {
+                        'id': parentId
+                    };
+
+                    $.ajax({
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        type: "POST",
+                        url: "/Admin/Banner/ChangeShow/",
+                        data: postData,
+                        success: function (data) {
+                            if (data.isSuccess == true) {
+                                swal.fire(
+                                    'موفق!',
+                                    data.message,
+                                    'success'
+                                ).then(function (isConfirm) {
+                                    location.reload();
+                                });
+                            } else {
+
+                                swal.fire(
+                                    'هشدار!',
+                                    data.message,
+                                    'warning'
+                                );
+
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+
+                    });
+
+                }
+            });
+        }
+        //Edit Banner
+        function UpdateBannerModal(id, title, link, possition, des) {
+            $('#edit_BannerId').val(id);
+            $('#edit_BannerTitle').val(title);
+            $('#edit_BannerLink').val(link);
+            $('#edit_BannerPossition').val(possition);
+            $('#edit_BannerDescription').val(des);
+            $('#edit_Banner_img').attr('src', $('#Banner_image_' + id).attr('src'));
+            $('#EditBanner').modal('show');
+        }
+    </script>
+}
+@section Modals
+{
+    @*Perent*@
+    <div class="modal" id="AddMenu" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-light-blue waves-effect">
+                    <h5 class="modal-title text-white">ایجادمنوی والد </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/Admin/Menu/CreateParentMenu">
+                        <div class="form-group">
+                            <label>عنوان &nbsp;<i class="text-danger">*</i></label>
+                            <div class="form-line">
+                                <input type="text" name="Name" class="form-control" placeholder="عنوان منو">
+                            </div>
+                        </div>
+                        <br> <div class="modal-footer">
+                            <button type="submit" class="btn btn-info waves-effect"><i class="fas fa-save"></i></button>
+                            <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">لغو</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*Sub*@
+    <div class="modal" id="AddSubMenu" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-light-blue waves-effect">
+                    <h5 class="modal-title text-white">ایجاد زیرمنو </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/Admin/Menu/CreateSubMenu">
+                        <input type="hidden" id="Add_sub_pId" name="MenuItemId" />
+                        <div class="form-group">
+                            <label>عنوان &nbsp;<i class="text-danger">*</i></label>
+                            <div class="form-line">
+                                <input type="text" name="Title" class="form-control" placeholder="عنوان منو">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label>دسته بندی</label>
+                                <select class="browser-default" asp-items="@ViewBag.Category" name="CategoryId">
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-info waves-effect"><i class="fas fa-save"></i></button>
+                            <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">لغو</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="EditBanner" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-light-blue waves-effect">
+                    <h5 class="modal-title text-white mb-3">بروزرسانی بنر جدید </h5>
+                    <div class="row">
+                        <div class="col-12">
+                            <img src="" id="edit_Banner_img" class="form-control" style="width: 100%; height: 220px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/Admin/Banner/UpdateBanner" enctype="multipart/form-data">
+                        <input type="hidden" id="edit_BannerId" name="Id" />
+                        <div class="form-group">
+                            <label>عنوان بنر&nbsp;<i class="text-danger">*</i></label>
+                            <div class="form-line">
+                                <input type="text" name="Title" class="form-control" placeholder="عنوان بنر" id="edit_BannerTitle">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label>مکان قرار گیری</label>
+                                <select class="browser-default" asp-items="@ViewBag.Possition" name="PossitionId" id="edit_BannerPossition">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>لینک بنر&nbsp;<i class="text-danger">*</i></label>
+                            <div class="form-line">
+                                <input type="text" name="Link" class="form-control" placeholder="لینک هدایت کننده به صفحه بنر" id="edit_BannerLink">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>تصویر بنر&nbsp;<i class="text-danger">*</i></label>
+                            <div class="form-line">
+                                <input type="file" name="Images" class="form-control" accept="image/*">
+                            </div>
+                        </div>
+                        <label> توضیحات</label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <textarea class="form-control" name="Description" id="edit_BannerDescription"></textarea>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-info waves-effect"><i class="fas fa-save"></i></button>
+                            <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">لغو</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 }
