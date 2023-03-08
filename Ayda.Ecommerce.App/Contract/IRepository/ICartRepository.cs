@@ -5,8 +5,8 @@ namespace Ayda.Ecommerce.App.Contract.IRepository;
 
 public interface ICartRepository
 {
-    Task<ResultDto> AddToCart(long ProductId, Guid BrowserId);
-    Task<ResultDto> AddToCart(long ProductId, Guid BrowserId,int count);
+    Task<ResultDto> AddToCart(int ProductId, Guid BrowserId);
+    Task<ResultDto> AddToCart(int ProductId, Guid BrowserId,int count);
     Task<ResultDto> RemoveFromCart(long ProductId, Guid BrowserId);
     Task<ResultDto<CartDto>> GetMyCart(Guid BrowserId, long? UserId);
     Task<ResultDto> Add(long CartItemId);

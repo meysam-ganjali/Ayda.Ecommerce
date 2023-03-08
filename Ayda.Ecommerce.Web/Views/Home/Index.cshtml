@@ -500,7 +500,7 @@
                                 <span class="margin-left-10">5 نظر</span>
                             </p>
                                 <div class="price">"@Model.ProductDtos[i].Price.ToString("#,##") تومان</div>
-                                <a href="#." class="cart-btn"><i class="icon-basket-loaded"></i></a>
+                                <a asp-controller="Cart" asp-action="AddToCart" asp-route-ProductId="@Model.ProductDtos[i].Id" class="cart-btn"><i class="icon-basket-loaded"></i></a>
                           
                         </article>
                     </div>

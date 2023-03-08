@@ -8,7 +8,7 @@ public class Cart : BaseEntity<long> {
     public Guid BrowserId { get; set; }
     public bool Finished { get; set; }
     public int TotalSum { get; set; }
-    public long UserId { get; set; }
+    public long? UserId { get; set; }
     [ForeignKey("UserId")]
     public virtual ApplicationUser ApplicationUser { get; set; }
     public virtual ICollection<CartItem> CartItems { get; set; }
