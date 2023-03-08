@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Ayda.Ecommerce.Domains.Cart;
 using Ayda.Ecommerce.Domains.Ecommerce;
 using Ayda.Ecommerce.Domains.Menu;
 using Ayda.Ecommerce.Domains.Slider;
 using Ayda.Ecommerce.Domains.User;
+using Ayda.Ecommerce.ShareModels.Carts;
 using Ayda.Ecommerce.ShareModels.EcommerceDto;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Attribut;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product;
@@ -186,8 +188,8 @@ public class MappConf : Profile {
             config.CreateMap<SliderDto, Slider>()
                 .ForMember(p => p.Possition,
                     p => p.MapFrom(q => q.Possition));
-            config.CreateMap<Slider,CreateSliderDto>().ReverseMap();
-            config.CreateMap<Slider,UpdateSliderDto>().ReverseMap();
+            config.CreateMap<Slider, CreateSliderDto>().ReverseMap();
+            config.CreateMap<Slider, UpdateSliderDto>().ReverseMap();
             #endregion
 
             #region Banner Mapp
@@ -244,6 +246,41 @@ public class MappConf : Profile {
                     p => p.MapFrom(q => q.MenuItem));
             config.CreateMap<SubMenu, CreateSubMenuDto>().ReverseMap();
             config.CreateMap<SubMenu, UpdateSubMenuDto>().ReverseMap();
+            #endregion
+
+            #region Cart Mapp
+
+            config.CreateMap<Cart, CartDto>()
+                .ForMember(p => p.ApplicationUser,
+                    p => p.MapFrom(q => q.ApplicationUser))
+                .ForMember(p => p.CartItems,
+                    p => p.MapFrom(q => q.CartItems));
+            config.CreateMap<CartDto, Cart>()
+                .ForMember(p => p.ApplicationUser,
+                    p => p.MapFrom(q => q.ApplicationUser))
+                .ForMember(p => p.CartItems,
+                    p => p.MapFrom(q => q.CartItems));
+            config.CreateMap<CreateCartDto, Cart>().ReverseMap();
+            config.CreateMap<UpdateCartDto, Cart>().ReverseMap();
+
+            #endregion
+
+            #region CartItem Mapp
+
+            config.CreateMap<CartItem, CartItemDto>()
+                .ForMember(p => p.Cart,
+                    p => p.MapFrom(q => q.Cart))
+                .ForMember(p => p.Product,
+                    p => p.MapFrom(q => q.Product));
+
+            config.CreateMap<CartItemDto, CartItem>()
+                .ForMember(p => p.Cart,
+                    p => p.MapFrom(q => q.Cart))
+                .ForMember(p => p.Product,
+                    p => p.MapFrom(q => q.Product));
+            config.CreateMap<CreateCartItemDto, CartItem>().ReverseMap();
+            config.CreateMap<UpdateCartItemDto, CartItem>().ReverseMap();
+
             #endregion
         });
         return mappingConfig;

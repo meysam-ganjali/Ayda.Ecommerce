@@ -13,6 +13,7 @@
     <Folder Include="EcommerceDto\Product\ProductColor\" />
     <Folder Include="EcommerceDto\Product\ProductImage\" />
     <Folder Include="Menu\" />
+    <Folder Include="Carts\" />
     <Folder Include="Slider\" />
     <Folder Include="Role\" />
   </ItemGroup>

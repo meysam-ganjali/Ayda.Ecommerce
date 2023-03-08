@@ -12,4 +12,5 @@ public interface IUnitOfWork : IDisposable {
     IPossitionRepository PossitionService { get; }
     IBannerRepository BannerService { get; }
     IMenuRepository MenuService { get; }
+    ICartRepository CartService { get; }
 }

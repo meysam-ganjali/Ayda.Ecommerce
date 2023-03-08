@@ -1,4 +1,5 @@
 ﻿using Ayda.Ecommerce.Domains.Base;
+using Ayda.Ecommerce.Domains.Cart;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ayda.Ecommerce.Domains.Ecommerce;
@@ -31,4 +32,5 @@ public class Product:BaseEntity<int>
     public virtual ICollection<ProductImage> ProductImages { get; set; }
     public virtual ICollection<ProductColor> ProductColors { get; set; }
     public virtual ICollection<ProductComment> ProductComments { get; set; }
+    public virtual ICollection<CartItem> CartItems { get; set; }
 }
