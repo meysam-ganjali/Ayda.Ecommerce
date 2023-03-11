@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Ayda.Ecommerce.Domains.Cart;
 using Ayda.Ecommerce.Domains.Ecommerce;
+using Ayda.Ecommerce.Domains.Finances;
 using Ayda.Ecommerce.Domains.Menu;
 using Ayda.Ecommerce.Domains.Slider;
 using Ayda.Ecommerce.Domains.User;
@@ -13,6 +14,7 @@ using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductColor;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductComment;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductImage;
 using Ayda.Ecommerce.ShareModels.Menu;
+using Ayda.Ecommerce.ShareModels.Ordering;
 using Ayda.Ecommerce.ShareModels.Role;
 using Ayda.Ecommerce.ShareModels.Slider;
 using Ayda.Ecommerce.ShareModels.User;
@@ -280,6 +282,66 @@ public class MappConf : Profile {
                     p => p.MapFrom(q => q.Product));
             config.CreateMap<CreateCartItemDto, CartItem>().ReverseMap();
             config.CreateMap<UpdateCartItemDto, CartItem>().ReverseMap();
+
+            #endregion
+
+            #region Request Mapp
+            config.CreateMap<RequestPay, RequestPayDto>()
+                .ForMember(p => p.User,
+                    p => p.MapFrom(q => q.User))
+                .ForMember(p => p.Orders,
+                    p => p.MapFrom(q => q.Orders));
+            config.CreateMap<RequestPayDto, RequestPay>()
+                .ForMember(p => p.User,
+                    p => p.MapFrom(q => q.User))
+                .ForMember(p => p.Orders,
+                    p => p.MapFrom(q => q.Orders));
+            config.CreateMap<RequestPay, CreateRequestPayDto>().ReverseMap();
+            config.CreateMap<RequestPay, UpdateRequestPayDto>().ReverseMap();
+            #endregion
+
+            #region Order Mapp
+
+            config.CreateMap<Order, OrderDto>()
+                .ForMember(p => p.User,
+                    p => p.MapFrom(q => q.User))
+                .ForMember(p => p.RequestPay,
+                    p => p.MapFrom(q => q.RequestPay))
+                .ForMember(p => p.OrderDetails,
+                    p => p.MapFrom(q => q.OrderDetails))
+                .ForMember(p => p.OrderState,
+                    p => p.MapFrom(q => q.OrderState));
+            config.CreateMap<OrderDto, Order>()
+                .ForMember(p => p.User,
+                    p => p.MapFrom(q => q.User))
+                .ForMember(p => p.RequestPay,
+                    p => p.MapFrom(q => q.RequestPay))
+                .ForMember(p => p.OrderDetails,
+                    p => p.MapFrom(q => q.OrderDetails))
+                .ForMember(p => p.OrderState,
+                    p => p.MapFrom(q => q.OrderState));
+    
+
+            #endregion
+
+            #region OrderDetail Mapp
+            config.CreateMap<OrderDetail, OrderDetailDto>()
+                .ForMember(p => p.Order,
+                    p => p.MapFrom(q => q.Order))
+                .ForMember(p => p.Product,
+                    p => p.MapFrom(q => q.Product));
+            config.CreateMap<OrderDetailDto, OrderDetail>()
+                .ForMember(p => p.Order,
+                    p => p.MapFrom(q => q.Order))
+                .ForMember(p => p.Product,
+                    p => p.MapFrom(q => q.Product));
+            config.CreateMap<OrderDetail, CreateOrderDetailDto>().ReverseMap();
+
+            #endregion
+
+            #region Oder
+
+            config.CreateMap<OrderState,OrderStateEnumDto>().ReverseMap();
 
             #endregion
         });

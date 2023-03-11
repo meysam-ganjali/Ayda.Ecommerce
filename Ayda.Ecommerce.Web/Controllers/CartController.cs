@@ -14,7 +14,7 @@ namespace Ayda.Ecommerce.Web.Controllers {
             _cart = cart;
             cookiesManeger = new CookiesManeger();
         }
-        [Authorize]
+        
         public async Task<IActionResult> Index() {
             var userId = ClaimUtility.GetUserId(User);
             var resultGetLst =await  _cart.CartService.GetMyCart(cookiesManeger.GetBrowserId(HttpContext), userId);

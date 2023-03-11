@@ -11,6 +11,7 @@
     <Folder Include="Ecommerce\" />
     <Folder Include="Menu\" />
     <Folder Include="Cart\" />
+    <Folder Include="Finances\" />
     <Folder Include="Slider\" />
     <Folder Include="User\" />
   </ItemGroup>

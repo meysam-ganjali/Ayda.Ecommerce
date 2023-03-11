@@ -1,6 +1,7 @@
 ﻿using Ayda.Ecommerce.Data.DataContext.Tools;
 using Ayda.Ecommerce.Domains.Cart;
 using Ayda.Ecommerce.Domains.Ecommerce;
+using Ayda.Ecommerce.Domains.Finances;
 using Ayda.Ecommerce.Domains.Menu;
 using Ayda.Ecommerce.Domains.Slider;
 using Ayda.Ecommerce.Domains.User;
@@ -37,6 +38,11 @@ public class DataBaseContext : DbContext {
     //Cart
     public DbSet<Cart> Carts { get; set; }
     public DbSet<CartItem> CartItems { get; set; }
+    //Order
+    public DbSet<RequestPay> RequestPays { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderDetail> OrderDetails { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(s => s.GetForeignKeys())) {

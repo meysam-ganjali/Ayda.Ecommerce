@@ -66,7 +66,7 @@
                                     <div class="media-left"> <a href="#."> <img class="img-responsive" src="~/@p.Product.ImageCoverPath.Trim('\\')" alt=""> </a> </div>
                                     <div class="media-body">
                                         <p>
-                                          @p.Product.Name
+                                            @p.Product.Name
                                         </p>
                                     </div>
                                 </div>
@@ -89,33 +89,40 @@
                             }
                         </tr>
                     }
-                }
-                else
-                {
-                        <p >
-                            محصولی در سبد شما یافت نشد
-                        </p>
+                } else {
+                    <p>
+                        محصولی در سبد شما یافت نشد
+                    </p>
                 }
             </tbody>
         </table>
-
-        <!-- Promotion -->
-        <div class="promo">
-            <div class="coupen">
-                <label>
-                    کد تبلیغاتی
-                    <input type="text" placeholder="کد شما اینجاست">
-                    <button type="submit"><i class="fa fa-arrow-circle-right"></i></button>
-                </label>
+        <form>
+            <!-- Promotion -->
+            <div class="promo">
+                <div class="coupen">
+                    <label>
+                        کد پستی
+                        <input type="text" placeholder="کد پستی 10 رقمی ">
+                      
+                    </label>
+                </div>
+                <div class="coupen">
+                    <label>
+                       آدرس پستی
+                        <input type="text" placeholder="آدرس تحویل مرسوله" style="width: 350px;">
+                      
+                    </label>
+                </div>
+                <!-- Grand total -->
+                <div class="g-totel">
+                    <h5>مجموع کل: <span>@totalSum.ToString("#,##") تومان</span></h5>
+                </div>
             </div>
 
-            <!-- Grand total -->
-            <div class="g-totel">
-                <h5>مجموع کل: <span>@totalSum.ToString("#,##") تومان</span></h5>
+            <!-- Button -->
+            <div class="pro-btn">
+                <a href="#." class="btn-round btn-light">ادامه خرید</a> <a href="#." class="btn-round">برو روش پرداخت</a>
             </div>
-        </div>
-
-        <!-- Button -->
-        <div class="pro-btn"> <a href="#." class="btn-round btn-light">ادامه خرید</a> <a href="#." class="btn-round">برو روش پرداخت</a> </div>
+        </form>
     </div>
 </section>

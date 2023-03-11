@@ -2,6 +2,7 @@
 using Ayda.Ecommerce.Domains.Base;
 using Ayda.Ecommerce.Domains.Cart;
 using Ayda.Ecommerce.Domains.Ecommerce;
+using Ayda.Ecommerce.Domains.Finances;
 
 namespace Ayda.Ecommerce.Domains.User;
 
@@ -25,5 +26,7 @@ public class ApplicationUser:BaseEntity<long>
     public Gender Gender { get; set; }
     public DateTime? LastLoginDateTime { get; set; }
     public virtual ICollection<ProductComment> ProductComments { get; set; }
+    public virtual ICollection<RequestPay> RequestPays { get; set; }
+    public virtual ICollection<Order> Orders { get; set; }
     public virtual ICollection<Cart.Cart> Carts { get; set; }
 }

@@ -4,6 +4,7 @@ using Ayda.Ecommerce.Data.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ayda.Ecommerce.Data.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230311142721_InitialUserAddress")]
+    partial class InitialUserAddress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -388,133 +391,6 @@ namespace Ayda.Ecommerce.Data.Migrations
                     b.ToTable("ProductImages");
                 });
 
-            modelBuilder.Entity("Ayda.Ecommerce.Domains.Finances.Order", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsShow")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("OrderState")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PostalCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("RequestPayId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RequestPayId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("Ayda.Ecommerce.Domains.Finances.OrderDetail", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsShow")
-                        .HasColumnType("bit");
-
-                    b.Property<long>("OrderId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("OrderDetails");
-                });
-
-            modelBuilder.Entity("Ayda.Ecommerce.Domains.Finances.RequestPay", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Authority")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Guid")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsPay")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsShow")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("PayDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("RefId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RequestPays");
-                });
-
             modelBuilder.Entity("Ayda.Ecommerce.Domains.Menu.MenuItem", b =>
                 {
                     b.Property<int>("Id")
@@ -649,7 +525,7 @@ namespace Ayda.Ecommerce.Data.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 3, 11, 18, 22, 47, 193, DateTimeKind.Local).AddTicks(4883),
+                            CreatedDate = new DateTime(2023, 3, 11, 17, 57, 21, 440, DateTimeKind.Local).AddTicks(8135),
                             IsShow = true,
                             PossitionNameFA = "بالا",
                             ProssitionNameEN = "UP"
@@ -657,7 +533,7 @@ namespace Ayda.Ecommerce.Data.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2023, 3, 11, 18, 22, 47, 193, DateTimeKind.Local).AddTicks(4890),
+                            CreatedDate = new DateTime(2023, 3, 11, 17, 57, 21, 440, DateTimeKind.Local).AddTicks(8143),
                             IsShow = true,
                             PossitionNameFA = "پایین",
                             ProssitionNameEN = "BUTTOM"
@@ -665,7 +541,7 @@ namespace Ayda.Ecommerce.Data.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2023, 3, 11, 18, 22, 47, 193, DateTimeKind.Local).AddTicks(4894),
+                            CreatedDate = new DateTime(2023, 3, 11, 17, 57, 21, 440, DateTimeKind.Local).AddTicks(8147),
                             IsShow = true,
                             PossitionNameFA = "چپ",
                             ProssitionNameEN = "LEFT"
@@ -673,7 +549,7 @@ namespace Ayda.Ecommerce.Data.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2023, 3, 11, 18, 22, 47, 193, DateTimeKind.Local).AddTicks(4898),
+                            CreatedDate = new DateTime(2023, 3, 11, 17, 57, 21, 440, DateTimeKind.Local).AddTicks(8152),
                             IsShow = true,
                             PossitionNameFA = "راست",
                             ProssitionNameEN = "RIGHT"
@@ -681,7 +557,7 @@ namespace Ayda.Ecommerce.Data.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2023, 3, 11, 18, 22, 47, 193, DateTimeKind.Local).AddTicks(4902),
+                            CreatedDate = new DateTime(2023, 3, 11, 17, 57, 21, 440, DateTimeKind.Local).AddTicks(8156),
                             IsShow = true,
                             PossitionNameFA = "بالا - چپ",
                             ProssitionNameEN = "UP-LEFT"
@@ -689,7 +565,7 @@ namespace Ayda.Ecommerce.Data.Migrations
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2023, 3, 11, 18, 22, 47, 193, DateTimeKind.Local).AddTicks(4909),
+                            CreatedDate = new DateTime(2023, 3, 11, 17, 57, 21, 440, DateTimeKind.Local).AddTicks(8163),
                             IsShow = true,
                             PossitionNameFA = "بالا - راست",
                             ProssitionNameEN = "UP-RIGHT"
@@ -697,7 +573,7 @@ namespace Ayda.Ecommerce.Data.Migrations
                         new
                         {
                             Id = 7,
-                            CreatedDate = new DateTime(2023, 3, 11, 18, 22, 47, 193, DateTimeKind.Local).AddTicks(4913),
+                            CreatedDate = new DateTime(2023, 3, 11, 17, 57, 21, 440, DateTimeKind.Local).AddTicks(8167),
                             IsShow = true,
                             PossitionNameFA = "وسط",
                             ProssitionNameEN = "CENTER"
@@ -705,7 +581,7 @@ namespace Ayda.Ecommerce.Data.Migrations
                         new
                         {
                             Id = 8,
-                            CreatedDate = new DateTime(2023, 3, 11, 18, 22, 47, 193, DateTimeKind.Local).AddTicks(4917),
+                            CreatedDate = new DateTime(2023, 3, 11, 17, 57, 21, 440, DateTimeKind.Local).AddTicks(8170),
                             IsShow = true,
                             PossitionNameFA = "وسط - راست",
                             ProssitionNameEN = "CENTER-RIGHT"
@@ -713,7 +589,7 @@ namespace Ayda.Ecommerce.Data.Migrations
                         new
                         {
                             Id = 9,
-                            CreatedDate = new DateTime(2023, 3, 11, 18, 22, 47, 193, DateTimeKind.Local).AddTicks(4921),
+                            CreatedDate = new DateTime(2023, 3, 11, 17, 57, 21, 440, DateTimeKind.Local).AddTicks(8175),
                             IsShow = true,
                             PossitionNameFA = "وسط - چپ",
                             ProssitionNameEN = "CENTER-Left"
@@ -836,7 +712,7 @@ namespace Ayda.Ecommerce.Data.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedDate = new DateTime(2023, 3, 11, 18, 22, 47, 193, DateTimeKind.Local).AddTicks(4844),
+                            CreatedDate = new DateTime(2023, 3, 11, 17, 57, 21, 440, DateTimeKind.Local).AddTicks(8090),
                             Email = "ganjalimeysam@gmail.com",
                             EmailConfirm = true,
                             FName = "Meysam",
@@ -846,7 +722,7 @@ namespace Ayda.Ecommerce.Data.Migrations
                             IsShow = true,
                             LName = "Ganjali",
                             OrganizationEmail = "GANJALIMEYSAM@GMAIL.COM",
-                            Password = "AQAAAAEAACcQAAAAENxaupoVqPA8Q7beXenlKs5EshpJyQ1X9TJoe0H4toU7EgTvxK7Fj6FQ2UNBAVuG+g==",
+                            Password = "AQAAAAEAACcQAAAAENr4ArouBMyVpGgU8iwAlBPU2yLhRVaDlACsLyLsJ14PYDiGnEYp3/KmoPxkr+r2lw==",
                             PhoneConfirm = true,
                             RoleId = 1,
                             UserPhone = "09187504331"
@@ -882,17 +758,52 @@ namespace Ayda.Ecommerce.Data.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 3, 11, 18, 22, 47, 193, DateTimeKind.Local).AddTicks(4746),
+                            CreatedDate = new DateTime(2023, 3, 11, 17, 57, 21, 440, DateTimeKind.Local).AddTicks(7975),
                             IsShow = true,
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2023, 3, 11, 18, 22, 47, 193, DateTimeKind.Local).AddTicks(4792),
+                            CreatedDate = new DateTime(2023, 3, 11, 17, 57, 21, 440, DateTimeKind.Local).AddTicks(8029),
                             IsShow = true,
                             Name = "Employee"
                         });
+                });
+
+            modelBuilder.Entity("Ayda.Ecommerce.Domains.User.UserAddress", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsShow")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserAddresses");
                 });
 
             modelBuilder.Entity("Ayda.Ecommerce.Domains.Cart.Cart", b =>
@@ -1016,55 +927,6 @@ namespace Ayda.Ecommerce.Data.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Ayda.Ecommerce.Domains.Finances.Order", b =>
-                {
-                    b.HasOne("Ayda.Ecommerce.Domains.Finances.RequestPay", "RequestPay")
-                        .WithMany("Orders")
-                        .HasForeignKey("RequestPayId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Ayda.Ecommerce.Domains.User.ApplicationUser", "User")
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("RequestPay");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Ayda.Ecommerce.Domains.Finances.OrderDetail", b =>
-                {
-                    b.HasOne("Ayda.Ecommerce.Domains.Finances.Order", "Order")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Ayda.Ecommerce.Domains.Ecommerce.Product", "Product")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("Ayda.Ecommerce.Domains.Finances.RequestPay", b =>
-                {
-                    b.HasOne("Ayda.Ecommerce.Domains.User.ApplicationUser", "User")
-                        .WithMany("RequestPays")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Ayda.Ecommerce.Domains.Menu.SubMenu", b =>
                 {
                     b.HasOne("Ayda.Ecommerce.Domains.Ecommerce.Category", "Category")
@@ -1117,6 +979,17 @@ namespace Ayda.Ecommerce.Data.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("Ayda.Ecommerce.Domains.User.UserAddress", b =>
+                {
+                    b.HasOne("Ayda.Ecommerce.Domains.User.ApplicationUser", "ApplicationUser")
+                        .WithMany("UserAddresses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("Ayda.Ecommerce.Domains.Cart.Cart", b =>
                 {
                     b.Navigation("CartItems");
@@ -1142,8 +1015,6 @@ namespace Ayda.Ecommerce.Data.Migrations
                 {
                     b.Navigation("CartItems");
 
-                    b.Navigation("OrderDetails");
-
                     b.Navigation("ProductAttributes");
 
                     b.Navigation("ProductColors");
@@ -1151,16 +1022,6 @@ namespace Ayda.Ecommerce.Data.Migrations
                     b.Navigation("ProductComments");
 
                     b.Navigation("ProductImages");
-                });
-
-            modelBuilder.Entity("Ayda.Ecommerce.Domains.Finances.Order", b =>
-                {
-                    b.Navigation("OrderDetails");
-                });
-
-            modelBuilder.Entity("Ayda.Ecommerce.Domains.Finances.RequestPay", b =>
-                {
-                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("Ayda.Ecommerce.Domains.Menu.MenuItem", b =>
@@ -1179,11 +1040,9 @@ namespace Ayda.Ecommerce.Data.Migrations
                 {
                     b.Navigation("Carts");
 
-                    b.Navigation("Orders");
-
                     b.Navigation("ProductComments");
 
-                    b.Navigation("RequestPays");
+                    b.Navigation("UserAddresses");
                 });
 
             modelBuilder.Entity("Ayda.Ecommerce.Domains.User.Role", b =>
