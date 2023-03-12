@@ -3,6 +3,7 @@ using Ayda.Ecommerce.App.Contract.IRepository;
 using Ayda.Ecommerce.Data.DataContext;
 using Ayda.Ecommerce.Domains.Finances;
 using Ayda.Ecommerce.ShareModels.BaseModel;
+using Ayda.Ecommerce.ShareModels.EcommerceDto.Product;
 using Ayda.Ecommerce.ShareModels.Ordering;
 using Azure.Core;
 using Microsoft.EntityFrameworkCore;
@@ -27,10 +28,12 @@ public class FainancesRepository : IFainancesRepository {
             IsPay = false,
             User = user,
             CreatedDate = DateTime.Now,
-            Authority = "",
+            Authority = "-1",
             IsShow = true,
             RefId = 0,
         };
+        user.Address = requestPayDto.Address;
+        user.PostalCode = requestPayDto.PostalCode;
         await _db.RequestPays.AddAsync(requestPay);
         await _db.SaveChangesAsync();
 
@@ -40,6 +43,7 @@ public class FainancesRepository : IFainancesRepository {
                 Amount = requestPay.Amount,
                 Email = user.Email,
                 Id = requestPay.Id,
+                
             },
             IsSuccess = true,
         };
@@ -64,12 +68,26 @@ public class FainancesRepository : IFainancesRepository {
         }
     }
 
-    public async Task<ResultDto<IEnumerable<RequestPayDto>>> GetRequestPayAsync() {
-        throw new NotImplementedException();
-    }
+    public async Task<ResultDto<IEnumerable<RequestPayDto>>> GetRequestPayAsync()
+    {
+        var requestPay = await _db.RequestPays
+            .Include(x => x.User)
+            .ToListAsync();
 
-    public async Task<ResultDto> UpdateRequestPayAsync(UpdateRequestPayDto requestPay) {
-        throw new NotImplementedException();
+        if (requestPay != null)
+        {
+            return new ResultDto<IEnumerable<RequestPayDto>>()
+            {
+                Data = _mapper.Map<IEnumerable<RequestPayDto>>(requestPay)
+            };
+        }
+        else
+        {
+            return new ResultDto<IEnumerable<RequestPayDto>>() {
+                IsSuccess = false,
+                Message = "درخواست پرداخت یافت نشد"
+            };
+        }
     }
 
     public async Task<ResultDto> CreateOrderAsync(CreateOrderDto orderDto) {
@@ -89,8 +107,6 @@ public class FainancesRepository : IFainancesRepository {
         cart.Finished = true;
 
         Order order = new Order() {
-            Address = orderDto.Address,
-            PostalCode = orderDto.PostalCode,
             OrderState = OrderState.Processing,
             RequestPay = requestPay,
             User = user,
@@ -125,7 +141,36 @@ public class FainancesRepository : IFainancesRepository {
     }
 
     public async Task<ResultDto<IEnumerable<OrderDto>>> GetUserOrderAsync(long userId) {
-        throw new NotImplementedException();
+        var orders = _db.Orders
+            .Include(x=>x.User)
+            .Include(p => p.OrderDetails)
+            .ThenInclude(p => p.Product)
+            .Where(p => p.UserId == userId)
+            .OrderByDescending(p => p.Id)
+            .ToList()
+            .Select(p => new OrderDto() {
+                Id = p.Id,
+                CreatedDate = p.CreatedDate,
+                OrderState = _mapper.Map<OrderStateEnumDto>(p.OrderState),
+                RequestPayId = p.RequestPayId,
+                OrderDetails = p.OrderDetails.Select(o => new OrderDetailDto {
+                    Count = o.Count,
+                    Id = o.Id,
+                    Price = o.Price,
+                   Product = new ProductDto()
+                   {
+                       Name=o.Product.Name,
+                       Id = o.ProductId
+                   }
+                }).ToList(),
+              Address = p.User.Address,
+              PostalCode = p.User.PostalCode
+            }).ToList();
+
+        return new ResultDto<IEnumerable<OrderDto>>() {
+            Data = orders,
+            IsSuccess = true,
+        };
     }
 
     public async Task<ResultDto<IEnumerable<OrderDto>>> GetUserOrderAsync(OrderStateEnumDto orderState)
@@ -142,8 +187,6 @@ public class FainancesRepository : IFainancesRepository {
                 OrderState = _mapper.Map<OrderStateEnumDto>(p.OrderState),
                 RequestPayId = p.RequestPayId,
                 UserId = p.UserId,
-                Address = p.Address,
-                PostalCode = p.PostalCode,
                 IsShow = p.IsShow,
                 OrderDetails =p.OrderDetails.Select(q => new OrderDetailDto
                 {
@@ -151,7 +194,9 @@ public class FainancesRepository : IFainancesRepository {
                     Id = q.Id,
                     Price = q.Price,
                     ProductId = q.ProductId,
-                }).ToList()
+                }).ToList(),
+                Address = p.User.Address,
+                PostalCode = p.User.PostalCode
             }).ToList();
 
         return new ResultDto<IEnumerable<OrderDto>>() {

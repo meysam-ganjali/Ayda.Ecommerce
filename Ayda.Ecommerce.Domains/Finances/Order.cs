@@ -16,8 +16,7 @@ public class Order : BaseEntity<long>
     public virtual RequestPay RequestPay { get; set; }
 
     public OrderState OrderState { get; set; }
-    public string Address { get; set; }
-    public string PostalCode { get; set; }
+  
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; }
 }

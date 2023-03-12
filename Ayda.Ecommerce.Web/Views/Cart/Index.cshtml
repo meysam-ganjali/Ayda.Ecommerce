@@ -96,20 +96,20 @@
                 }
             </tbody>
         </table>
-        <form>
+        <form method="post" asp-controller="Pay" asp-action="Index">
             <!-- Promotion -->
             <div class="promo">
                 <div class="coupen">
                     <label>
                         کد پستی
-                        <input type="text" placeholder="کد پستی 10 رقمی ">
+                        <input type="text" placeholder="کد پستی 10 رقمی " name="PostalCode">
                       
                     </label>
                 </div>
                 <div class="coupen">
                     <label>
                        آدرس پستی
-                        <input type="text" placeholder="آدرس تحویل مرسوله" style="width: 350px;">
+                        <input type="text" placeholder="آدرس تحویل مرسوله" style="width: 350px;"name="Address" >
                       
                     </label>
                 </div>
@@ -121,7 +121,8 @@
 
             <!-- Button -->
             <div class="pro-btn">
-                <a href="#." class="btn-round btn-light">ادامه خرید</a> <a href="#." class="btn-round">برو روش پرداخت</a>
+                <a  class="btn-round btn-light">ادامه خرید</a> 
+                <button type="submit" class="btn-round">برو روش پرداخت</button>
             </div>
         </form>
     </div>

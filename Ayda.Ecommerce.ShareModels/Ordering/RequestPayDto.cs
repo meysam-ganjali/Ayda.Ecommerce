@@ -25,6 +25,8 @@ public class CreateRequestPayDto{
     public DateTime? PayDate { get; set; }
     public string Authority { get; set; }
     public long RefId { get; set; } = 0;
+    public string Address { get; set; }
+    public string PostalCode { get; set; }
 }
 public class UpdateRequestPayDto:BaseDto<long> {
     public bool IsPay { get; set; }

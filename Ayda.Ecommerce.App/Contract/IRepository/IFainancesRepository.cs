@@ -8,7 +8,7 @@ public interface IFainancesRepository
     Task<ResultDto<RequestPayDto>> AddRequestPayAsync(CreateRequestPayDto requestPayDto);
     Task<ResultDto<RequestPayDto>> GetRequestPayAsync(Guid guid);
     Task<ResultDto<IEnumerable<RequestPayDto>>> GetRequestPayAsync();
-    Task<ResultDto> UpdateRequestPayAsync(UpdateRequestPayDto requestPay);
+   
     //order
     Task<ResultDto> CreateOrderAsync(CreateOrderDto orderDto);
     Task<ResultDto<IEnumerable<OrderDto>>> GetUserOrderAsync(long userId);

@@ -23,6 +23,8 @@ public class ApplicationUser:BaseEntity<long>
     public bool IsLocked { get; set; }
     public string? UserPhone { get; set; }
     public bool? PhoneConfirm { get; set; }
+    public string? Address { get; set; }
+    public string? PostalCode { get; set; }
     public Gender Gender { get; set; }
     public DateTime? LastLoginDateTime { get; set; }
     public virtual ICollection<ProductComment> ProductComments { get; set; }
