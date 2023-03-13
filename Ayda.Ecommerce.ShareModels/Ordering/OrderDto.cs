@@ -15,6 +15,7 @@ public class OrderDto:BaseDto<long>
     public OrderStateEnumDto OrderState { get; set; }
     public string Address { get; set; }
     public string PostalCode { get; set; }
+    public int Amount { get; set; }
 
     public  List<OrderDetailDto> OrderDetails { get; set; }
 }

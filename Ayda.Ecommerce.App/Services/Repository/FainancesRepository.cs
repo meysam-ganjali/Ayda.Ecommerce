@@ -1,10 +1,13 @@
-﻿using AutoMapper;
+﻿using System.Net.Sockets;
+using AutoMapper;
 using Ayda.Ecommerce.App.Contract.IRepository;
 using Ayda.Ecommerce.Data.DataContext;
 using Ayda.Ecommerce.Domains.Finances;
 using Ayda.Ecommerce.ShareModels.BaseModel;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product;
 using Ayda.Ecommerce.ShareModels.Ordering;
+using Ayda.Ecommerce.ShareModels.User;
+using Ayda.Ecommerce.Utilities;
 using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,7 +46,7 @@ public class FainancesRepository : IFainancesRepository {
                 Amount = requestPay.Amount,
                 Email = user.Email,
                 Id = requestPay.Id,
-                
+                User = _mapper.Map<ApplicationUserDto>(user),
             },
             IsSuccess = true,
         };
@@ -68,21 +71,16 @@ public class FainancesRepository : IFainancesRepository {
         }
     }
 
-    public async Task<ResultDto<IEnumerable<RequestPayDto>>> GetRequestPayAsync()
-    {
+    public async Task<ResultDto<IEnumerable<RequestPayDto>>> GetRequestPayAsync() {
         var requestPay = await _db.RequestPays
             .Include(x => x.User)
             .ToListAsync();
 
-        if (requestPay != null)
-        {
-            return new ResultDto<IEnumerable<RequestPayDto>>()
-            {
+        if (requestPay != null) {
+            return new ResultDto<IEnumerable<RequestPayDto>>() {
                 Data = _mapper.Map<IEnumerable<RequestPayDto>>(requestPay)
             };
-        }
-        else
-        {
+        } else {
             return new ResultDto<IEnumerable<RequestPayDto>>() {
                 IsSuccess = false,
                 Message = "درخواست پرداخت یافت نشد"
@@ -140,68 +138,98 @@ public class FainancesRepository : IFainancesRepository {
         };
     }
 
-    public async Task<ResultDto<IEnumerable<OrderDto>>> GetUserOrderAsync(long userId) {
+    public ResultDto<GetForAdmin<OrderDto>> GetOrderForAdmin(OrderStateEnumDto state, int pageSize = 100, int pageNumber = 1) {
+        int rowCount = 0;
+        OrderState stateMapp = _mapper.Map<OrderState>(state);
         var orders = _db.Orders
-            .Include(x=>x.User)
+            .Include(x => x.User)
+            .Include(x => x.OrderDetails)
+            .ThenInclude(x => x.Product)
+            .Include(x => x.RequestPay)
+            .Where(p=>p.OrderState == stateMapp)
+            .ToPaged(pageNumber, pageSize, out rowCount).ToList();
+     
+
+        return new ResultDto<GetForAdmin<OrderDto>> {
+            Data = new GetForAdmin<OrderDto>() {
+                EntityDto = _mapper.Map<List<OrderDto>>(orders),
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                RowCount = rowCount
+            },
+            IsSuccess = true,
+        };
+    }
+
+    public ResultDto<GetForAdmin<OrderDto>> GetOrderForUser(long UserId, int pageSize = 100, int pageNumber = 1) {
+        int rowCount = 0;
+        var orders = _db.Orders
+            .Include(x => x.RequestPay)
+                .Include(x => x.User)
+                .Include(p => p.OrderDetails)
+                .ThenInclude(p => p.Product)
+                .Where(p => p.UserId == UserId)
+                .OrderByDescending(p => p.Id)
+            .ToPaged(pageNumber, pageSize, out rowCount).ToList();
+
+        return new ResultDto<GetForAdmin<OrderDto>> {
+            Data = new GetForAdmin<OrderDto>() {
+                EntityDto = _mapper.Map<List<OrderDto>>(orders),
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                RowCount = rowCount
+            },
+            IsSuccess = true,
+        };
+    }
+
+    public async Task<ResultDto<OrderDto>> GetOrderDetail(long id)
+    {
+        var order = await _db.Orders
+            .Include(x => x.RequestPay)
+            .Include(x => x.User)
             .Include(p => p.OrderDetails)
             .ThenInclude(p => p.Product)
-            .Where(p => p.UserId == userId)
-            .OrderByDescending(p => p.Id)
-            .ToList()
-            .Select(p => new OrderDto() {
-                Id = p.Id,
-                CreatedDate = p.CreatedDate,
-                OrderState = _mapper.Map<OrderStateEnumDto>(p.OrderState),
-                RequestPayId = p.RequestPayId,
-                OrderDetails = p.OrderDetails.Select(o => new OrderDetailDto {
-                    Count = o.Count,
-                    Id = o.Id,
-                    Price = o.Price,
-                   Product = new ProductDto()
-                   {
-                       Name=o.Product.Name,
-                       Id = o.ProductId
-                   }
-                }).ToList(),
-              Address = p.User.Address,
-              PostalCode = p.User.PostalCode
-            }).ToList();
+            .FirstOrDefaultAsync(x => x.Id == id);
+        if (order == null)
+        {
+            return new ResultDto<OrderDto>
+            {
+                Data = null,
+                IsSuccess = false,
+                Message = "فاکتور یافت نشد"
+            };
+        }
 
-        return new ResultDto<IEnumerable<OrderDto>>() {
-            Data = orders,
-            IsSuccess = true,
-        };
-    }
-
-    public async Task<ResultDto<IEnumerable<OrderDto>>> GetUserOrderAsync(OrderStateEnumDto orderState)
-    {
-        var oderState = _mapper.Map<OrderState>(orderState);
-        var orders =  _db.Orders
-            .Include(p => p.OrderDetails)
-            .Where(p => p.OrderState == oderState)
-            .OrderByDescending(p => p.Id)
-            .ToList()
-            .Select(p => new OrderDto {
-                CreatedDate = p.CreatedDate,
-                Id = p.Id,
-                OrderState = _mapper.Map<OrderStateEnumDto>(p.OrderState),
-                RequestPayId = p.RequestPayId,
-                UserId = p.UserId,
-                IsShow = p.IsShow,
-                OrderDetails =p.OrderDetails.Select(q => new OrderDetailDto
+        return new ResultDto<OrderDto>
+        {
+            Data = new OrderDto
+            {
+                User = new ApplicationUserDto
                 {
-                    Count = q.Count,
-                    Id = q.Id,
-                    Price = q.Price,
-                    ProductId = q.ProductId,
+                    Address = order.User.Address,
+                    FName=order.User.FName,
+                    LName = order.User.LName
+                },
+                OrderDetails = order.OrderDetails.Select(p => new OrderDetailDto
+                {
+                    Count = p.Count,
+                    Price = p.Price,
+                    Product = new ProductDto
+                    {
+                        Name = p.Product.Name,
+                        ImageCoverPath = p.Product.ImageCoverPath,
+                    },
                 }).ToList(),
-                Address = p.User.Address,
-                PostalCode = p.User.PostalCode
-            }).ToList();
-
-        return new ResultDto<IEnumerable<OrderDto>>() {
-            Data =  orders,
-            IsSuccess = true,
+                Amount = order.RequestPay.Amount,
+                CreatedDate = order.CreatedDate,
+                Id = order.Id,
+                
+            },
+            IsSuccess = true
         };
     }
+
+
+    
 }

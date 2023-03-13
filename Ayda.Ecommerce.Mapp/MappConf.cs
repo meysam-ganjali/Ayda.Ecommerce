@@ -310,17 +310,14 @@ public class MappConf : Profile {
                 .ForMember(p => p.OrderDetails,
                     p => p.MapFrom(q => q.OrderDetails))
                 .ForMember(p => p.OrderState,
-                    p => p.MapFrom(q => q.OrderState));
-            config.CreateMap<OrderDto, Order>()
-                .ForMember(p => p.User,
-                    p => p.MapFrom(q => q.User))
-                .ForMember(p => p.RequestPay,
-                    p => p.MapFrom(q => q.RequestPay))
-                .ForMember(p => p.OrderDetails,
-                    p => p.MapFrom(q => q.OrderDetails))
-                .ForMember(p => p.OrderState,
-                    p => p.MapFrom(q => q.OrderState));
-    
+                    p => p.MapFrom(q => q.OrderState))
+                .ForMember(p => p.Amount,
+                    p => p.MapFrom(q => q.RequestPay.Amount))
+                .ForMember(p => p.Address,
+                    p => p.MapFrom(q => q.User.Address))
+                .ForMember(p => p.PostalCode,
+                    p => p.MapFrom(q => q.User.PostalCode));
+
 
             #endregion
 

@@ -16,6 +16,8 @@ public class ApplicationUserDto : BaseDto<long>
     public RoleDto Role { get; set; }
     public string? Avatar { get; set; }
     public bool IsActive { get; set; }
+    public string? Address { get; set; }
+    public string? PostalCode { get; set; }
     public DateTime? LockoutEndDate { get; set; }
     public bool IsLocked { get; set; }
     public string? UserPhone { get; set; }

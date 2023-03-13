@@ -1,0 +1,108 @@
+﻿@using Ayda.Ecommerce.Utilities
+@model Ayda.Ecommerce.ShareModels.Ordering.OrderDto
+@{
+    ViewData["Title"] = "جزئیات فاکتور";
+    int totalRowSum = 0;
+    int totalSum = 0;
+}
+<div class="block-header">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+                <li class="breadcrumb-item">
+                    <h4 class="page-title">جزئیات فاکتور</h4>
+                </li>
+                <li class="breadcrumb-item bcrumb-1">
+                    <a href="/admin/product/index">
+                        <i class="fas fa-home"></i> خانه
+                    </a>
+                </li>
+                <li class="breadcrumb-item active">جزئیات فاکتور</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card">
+            <div class="body">
+                <div>
+                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td>شماره فاکتور</td>
+                                        <td>@Model.Id</td>
+                                    </tr>
+                                    <tr>
+                                        <td>نام کاربر</td>
+                                        <td>@Model.User.FName @Model.User.FName</td>
+                                    </tr>
+                                    <tr>
+                                        <td>تاریخ</td>
+                                        <td>@Model.CreatedDate.ToPersianDate()</td>
+                                    </tr>
+                                    <tr>
+                                        <td>آدرس</td>
+                                        <td>@Model.User.Address</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div><div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-bordered table-striped table-hover ">
+                                    <thead>
+                                        <tr role="row">
+                                            <th>نام محصول</th>
+                                            <th>مبلغ </th>
+                                            <th>تعداد </th>
+                                            <th>جمع کل </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.OrderDetails.Count > 0) {
+                                            foreach (var p in Model.OrderDetails) {
+                                                <tr>
+                                                    <td>@p.Product.Name</td>
+                                                    <td>@p.Price</td>
+                                                    <td>@p.Count</td> 
+                                                    @{
+                                                        totalRowSum = p.Price * p.Count;
+                                                    }
+                                                    <td>@p.CreatedDate</td>
+                                                    <td>@totalRowSum.ToString("#,##")</td>
+                                                    @{
+                                                        totalSum += totalRowSum;
+                                                    }
+                                                </tr>
+
+                                            }
+                                        } else {
+                                            <tr>
+                                                <td colspan="6">
+                                                    فاکتوری وجود ندارد
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td></td>
+                                            <td colspan="2" class="bg-light-blue">مبلغ پرداختی</td>
+                                           
+                                            <td colspan="2" class="bg-light-blue bold">@totalSum.ToString("#,##") تومان</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

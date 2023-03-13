@@ -43,7 +43,7 @@ namespace Ayda.Ecommerce.Web.Controllers {
                 var result = await _payment.Request(new DtoRequest() {
                     Mobile ="",
                     CallbackUrl = $"{SD.BaseURL}Pay/Verify?guid={requestPay.Data.Guid}&cartId={userCart.Data.Id}&userId={UserId}",
-                    Description = $"پرداخت فاکتور {requestPay.Data.Id} مربوط به کاربر ",
+                    Description = $"پرداخت فاکتور {requestPay.Data.Id} مربوط به کاربر {requestPay.Data.User.FName} {requestPay.Data.User.LName}",
                     Email = requestPay.Data.Email,
                     Amount = requestPay.Data.Amount,
                     MerchantId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
@@ -73,7 +73,6 @@ namespace Ayda.Ecommerce.Web.Controllers {
                     
                 };
                 var addOrder = await _unitOfWork.FainancesService.CreateOrderAsync(createOrder);
-               // var model = await _unitOfWork.FainancesService.GetUserOrderAsync(userId);
                 ViewBag.Detaile = verification.ExtraDetail;
                 ViewBag.Status = verification.Status;
                 return View();

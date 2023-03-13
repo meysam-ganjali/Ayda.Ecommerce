@@ -1,4 +1,5 @@
-﻿<!-- Left Sidebar -->
+﻿@using Ayda.Ecommerce.ShareModels.Ordering
+<!-- Left Sidebar -->
 <aside id="leftsidebar" class="sidebar">
     <!-- Menu -->
     <div class="menu">
@@ -69,6 +70,32 @@
                     <i class="menu-icon ti-user"></i>
                     <span>مدیریت کاربران</span>
                 </a>
+            </li>
+            <li>
+                <a href="#" onClick="return false;" class="menu-toggle">
+                    <i class="menu-icon fas fa-dollar-sign"></i>
+                    <span>مالی</span>
+                </a>
+                <ul class="ml-menu">
+                    <li>
+                        <a href="/admin/Fainances/OrderList">فاکتور در حال پردازش</a>
+                    </li>
+                    <li>
+                        <a href="/admin/Fainances/OrderList?state=@OrderStateEnumDto.Canceled">فاکتور لغو شده</a>
+                    </li>
+                    <li>
+                        <a href="/admin/Fainances/OrderList?state=@OrderStateEnumDto.Delivered">فاکتور تحویلی</a>
+                    </li>
+                    <li>
+                        <a href="pages/ecommerce/cart.html">سبد خرید</a>
+                    </li>
+                    <li>
+                        <a href="pages/ecommerce/product-list.html">فهرست محصول</a>
+                    </li>
+                    <li>
+                        <a href="pages/ecommerce/invoice.html">صورت حساب</a>
+                    </li>
+                </ul>
             </li>
             <li>
                 <a href="/admin/slider/index">

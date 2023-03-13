@@ -1,4 +1,5 @@
 ﻿using Ayda.Ecommerce.ShareModels.BaseModel;
+using Ayda.Ecommerce.ShareModels.EcommerceDto.Product;
 using Ayda.Ecommerce.ShareModels.Ordering;
 
 namespace Ayda.Ecommerce.App.Contract.IRepository;
@@ -11,8 +12,9 @@ public interface IFainancesRepository
    
     //order
     Task<ResultDto> CreateOrderAsync(CreateOrderDto orderDto);
-    Task<ResultDto<IEnumerable<OrderDto>>> GetUserOrderAsync(long userId);
-    Task<ResultDto<IEnumerable<OrderDto>>> GetUserOrderAsync(OrderStateEnumDto orderState);
+    ResultDto<GetForAdmin<OrderDto>> GetOrderForAdmin(OrderStateEnumDto state, int pageSize = 100, int pageNumber = 1);
+    ResultDto<GetForAdmin<OrderDto>> GetOrderForUser(long UserId, int pageSize = 100, int pageNumber = 1);
+    Task<ResultDto<OrderDto>> GetOrderDetail(long id);
 
 
 }
