@@ -96,109 +96,109 @@ function apexBarChart() {
 }
 
 
-function chartjsLineChart() {
-	try {
-	//Sales chart
-	var ctx = document.getElementById("line-chart");
-	if (ctx) {
-		ctx.height = 240;
-		var myChart = new Chart(ctx, {
-			type: 'line',
-			data: {
-				labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016"],
-				type: 'line',
-				defaultFontFamily: 'iran',
-				datasets: [{
-					label: "غذاها",
-					data: [0, 30, 10, 120, 50, 63, 10],
-					backgroundColor: 'transparent',
-					borderColor: '#54B253',
-					borderWidth: 4,
-					pointStyle: 'circle',
-					pointRadius: 5,
-					pointBorderColor: 'transparent',
-					pointBackgroundColor: '#54B253',
-				}, {
-					label: "الکترونیک",
-					data: [0, 50, 40, 80, 40, 79, 120],
-					backgroundColor: 'transparent',
-					borderColor: '#f96332',
-					borderWidth: 4,
-					pointStyle: 'circle',
-					pointRadius: 5,
-					pointBorderColor: 'transparent',
-					pointBackgroundColor: '#f96332',
-				}]
-			},
-			options: {
-				responsive: true,
-				tooltips: {
-					mode: 'index',
-					titleFontSize: 12,
-					titleFontColor: '#000',
-					bodyFontColor: '#000',
-					backgroundColor: '#fff',
-					titleFontFamily: 'iran',
-					bodyFontFamily: 'iran',
-					cornerRadius: 3,
-					intersect: false,
-				},
-				legend: {
-					display: false,
-					labels: {
-						usePointStyle: true,
-						fontFamily: 'iran',
-					},
-				},
-				scales: {
-					xAxes: [{
-						display: true,
-						gridLines: {
-							display: false,
-							drawBorder: false
-						},
-						scaleLabel: {
-							display: false,
-							labelString: 'ماه'
-						},
-						ticks: {
-							fontFamily: "iran",
-							fontColor: "#9aa0ac", // Font Color
-						}
+//function chartjsLineChart() {
+//	try {
+//	//Sales chart
+//	var ctx = document.getElementById("line-chart");
+//	if (ctx) {
+//		ctx.height = 240;
+//		var myChart = new Chart(ctx, {
+//			type: 'line',
+//			data: {
+//				labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016"],
+//				type: 'line',
+//				defaultFontFamily: 'iran',
+//				datasets: [{
+//					label: "غذاها",
+//					data: [0, 30, 10, 120, 50, 63, 10],
+//					backgroundColor: 'transparent',
+//					borderColor: '#54B253',
+//					borderWidth: 4,
+//					pointStyle: 'circle',
+//					pointRadius: 5,
+//					pointBorderColor: 'transparent',
+//					pointBackgroundColor: '#54B253',
+//				}, {
+//					label: "الکترونیک",
+//					data: [0, 50, 40, 80, 40, 79, 120],
+//					backgroundColor: 'transparent',
+//					borderColor: '#f96332',
+//					borderWidth: 4,
+//					pointStyle: 'circle',
+//					pointRadius: 5,
+//					pointBorderColor: 'transparent',
+//					pointBackgroundColor: '#f96332',
+//				}]
+//			},
+//			options: {
+//				responsive: true,
+//				tooltips: {
+//					mode: 'index',
+//					titleFontSize: 12,
+//					titleFontColor: '#000',
+//					bodyFontColor: '#000',
+//					backgroundColor: '#fff',
+//					titleFontFamily: 'iran',
+//					bodyFontFamily: 'iran',
+//					cornerRadius: 3,
+//					intersect: false,
+//				},
+//				legend: {
+//					display: false,
+//					labels: {
+//						usePointStyle: true,
+//						fontFamily: 'iran',
+//					},
+//				},
+//				scales: {
+//					xAxes: [{
+//						display: true,
+//						gridLines: {
+//							display: false,
+//							drawBorder: false
+//						},
+//						scaleLabel: {
+//							display: false,
+//							labelString: 'ماه'
+//						},
+//						ticks: {
+//							fontFamily: "iran",
+//							fontColor: "#9aa0ac", // Font Color
+//						}
 						
-					}],
-					yAxes: [{
-						display: true,
-						gridLines: {
-							display: false,
-							drawBorder: false
-						},
-						scaleLabel: {
-							display: true,
-							labelString: 'Value',
-							fontFamily: "iran"
+//					}],
+//					yAxes: [{
+//						display: true,
+//						gridLines: {
+//							display: false,
+//							drawBorder: false
+//						},
+//						scaleLabel: {
+//							display: true,
+//							labelString: 'Value',
+//							fontFamily: "iran"
 
-						},
-						ticks: {
-							fontFamily: "iran",
-							fontColor: "#9aa0ac", // Font Color
-						}
-					}]
-				},
-				title: {
-					display: false,
-					text: 'افسانه عادی'
-				}
-			}
-		});
-	}
+//						},
+//						ticks: {
+//							fontFamily: "iran",
+//							fontColor: "#9aa0ac", // Font Color
+//						}
+//					}]
+//				},
+//				title: {
+//					display: false,
+//					text: 'افسانه عادی'
+//				}
+//			}
+//		});
+//	}
 
 
-} catch (error) {
-	console.log(error);
-}
+//} catch (error) {
+//	console.log(error);
+//}
 	
-}
+//}
 
 
 function initCardChart() {

@@ -1,7 +1,6 @@
 ﻿using Ayda.Ecommerce.App;
 using Ayda.Ecommerce.Utilities;
 using Ayda.Ecommerce.Web.Utility;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ayda.Ecommerce.Web.Controllers {

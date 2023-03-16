@@ -13,8 +13,10 @@ using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductAttribute;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductColor;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductComment;
 using Ayda.Ecommerce.ShareModels.EcommerceDto.Product.ProductImage;
+using Ayda.Ecommerce.ShareModels.Finances;
+using Ayda.Ecommerce.ShareModels.Finances.FeaturesInvoic;
+using Ayda.Ecommerce.ShareModels.Finances.InvoiceItems;
 using Ayda.Ecommerce.ShareModels.Menu;
-using Ayda.Ecommerce.ShareModels.Ordering;
 using Ayda.Ecommerce.ShareModels.Role;
 using Ayda.Ecommerce.ShareModels.Slider;
 using Ayda.Ecommerce.ShareModels.User;
@@ -286,61 +288,55 @@ public class MappConf : Profile {
             #endregion
 
             #region Request Mapp
-            config.CreateMap<RequestPay, RequestPayDto>()
+
+            config.CreateMap<FeaturesInvoice, FeaturesInvoiceDto>()
                 .ForMember(p => p.User,
                     p => p.MapFrom(q => q.User))
-                .ForMember(p => p.Orders,
-                    p => p.MapFrom(q => q.Orders));
-            config.CreateMap<RequestPayDto, RequestPay>()
+                .ForMember(p => p.Invoices,
+                    p => p.MapFrom(q => q.Invoices));
+            config.CreateMap<FeaturesInvoiceDto, FeaturesInvoice>()
                 .ForMember(p => p.User,
                     p => p.MapFrom(q => q.User))
-                .ForMember(p => p.Orders,
-                    p => p.MapFrom(q => q.Orders));
-            config.CreateMap<RequestPay, CreateRequestPayDto>().ReverseMap();
-            config.CreateMap<RequestPay, UpdateRequestPayDto>().ReverseMap();
+                .ForMember(p => p.Invoices,
+                    p => p.MapFrom(q => q.Invoices));
+            config.CreateMap<CreateFeaturesInvoiceDto, FeaturesInvoice>().ReverseMap();
             #endregion
 
             #region Order Mapp
 
-            config.CreateMap<Order, OrderDto>()
+            config.CreateMap<OrderState, OrderStateDto>().ReverseMap();
+            config.CreateMap<InvoicesDto, Invoice>()
                 .ForMember(p => p.User,
                     p => p.MapFrom(q => q.User))
-                .ForMember(p => p.RequestPay,
-                    p => p.MapFrom(q => q.RequestPay))
-                .ForMember(p => p.OrderDetails,
-                    p => p.MapFrom(q => q.OrderDetails))
-                .ForMember(p => p.OrderState,
-                    p => p.MapFrom(q => q.OrderState))
-                .ForMember(p => p.Amount,
-                    p => p.MapFrom(q => q.RequestPay.Amount))
-                .ForMember(p => p.Address,
-                    p => p.MapFrom(q => q.User.Address))
-                .ForMember(p => p.PostalCode,
-                    p => p.MapFrom(q => q.User.PostalCode));
-
+                .ForMember(p => p.FeaturesInvoice,
+                    p => p.MapFrom(q => q.FeaturesInvoice))
+                .ForMember(p => p.InvoiceItems,
+                    p => p.MapFrom(q => q.InvoiceItems));
+            config.CreateMap<Invoice, InvoicesDto>()
+                .ForMember(p => p.User,
+                    p => p.MapFrom(q => q.User))
+                .ForMember(p => p.FeaturesInvoice,
+                    p => p.MapFrom(q => q.FeaturesInvoice))
+                .ForMember(p => p.InvoiceItems,
+                    p => p.MapFrom(q => q.InvoiceItems));
+            config.CreateMap<Invoice, CreateInvoicDto>().ReverseMap();
 
             #endregion
 
             #region OrderDetail Mapp
-            config.CreateMap<OrderDetail, OrderDetailDto>()
-                .ForMember(p => p.Order,
-                    p => p.MapFrom(q => q.Order))
+
+            config.CreateMap<InvoiceItem, InvoiceItemDto>()
+                .ForMember(p => p.Invoice,
+                    p => p.MapFrom(q => q.Invoice))
                 .ForMember(p => p.Product,
                     p => p.MapFrom(q => q.Product));
-            config.CreateMap<OrderDetailDto, OrderDetail>()
-                .ForMember(p => p.Order,
-                    p => p.MapFrom(q => q.Order))
+            config.CreateMap<InvoiceItemDto, InvoiceItem>()
+                .ForMember(p => p.Invoice,
+                    p => p.MapFrom(q => q.Invoice))
                 .ForMember(p => p.Product,
                     p => p.MapFrom(q => q.Product));
-            config.CreateMap<OrderDetail, CreateOrderDetailDto>().ReverseMap();
-
             #endregion
 
-            #region Oder
-
-            config.CreateMap<OrderState,OrderStateEnumDto>().ReverseMap();
-
-            #endregion
         });
         return mappingConfig;
     }

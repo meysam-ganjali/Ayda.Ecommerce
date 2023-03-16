@@ -4,19 +4,13 @@ using Ayda.Ecommerce.Domains.User;
 
 namespace Ayda.Ecommerce.Domains.Finances;
 
-public class Order : BaseEntity<long>
-{
+public class Invoice : BaseEntity<long> {
     public long UserId { get; set; }
     [ForeignKey("UserId")]
     public virtual ApplicationUser User { get; set; }
-
-
-    public long RequestPayId { get; set; }
-    [ForeignKey("RequestPayId")]
-    public virtual RequestPay RequestPay { get; set; }
-
+    public long FeaturesInvoiceId { get; set; }
+    [ForeignKey("FeaturesInvoiceId")]
+    public virtual FeaturesInvoice FeaturesInvoice { get; set; }
     public OrderState OrderState { get; set; }
-  
-
-    public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+    public virtual ICollection<InvoiceItem> InvoiceItems { get; set; }
 }

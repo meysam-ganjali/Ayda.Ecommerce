@@ -39,9 +39,9 @@ public class DataBaseContext : DbContext {
     public DbSet<Cart> Carts { get; set; }
     public DbSet<CartItem> CartItems { get; set; }
     //Order
-    public DbSet<RequestPay> RequestPays { get; set; }
-    public DbSet<Order> Orders { get; set; }
-    public DbSet<OrderDetail> OrderDetails { get; set; }
+    public DbSet<FeaturesInvoice> FeaturesInvoices { get; set; }
+    public DbSet<Invoice> Invoices { get; set; }
+    public DbSet<InvoiceItem> InvoiceItems { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {

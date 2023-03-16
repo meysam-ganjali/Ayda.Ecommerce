@@ -3,7 +3,7 @@
 namespace Ayda.Ecommerce.Domains.Finances;
 
 public enum OrderState {
-    [Display(Name = "در حالی پردازش")]
+    [Display(Name = "در حال پردازش")]
     Processing = 0,
     [Display(Name = "لغو شده")]
     Canceled = 1,

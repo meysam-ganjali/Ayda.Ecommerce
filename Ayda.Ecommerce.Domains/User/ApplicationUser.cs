@@ -28,7 +28,7 @@ public class ApplicationUser:BaseEntity<long>
     public Gender Gender { get; set; }
     public DateTime? LastLoginDateTime { get; set; }
     public virtual ICollection<ProductComment> ProductComments { get; set; }
-    public virtual ICollection<RequestPay> RequestPays { get; set; }
-    public virtual ICollection<Order> Orders { get; set; }
+    public virtual ICollection<FeaturesInvoice> FeaturesInvoices { get; set; }
+    public virtual ICollection<Invoice> Invoices { get; set; }
     public virtual ICollection<Cart.Cart> Carts { get; set; }
 }

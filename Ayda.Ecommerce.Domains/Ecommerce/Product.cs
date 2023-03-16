@@ -34,5 +34,5 @@ public class Product:BaseEntity<int>
     public virtual ICollection<ProductColor> ProductColors { get; set; }
     public virtual ICollection<ProductComment> ProductComments { get; set; }
     public virtual ICollection<CartItem> CartItems { get; set; }
-    public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+    public virtual ICollection<InvoiceItem> InvoiceItems { get; set; }
 }

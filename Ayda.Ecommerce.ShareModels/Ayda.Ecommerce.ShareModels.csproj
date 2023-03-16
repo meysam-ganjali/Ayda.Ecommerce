@@ -12,9 +12,10 @@
     <Folder Include="EcommerceDto\Product\ProductComment\" />
     <Folder Include="EcommerceDto\Product\ProductColor\" />
     <Folder Include="EcommerceDto\Product\ProductImage\" />
+    <Folder Include="Finances\InvoiceItems\" />
+    <Folder Include="Finances\FeaturesInvoic\" />
     <Folder Include="Menu\" />
     <Folder Include="Carts\" />
-    <Folder Include="Ordering\" />
     <Folder Include="Slider\" />
     <Folder Include="Role\" />
   </ItemGroup>

@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
-namespace Ayda.Ecommerce.ShareModels.Ordering;
+namespace Ayda.Ecommerce.ShareModels.Finances;
 
-public enum OrderStateEnumDto
+public enum OrderStateDto
 {
-    [Display(Name = "در حالی پردازش")]
+    [Display(Name = "در حال پردازش")]
     Processing = 0,
     [Display(Name = "لغو شده")]
     Canceled = 1,

@@ -25,7 +25,6 @@ public class UnitOfWork : IUnitOfWork {
         PossitionService = new PossitionRepository(_db, _mapper);
         MenuService = new MenuRepository(_db, _mapper);
         CartService = new CartRepository(_db, _mapper);
-        FainancesService = new FainancesRepository(_db, _mapper);
 
     }
     public void Dispose() {
@@ -42,5 +41,4 @@ public class UnitOfWork : IUnitOfWork {
     public IBannerRepository BannerService { get; }
     public IMenuRepository MenuService { get; }
     public ICartRepository CartService { get; }
-    public IFainancesRepository FainancesService { get; }
 }
