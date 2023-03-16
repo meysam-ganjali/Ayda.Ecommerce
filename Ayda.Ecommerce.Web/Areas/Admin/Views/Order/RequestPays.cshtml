@@ -1,0 +1,111 @@
+﻿@addTagHelper *, LazZiya.TagHelpers
+@using Ayda.Ecommerce.ShareModels.Finances
+@using Ayda.Ecommerce.ShareModels.Finances.FeaturesInvoic
+@using LazZiya.TagHelpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Ayda.Ecommerce.ShareModels.BaseModel.GetForAdmin<Ayda.Ecommerce.ShareModels.Finances.FeaturesInvoic.FeaturesInvoiceDto>
+@{
+    ViewData["Title"] = "فاکتور ها";
+
+}
+<partial name="_Notification" />
+<div class="block-header">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+                <li class="breadcrumb-item">
+                    <h4 class="page-title">لیست  فاکتور</h4>
+                </li>
+                <li class="breadcrumb-item bcrumb-1">
+                    <a href="/admin/home/index">
+                        <i class="fas fa-home"></i> خانه
+                    </a>
+                </li>
+                <li class="breadcrumb-item bcrumb-2">
+                    <a href="/admin/category/index">@ViewData["Title"]</a>
+                </li>
+                <li class="breadcrumb-item active">@ViewData["Title"]</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <div class="btn-group pull-left">
+                    <button type="button" class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        فیلتر
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 36px, 0px);">
+                        <li>
+                            <a href="/Admin/order/RequestPays?isPay=true" class="dropdown-item text-left text-left">درخواست های پرداخت شده </a>
+                        </li>
+                        <li>
+                            <a href="/Admin/order/RequestPays?isPay=false" class="dropdown-item text-left text-left">درخواست های پرداخت نشده </a>
+                        </li>
+                        <li>
+                            <a href="/Admin/order/RequestPays" class="dropdown-item text-left text-left">کل درخواست ها </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="body">
+                @if (Model.EntityDto == null) {
+                    <p>درخواستی یافت نشد</p>
+
+                } else {
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td>#</td>
+                                    <td>نام کاربر</td>
+                                    <td>مبلغ درخواست</td>
+                                    <td>Authority</td>
+                                    <td>Ref Id</td>
+                                    <td>تاریخ پرداخت</td>
+                                    <td>وضعیت</td>
+                                    <td></td>
+                                </tr>
+                                @foreach (FeaturesInvoiceDto p in Model.EntityDto) {
+                                    <tr class="@(p.IsPay?"":"bg-pink")">
+                                        <td>@p.Id</td>
+                                        <td>@p.User.FName @p.User.LName</td>
+                                        <td>@p.Amount.ToString("#,##") تومان</td>
+                                        <td>@p.Authority</td>
+                                        <td>@p.RefId</td>
+                                        <td>@p.PayDate</td>
+                                        <td >@(p.IsPay ?"پرداخت شده":"پرداخت نشده")</td>
+                                        <td>
+                                            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="row">
+
+                <paging total-records="@Model.RowCount"
+                        page-no="@Model.CurrentPage"
+                        page-size="@Model.PageSize"
+                        show-prev-next="true"
+                        show-total-pages="false"
+                        show-total-records="false"
+                        show-page-size-nav="true"
+                        show-first-numbered-page="true"
+                        show-last-numbered-page="true"
+                        query-string-key-page-no="Page"
+                        query-string-key-page-size="PageSize"
+                        sr-text-next="بعدی"
+                        sr-text-previous="قبلی"
+                        gap-size="2">
+                </paging>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,234 @@
+﻿@addTagHelper *, LazZiya.TagHelpers
+@using Ayda.Ecommerce.ShareModels.Finances
+@model Ayda.Ecommerce.ShareModels.BaseModel.GetForAdmin<Ayda.Ecommerce.ShareModels.Finances.InvoicesDto>
+@{
+    ViewData["Title"] = "فاکتور ها";
+
+}
+<partial name="_Notification" />
+<div class="block-header">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+                <li class="breadcrumb-item">
+                    <h4 class="page-title">لیست  فاکتور</h4>
+                </li>
+                <li class="breadcrumb-item bcrumb-1">
+                    <a href="/admin/home/index">
+                        <i class="fas fa-home"></i> خانه
+                    </a>
+                </li>
+                <li class="breadcrumb-item bcrumb-2">
+                    <a href="/admin/category/index">@ViewData["Title"]</a>
+                </li>
+                <li class="breadcrumb-item active">@ViewData["Title"]</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <button type="button" class="btn bg-green" onclick="CreateParentModal()"><i class="fa fa-plus"></i>&nbsp;ایجاد منوی والد</button>
+            </div>
+            <div class="body">
+                @if (Model.EntityDto == null) {
+                    <p>فاکتور یافت نشد</p>
+
+                } else {
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td>#</td>
+                                    <td>نام کاربر</td>
+                                    <td>مبلغ فاکتور</td>
+                                    <td>تعداد محصول</td>
+                                    <td>وضعیت</td>
+                                    <td>تاریخ پرداخت</td>
+                                    <td>اقدام</td>
+                                </tr>
+                                @foreach (InvoicesDto p in Model.EntityDto)
+                                {
+                                    <tr>
+                                        <td>@p.Id</td>
+                                        <td>@p.User.FName @p.User.LName</td>
+                                        <td>@p.FeaturesInvoice.Amount.ToString("#,##") T</td>
+                                        <td>@p.InvoiceItems.Count</td>
+                                        @switch (p.OrderState)
+                                        {
+                                            case OrderStateDto.Canceled:
+                                            {
+                                                <td >لغو شده</td>
+                                                break;
+                                            }
+                                            case OrderStateDto.Delivered:
+                                            {
+                                                <td>تحویل داده</td>
+                                                break;
+                                            }
+                                            case OrderStateDto.Processing:
+                                            {
+                                                <td>در حال پردازش</td>
+                                                break;
+                                            }
+                                        }
+                                        <td>@p.FeaturesInvoice.PayDate</td>
+                                        <td>
+                                            <a href="/Admin/order/OrderDetail/@p.Id" class="btn bg-light-blue btn-sm"><i class="fa fa-info"></i>&nbsp;جزئیات</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="row">
+
+                <paging total-records="@Model.RowCount"
+                        page-no="@Model.CurrentPage"
+                        page-size="@Model.PageSize"
+                        show-prev-next="true"
+                        show-total-pages="false"
+                        show-total-records="false"
+                        show-page-size-nav="true"
+                        show-first-numbered-page="true"
+                        show-last-numbered-page="true"
+                        query-string-key-page-no="Page"
+                        query-string-key-page-size="PageSize"
+                        sr-text-next="بعدی"
+                        sr-text-previous="قبلی"
+                        gap-size="2">
+                </paging>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+    {
+    <link rel="stylesheet" href="~/lib/Sweetalert2/sweetalert2.min.css" />
+    <script src="~/lib/Sweetalert2/sweetalert2.min.js"></script>
+    <script>
+        //Add Parent Menu
+        function CreateParentModal() {
+            $('#AddMenu').modal('show');
+        }
+        //Add Sub Menu
+        function AddSubMenu(parentid) {
+            $('#Add_sub_pId').val(parentid);
+            $('#AddSubMenu').modal('show');
+        }
+        //Remove Parent Menu
+        function DeleteParentMenu(parentId, title) {
+            swal.fire({
+                title: 'حذف منو ' + ' ( ' + title + ' )',
+                text: "کاربر گرامی  مطمئن هستید؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#7cacbe',
+                confirmButtonText: 'بله ',
+                cancelButtonText: 'خیر'
+            }).then((result) => {
+                if (result.value) {
+
+                    var postData = {
+                        'id': parentId
+                    };
+
+                    $.ajax({
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        type: "POST",
+                        url: "/Admin/Menu/RemoveParentMenu/",
+                        data: postData,
+                        success: function (data) {
+                            if (data.isSuccess == true) {
+                                swal.fire(
+                                    'موفق!',
+                                    data.message,
+                                    'success'
+                                ).then(function (isConfirm) {
+                                    location.reload();
+                                });
+                            } else {
+
+                                swal.fire(
+                                    'هشدار!',
+                                    data.message,
+                                    'warning'
+                                );
+
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+
+                    });
+
+                }
+            });
+        }
+        //Chabge Is Show Menu
+        function ChangeShow(parentId) {
+            swal.fire({
+                title: 'مخفی / آشکار ',
+                text: "کاربر گرامی  مطمئن هستید؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#7cacbe',
+                confirmButtonText: 'بله ',
+                cancelButtonText: 'خیر'
+            }).then((result) => {
+                if (result.value) {
+
+                    var postData = {
+                        'id': parentId
+                    };
+
+                    $.ajax({
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        type: "POST",
+                        url: "/Admin/Menu/ChangeShowParentMenu/",
+                        data: postData,
+                        success: function (data) {
+                            if (data.isSuccess == true) {
+                                swal.fire(
+                                    'موفق!',
+                                    data.message,
+                                    'success'
+                                ).then(function (isConfirm) {
+                                    location.reload();
+                                });
+                            } else {
+
+                                swal.fire(
+                                    'هشدار!',
+                                    data.message,
+                                    'warning'
+                                );
+
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+
+                    });
+
+                }
+            });
+        }
+        //Edit Parent Menu
+        function UpdateParentMenuModal(id, title) {
+            $('#edit_Id').val(id);
+            $('#edit_Title').val(title);
+            $('#EditParent').modal('show');
+        }
+    </script>
+}

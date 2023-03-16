@@ -1,0 +1,107 @@
+﻿@using Ayda.Ecommerce.Utilities
+@using ZarinPal.Class
+@using Ayda.Ecommerce.ShareModels.Finances.InvoiceItems
+@model Ayda.Ecommerce.ShareModels.Finances.InvoicesDto
+@{
+    ViewData["Title"] = "جزئیات فاکتور";
+    int totalRow = 0;
+    int totalSum = 0;
+}
+<div class="block-header">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+                <li class="breadcrumb-item">
+                    <h4 class="page-title">لیست  فاکتور</h4>
+                </li>
+                <li class="breadcrumb-item bcrumb-1">
+                    <a href="/admin/home/index">
+                        <i class="fas fa-home"></i> خانه
+                    </a>
+                </li>
+                <li class="breadcrumb-item bcrumb-2">
+                    <a href="/admin/category/index">@ViewData["Title"]</a>
+                </li>
+                <li class="breadcrumb-item active">@ViewData["Title"]</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+           
+            <div class="body">
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>
+                                    نام کاربر :@Model.User.FName @Model.User.LName
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    تاریخ : @Model.CreatedDate.ToPersianDate()
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    مبلغ : @Model.FeaturesInvoice.Amount.ToString("#,##") تومان
+                                </td>
+                                <td>
+                                    آدرس : @Model.FeaturesInvoice.PostalAddress
+                                </td>
+                                <td>
+                                    تلفن گیرنده : @Model.FeaturesInvoice.InvoicePhone
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>نام کالا</td>
+                                <td>تعداد</td>
+                                <td>مبلغ</td>
+                                <td>جمع</td>
+
+                            </tr>
+
+                            @foreach (InvoiceItemDto p in Model.InvoiceItems) {
+                                <tr>
+                                    <td>@p.Product.Name</td>
+                                    <td>@p.Count</td>
+                                    <td>@p.Price</td>
+                                    @{
+                                        totalRow = p.Product.Price * p.Count;
+                                    }
+                                    <td>@totalRow.ToString("#,##")</td>
+                                    @{
+                                        totalSum += totalRow;
+                                    }
+                                </tr>
+
+                            }
+                            <tfoot>
+                            <tr>
+                                <td></td>
+                                <td class="bg-light-green text-white">مبلغ قابل پرداخت</td>
+                                <td class="bg-light-green text-white" colspan="2">@totalSum.ToString("#,##") تومان</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><button class="btn btn-danger">لغو فاکتور</button></td>
+                                <td colspan="2"><button class="btn bg-light-green">تائید فاکتور برای ارسال</button> </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

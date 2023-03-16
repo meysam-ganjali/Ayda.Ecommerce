@@ -1,4 +1,5 @@
-﻿
+﻿@using Ayda.Ecommerce.ShareModels.Finances
+
 <!-- Left Sidebar -->
 <aside id="leftsidebar" class="sidebar">
     <!-- Menu -->
@@ -78,13 +79,16 @@
                 </a>
                 <ul class="ml-menu">
                     <li>
-                        <a href="/admin/Fainances/OrderList">فاکتور در حال پردازش</a>
+                        <a href="/admin/Order/index">فاکتور در حال پردازش</a>
                     </li>
                     <li>
-                        <a href="/admin/Fainances/OrderList?state=">فاکتور لغو شده</a>
+                        <a href="/admin/Order/index?state=@OrderStateDto.Canceled">فاکتور لغو شده</a>
                     </li>
                     <li>
-                        <a href="/admin/Fainances/OrderList?state=">فاکتور تحویلی</a>
+                        <a href="/admin/Order/index?state=@OrderStateDto.Delivered">فاکتور تحویلی</a>
+                    </li>
+                    <li>
+                        <a href="/admin/order/RequestPays">درخواست پرداخت</a>
                     </li>
                     <li>
                         <a href="pages/ecommerce/cart.html">سبد خرید</a>
