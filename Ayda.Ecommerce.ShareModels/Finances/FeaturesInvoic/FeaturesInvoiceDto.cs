@@ -20,4 +20,5 @@ public class FeaturesInvoiceDto:BaseDto<long>
     public string PostalAddress { get; set; }
     public string PostalCode { get; set; }
     public  List<InvoicesDto> Invoices { get; set; }
+    public string Emaile { get; set; }
 }

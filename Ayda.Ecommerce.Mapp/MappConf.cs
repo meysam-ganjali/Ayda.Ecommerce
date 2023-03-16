@@ -293,12 +293,16 @@ public class MappConf : Profile {
                 .ForMember(p => p.User,
                     p => p.MapFrom(q => q.User))
                 .ForMember(p => p.Invoices,
-                    p => p.MapFrom(q => q.Invoices));
-            config.CreateMap<FeaturesInvoiceDto, FeaturesInvoice>()
+                    p => p.MapFrom(q => q.Invoices))
+                .ForMember(p => p.Emaile,
+                    p => p.MapFrom(q => q.User.Email));
+            config.CreateMap<FeaturesInvoice, FeaturesInvoiceDto>()
                 .ForMember(p => p.User,
                     p => p.MapFrom(q => q.User))
                 .ForMember(p => p.Invoices,
-                    p => p.MapFrom(q => q.Invoices));
+                    p => p.MapFrom(q => q.Invoices))
+                .ForMember(p => p.Emaile,
+                    p => p.MapFrom(q => q.User.Email));
             config.CreateMap<CreateFeaturesInvoiceDto, FeaturesInvoice>().ReverseMap();
             #endregion
 
